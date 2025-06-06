@@ -33,19 +33,7 @@ class MainActivity : BaseActivity<ActivityMainBinding,MainViewModel>() {
     }
 
     override fun initView() {
-        enableEdgeToEdge()
-        ViewCompat.setOnApplyWindowInsetsListener(mBinding.drawLayout) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            val params = v.layoutParams as? ViewGroup.MarginLayoutParams
-            params?.setMargins(
-                systemBars.left,
-                systemBars.top,
-                systemBars.right,
-                systemBars.bottom
-            )
-//            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
-        }
+
 
 
 
