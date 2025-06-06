@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- 主色 -->
+    <color name="primary">#91cef5</color>
+    <color name="on_primary">#00344b</color>
+    <color name="primary_container">#004c6b</color>
+    <color name="on_primary_container">#c5e7ff</color>
+
+    <!-- 次要色 -->
+    <color name="secondary">#83d5c5</color>
+    <color name="on_secondary">#003730</color>
+    <color name="secondary_container">#005046</color>
+    <color name="on_secondary_container">#9ff2e1</color>
+
+    <!-- 第三色 -->
+    <color name="tertiary">#ffb0cf</color>
+    <color name="on_tertiary">#531d37</color>
+    <color name="tertiary_container">#6e334e</color>
+    <color name="on_tertiary_container">#ffd9e5</color>
+
+    <!-- 界面色 -->
+    <color name="surface_dim">#0f1417</color>
+    <color name="surface">#0f1417</color>
+    <color name="surface_bright">#353a3d</color>
+    <color name="surface_container_lowest">#0a0f12</color>
+    <color name="surface_container_low">#181c1f</color>
+    <color name="surface_container">#1c2024</color>
+    <color name="surface_container_high">#262b2e</color>
+    <color name="surface_container_highest">#313539</color>
+    <color name="on_surface">#dfe3e7</color>
+    <color name="on_surface_variant">#c1c7ce</color>
+
+    <color name="inverse_surface">#dfe3e7</color>
+    <color name="inverse_on_surface">#2c3134</color>
+    <color name="inverse_primary">#1f6587</color>
+    <color name="scrim">#000000</color>
+    <color name="shadow">#000000</color>
+
+    <!-- 功能色 -->
+    <color name="error">#ffb4ab</color>
+    <color name="on_error">#690005</color>
+    <color name="error_container">#93000a</color>
+    <color name="on_error_container">#ffdad6</color>
+
+    <!-- 轮廓 -->
+    <color name="outline">#8b9297</color>
+    <color name="outline_variant">#41484d</color>
+
+</resources>

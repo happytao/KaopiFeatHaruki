@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">KaopiFeatHaruki</string>
+    <string name="navigation_draw_subtitle_1">菜单标题</string>
+    <string name="navigation_draw_func_1">功能1</string>
+    <string name="navigation_draw_func_2">功能2</string>
+    <string name="navigation_draw_func_3">功能3</string>
+    <string name="navigation_draw_header_title">功能列表</string>
+
+</resources>
