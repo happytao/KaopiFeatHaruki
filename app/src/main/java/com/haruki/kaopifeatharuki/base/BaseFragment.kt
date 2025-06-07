@@ -17,7 +17,13 @@ abstract class BaseFragment<VB: ViewBinding, VM:BaseViewModel>:Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         mBinding = getLayout(inflater, container)
+        initView()
         return mBinding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        initData()
     }
 
     abstract fun getLayout(inflater: LayoutInflater, container: ViewGroup?):VB

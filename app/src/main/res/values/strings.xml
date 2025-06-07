@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">KaopiFeatHaruki</string>
+    <string name="app_name">烤批</string>
     <string name="navigation_draw_subtitle_1">信息查看</string>
     <string name="navigation_draw_func_1">卡牌</string>
     <string name="navigation_draw_func_2">乐曲</string>
@@ -8,5 +8,15 @@
 
     <string name="navigation_other_subtitle">其他</string>
     <string name="navigation_other_about">关于</string>
+    <string name="card_tab_all">全员</string>
+    <string name="card_tab_virtual_singer">V家</string>
+    <string name="card_tab_leo_need">L/N</string>
+    <string name="card_tab_more_more_jump">MMJ</string>
+    <string name="card_tab_vivid_bad_squad">VBS</string>
+    <string name="card_tab_wonderland_showtime">WS</string>
+    <string name="card_tab_25_night_cord">25时</string>
+    <string name="btn_filter">筛选</string>"
+    <string name="search_hint">搜索</string>
+
 
 </resources>

@@ -1,0 +1,476 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/band_card"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:cardCornerRadius="8dp"
+        app:contentPaddingLeft="16dp"
+        app:contentPaddingRight="16dp"
+        app:contentPaddingTop="5dp"
+        app:contentPaddingBottom="5dp"
+        app:cardBackgroundColor="@color/transparent"
+        >
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            >
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/tv_band"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                android:text="组合"
+                />
+
+            <com.google.android.material.divider.MaterialDivider
+                android:id="@+id/divider_band"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/tv_band"
+                app:layout_constraintStart_toStartOf="parent"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"/>
+
+
+            <com.google.android.material.chip.ChipGroup
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/chip_icon_band_group"
+                app:layout_constraintTop_toBottomOf="@id/divider_band"
+                app:chipSpacingHorizontal="2dp"
+                app:chipSpacingVertical="2dp"
+
+                >
+
+                <com.google.android.material.chip.Chip
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:chipIcon="@mipmap/virtual_singer_icon"
+                    android:checkable="true"
+                    android:checked="true"
+                    style="@style/Widget.App.IconChip"
+                    />
+
+                <com.google.android.material.chip.Chip
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:chipIcon="@mipmap/leoneed_icon"
+                    android:checkable="true"
+                    android:checked="true"
+                    style="@style/Widget.App.IconChip"
+                    />
+
+                <com.google.android.material.chip.Chip
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:chipIcon="@mipmap/more_more_jump_icon"
+                    android:checkable="true"
+                    android:checked="true"
+                    style="@style/Widget.App.IconChip"/>
+
+                <com.google.android.material.chip.Chip
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:chipIcon="@mipmap/vivid_brand_squad_icon"
+                    android:checkable="true"
+                    android:checked="true"
+                    style="@style/Widget.App.IconChip"/>
+
+                <com.google.android.material.chip.Chip
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:chipIcon="@mipmap/wonderland_showtime_icon"
+                    android:checkable="true"
+                    android:checked="true"
+                    style="@style/Widget.App.IconChip"/>
+
+                <com.google.android.material.chip.Chip
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:chipIcon="@mipmap/night_cord_25_icon"
+                    android:checkable="true"
+                    android:checked="true"
+                    style="@style/Widget.App.IconChip"/>
+
+
+            </com.google.android.material.chip.ChipGroup>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    </com.google.android.material.card.MaterialCardView>
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/character_card"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/band_card"
+        android:layout_marginTop="5dp"
+        app:cardCornerRadius="8dp"
+        app:contentPaddingLeft="16dp"
+        app:contentPaddingRight="16dp"
+        app:contentPaddingTop="5dp"
+        app:contentPaddingBottom="5dp"
+        app:cardBackgroundColor="@color/transparent"
+        >
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            >
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/tv_character"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                android:text="角色"
+                />
+
+            <com.google.android.material.divider.MaterialDivider
+                android:id="@+id/divider_character"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/tv_character"
+                app:layout_constraintStart_toStartOf="parent"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"/>
+
+
+            <com.google.android.material.chip.ChipGroup
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/chip_icon_character_group"
+                app:layout_constraintTop_toBottomOf="@id/divider_character"
+                app:chipSpacingHorizontal="2dp"
+                app:chipSpacingVertical="2dp"
+
+                >
+
+                <com.google.android.material.chip.Chip
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:chipIcon="@mipmap/miku_icon"
+                    android:checkable="true"
+                    android:checked="true"
+                    style="@style/Widget.App.IconChip"
+                    />
+
+                <com.google.android.material.chip.Chip
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:chipIcon="@mipmap/rin_icon"
+                    android:checkable="true"
+                    android:checked="true"
+                    style="@style/Widget.App.IconChip"
+                    />
+
+                <com.google.android.material.chip.Chip
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:chipIcon="@mipmap/ren_icon"
+                    android:checkable="true"
+                    android:checked="true"
+                    style="@style/Widget.App.IconChip"/>
+
+                <com.google.android.material.chip.Chip
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:chipIcon="@mipmap/luka_icon"
+                    android:checkable="true"
+                    android:checked="true"
+                    style="@style/Widget.App.IconChip"/>
+
+                <com.google.android.material.chip.Chip
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:chipIcon="@mipmap/meiko_icon"
+                    android:checkable="true"
+                    android:checked="true"
+                    style="@style/Widget.App.IconChip"/>
+
+                <com.google.android.material.chip.Chip
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:chipIcon="@mipmap/kaito_icon"
+                    android:checkable="true"
+                    android:checked="true"
+                    style="@style/Widget.App.IconChip"/>
+
+                <com.google.android.material.chip.Chip
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:chipIcon="@mipmap/ichika_icon"
+                    android:checkable="true"
+                    android:checked="true"
+                    style="@style/Widget.App.IconChip"/>
+
+                <com.google.android.material.chip.Chip
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:chipIcon="@mipmap/saki_icon"
+                    android:checkable="true"
+                    android:checked="true"
+                    style="@style/Widget.App.IconChip"/>
+
+                <com.google.android.material.chip.Chip
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:chipIcon="@mipmap/honami_icon"
+                    android:checkable="true"
+                    android:checked="true"
+                    style="@style/Widget.App.IconChip"/>
+
+                <com.google.android.material.chip.Chip
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:chipIcon="@mipmap/shihou_icon"
+                    android:checkable="true"
+                    android:checked="true"
+                    style="@style/Widget.App.IconChip"/>
+
+                <com.google.android.material.chip.Chip
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:chipIcon="@mipmap/minori_icon"
+                    android:checkable="true"
+                    android:checked="true"
+                    style="@style/Widget.App.IconChip"/>
+
+                <com.google.android.material.chip.Chip
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:chipIcon="@mipmap/haruka_icon"
+                    android:checkable="true"
+                    android:checked="true"
+                    style="@style/Widget.App.IconChip"/>
+
+                <com.google.android.material.chip.Chip
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:chipIcon="@mipmap/airi_icon"
+                    android:checkable="true"
+                    android:checked="true"
+                    style="@style/Widget.App.IconChip"/>
+
+                <com.google.android.material.chip.Chip
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:chipIcon="@mipmap/shizuku_icon"
+                    android:checkable="true"
+                    android:checked="true"
+                    style="@style/Widget.App.IconChip"/>
+
+                <com.google.android.material.chip.Chip
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:chipIcon="@mipmap/kohane_icon"
+                    android:checkable="true"
+                    android:checked="true"
+                    style="@style/Widget.App.IconChip"/>
+
+                <com.google.android.material.chip.Chip
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:chipIcon="@mipmap/an_icon"
+                    android:checkable="true"
+                    android:checked="true"
+                    style="@style/Widget.App.IconChip"/>
+
+                <com.google.android.material.chip.Chip
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:chipIcon="@mipmap/akito_icon"
+                    android:checkable="true"
+                    android:checked="true"
+                    style="@style/Widget.App.IconChip"/>
+
+                <com.google.android.material.chip.Chip
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:chipIcon="@mipmap/touya_icon"
+                    android:checkable="true"
+                    android:checked="true"
+                    style="@style/Widget.App.IconChip"/>
+
+                <com.google.android.material.chip.Chip
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:chipIcon="@mipmap/tsukasa_icon"
+                    android:checkable="true"
+                    android:checked="true"
+                    style="@style/Widget.App.IconChip"/>
+
+                <com.google.android.material.chip.Chip
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:chipIcon="@mipmap/emu_icon"
+                    android:checkable="true"
+                    android:checked="true"
+                    style="@style/Widget.App.IconChip"/>
+
+                <com.google.android.material.chip.Chip
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:chipIcon="@mipmap/neinei_icon"
+                    android:checkable="true"
+                    android:checked="true"
+                    style="@style/Widget.App.IconChip"/>
+
+                <com.google.android.material.chip.Chip
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:chipIcon="@mipmap/rui_icon"
+                    android:checkable="true"
+                    android:checked="true"
+                    style="@style/Widget.App.IconChip"/>
+
+                <com.google.android.material.chip.Chip
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:chipIcon="@mipmap/kanade_icon"
+                    android:checkable="true"
+                    android:checked="true"
+                    style="@style/Widget.App.IconChip"/>
+
+                <com.google.android.material.chip.Chip
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:chipIcon="@mipmap/mafuyu_icon"
+                    android:checkable="true"
+                    android:checked="true"
+                    style="@style/Widget.App.IconChip"/>
+
+                <com.google.android.material.chip.Chip
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:chipIcon="@mipmap/ena_icon"
+                    android:checkable="true"
+                    android:checked="true"
+                    style="@style/Widget.App.IconChip"/>
+
+                <com.google.android.material.chip.Chip
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:chipIcon="@mipmap/mizuki_icon"
+                    android:checkable="true"
+                    android:checked="true"
+                    style="@style/Widget.App.IconChip"/>
+
+
+            </com.google.android.material.chip.ChipGroup>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    </com.google.android.material.card.MaterialCardView>
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/attribute_card"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/character_card"
+        app:cardCornerRadius="8dp"
+        app:contentPaddingLeft="16dp"
+        app:contentPaddingRight="16dp"
+        app:contentPaddingTop="5dp"
+        app:contentPaddingBottom="5dp"
+        app:cardBackgroundColor="@color/transparent"
+        android:layout_marginTop="5dp"
+        >
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            >
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/tv_attribute"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                android:text="属性"
+                />
+
+            <com.google.android.material.divider.MaterialDivider
+                android:id="@+id/divider_attribute"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/tv_attribute"
+                app:layout_constraintStart_toStartOf="parent"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"/>
+
+
+            <com.google.android.material.chip.ChipGroup
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/chip_icon_attribute_group"
+                app:layout_constraintTop_toBottomOf="@id/divider_attribute"
+                app:chipSpacingHorizontal="2dp"
+                app:chipSpacingVertical="2dp"
+
+                >
+
+                <com.google.android.material.chip.Chip
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:chipIcon="@mipmap/cute_icon"
+                    android:checkable="true"
+                    android:checked="true"
+                    style="@style/Widget.App.IconChip"
+                    />
+
+                <com.google.android.material.chip.Chip
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:chipIcon="@mipmap/mysterious_icon"
+                    android:checkable="true"
+                    android:checked="true"
+                    style="@style/Widget.App.IconChip"
+                    />
+
+                <com.google.android.material.chip.Chip
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:chipIcon="@mipmap/cool_icon"
+                    android:checkable="true"
+                    android:checked="true"
+                    style="@style/Widget.App.IconChip"/>
+
+                <com.google.android.material.chip.Chip
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:chipIcon="@mipmap/happy_icon"
+                    android:checkable="true"
+                    android:checked="true"
+                    style="@style/Widget.App.IconChip"/>
+
+                <com.google.android.material.chip.Chip
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:chipIcon="@mipmap/pure_icon"
+                    android:checkable="true"
+                    android:checked="true"
+                    style="@style/Widget.App.IconChip"/>
+
+
+            </com.google.android.material.chip.ChipGroup>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    </com.google.android.material.card.MaterialCardView>
+
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

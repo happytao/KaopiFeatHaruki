@@ -5,4 +5,26 @@
         <item name="itemTextColor">@color/navigation_item_color</item>
         <item name="itemShapeFillColor">@color/navigation_item_background_color</item>
     </style>
+
+    <style name="CustomHintAppearance" parent="TextAppearance.MaterialComponents.Subtitle1">
+        <item name="android:paddingStart">8dp</item> <!-- 增加提示文字左侧内边距 -->
+    </style>
+
+    <style name="Widget.App.IconChip" parent="Widget.Material3.Chip.Assist">
+<!--        <item name="chipIconTint">@color/shrine_pink_900</item>-->
+        <item name="chipBackgroundColor">@color/transparent</item>
+        <item name="chipStrokeWidth">1dp</item>
+        <item name="shapeAppearance">@style/ShapeAppearance.Material3.Corner.Full</item>
+        <item name="chipStrokeColor">@color/chip_icon_stroke_selector</item>
+        <item name="textStartPadding">0dp</item>
+        <item name="textEndPadding">0dp</item>
+        <item name="closeIconStartPadding">0dp</item>
+        <item name="closeIconEndPadding">0dp</item>
+        <item name="chipIconSize">24dp</item>
+        <item name="chipMinHeight">40dp</item>
+
+<!--        <item name="chipStrokeColor">@color/stroke_tint</item>-->
+<!--        <item name="checkedIconVisible">false</item>-->
+<!--        <item name="shapeAppearanceOverlay">@null</item>-->
+    </style>
 </resources>

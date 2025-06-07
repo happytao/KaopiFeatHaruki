@@ -5,12 +5,14 @@ import androidx.activity.viewModels
 import androidx.core.content.ContextCompat
 import androidx.core.view.forEach
 import androidx.drawerlayout.widget.DrawerLayout.DrawerListener
-import androidx.fragment.app.Fragment
 import com.haruki.kaopifeatharuki.R
 import com.haruki.kaopifeatharuki.base.BaseActivity
 import com.haruki.kaopifeatharuki.base.BaseFragment
 import com.haruki.kaopifeatharuki.databinding.ActivityMainBinding
+import com.haruki.kaopifeatharuki.fragment.AboutFragment
 import com.haruki.kaopifeatharuki.fragment.CardFragment
+import com.haruki.kaopifeatharuki.fragment.EventFragment
+import com.haruki.kaopifeatharuki.fragment.MusicFragment
 import com.haruki.kaopifeatharuki.viewmodel.MainViewModel
 
 class MainActivity : BaseActivity<ActivityMainBinding,MainViewModel>() {
@@ -25,6 +27,7 @@ class MainActivity : BaseActivity<ActivityMainBinding,MainViewModel>() {
 
     override fun initView() {
         initListener()
+        showFragment<CardFragment>()
 
     }
 
@@ -71,17 +74,16 @@ class MainActivity : BaseActivity<ActivityMainBinding,MainViewModel>() {
     private fun changeFragment(fragmentName:String) {
         when(fragmentName) {
             getString(R.string.navigation_draw_func_1) -> {
-                showCardFragment<CardFragment>()
-
+                showFragment<CardFragment>()
             }
             getString(R.string.navigation_draw_func_2) -> {
-
+                showFragment<MusicFragment>()
             }
             getString(R.string.navigation_draw_func_3) -> {
-
+                showFragment<EventFragment>()
             }
             getString(R.string.navigation_other_about) -> {
-
+                showFragment<AboutFragment>()
             }
 
             else -> {}
@@ -91,7 +93,7 @@ class MainActivity : BaseActivity<ActivityMainBinding,MainViewModel>() {
 
 
 
-    private inline fun<reified T :BaseFragment<*,*>> showCardFragment() {
+    private inline fun<reified T :BaseFragment<*,*>> showFragment() {
         val fragmentManager = supportFragmentManager
         val transaction = fragmentManager.beginTransaction()
 
