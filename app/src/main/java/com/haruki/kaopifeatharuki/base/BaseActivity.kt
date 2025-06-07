@@ -6,10 +6,12 @@ import android.view.ViewGroup
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.viewbinding.ViewBinding
+import com.haruki.kaopifeatharuki.R
 
 abstract class BaseActivity<VB: ViewBinding, VM:BaseViewModel>:AppCompatActivity() {
     lateinit var mBinding :VB
@@ -32,7 +34,7 @@ abstract class BaseActivity<VB: ViewBinding, VM:BaseViewModel>:AppCompatActivity
             insets
         }
         WindowCompat.setDecorFitsSystemWindows(window, false)
-        window.statusBarColor = Color.TRANSPARENT
+        window.statusBarColor = ContextCompat.getColor(this, R.color.md_theme_primaryContainer)
         initView()
         initData()
     }

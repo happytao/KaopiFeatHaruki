@@ -1,20 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    >
     <item android:id="@+id/navi_menu_func_list"
         android:title="@string/navigation_draw_subtitle_1">
         <menu>
             <item android:id="@+id/navi_menu_func_1"
                 android:title="@string/navigation_draw_func_1"
-                android:checkable="true"/>
+                android:checkable="true"
+                android:checked="true"
+                android:icon="@drawable/card"
+                />
 
             <item android:id="@+id/navi_menu_func_2"
                 android:title="@string/navigation_draw_func_2"
-                android:checkable="true"/>
+                android:checkable="true"
+                android:icon="@drawable/music"/>
 
             <item android:id="@+id/navi_menu_func_3"
                 android:title="@string/navigation_draw_func_3"
-                android:checkable="true"/>
+                android:checkable="true"
+                android:icon="@drawable/event"/>
+        </menu>
+    </item>
+
+    <item android:id="@+id/navi_menu_others"
+        android:title="@string/navigation_other_subtitle">
+        <menu>
+            <item android:id="@+id/navi_menu_about"
+                android:title="@string/navigation_other_about"
+                android:checkable="true"
+                android:icon="@drawable/about"/>
         </menu>
     </item>
 

@@ -1,31 +1,22 @@
 package com.haruki.kaopifeatharuki.activity
 
-import android.content.res.ColorStateList
-import android.graphics.Color
-import android.graphics.RenderEffect
-import android.graphics.Shader
-import android.os.Build
 import android.view.View
-import android.view.ViewGroup
-import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
-import androidx.core.view.marginTop
-import androidx.drawerlayout.widget.DrawerLayout
-import com.google.android.material.color.MaterialColors
-import com.google.android.material.navigation.NavigationView
-import com.google.android.material.shape.CornerFamily
-import com.google.android.material.shape.MaterialShapeDrawable
-import com.google.android.material.shape.ShapeAppearanceModel
+import androidx.core.content.ContextCompat
+import androidx.core.view.forEach
+import androidx.drawerlayout.widget.DrawerLayout.DrawerListener
+import androidx.fragment.app.Fragment
 import com.haruki.kaopifeatharuki.R
 import com.haruki.kaopifeatharuki.base.BaseActivity
+import com.haruki.kaopifeatharuki.base.BaseFragment
 import com.haruki.kaopifeatharuki.databinding.ActivityMainBinding
-import com.haruki.kaopifeatharuki.util.dp
+import com.haruki.kaopifeatharuki.fragment.CardFragment
 import com.haruki.kaopifeatharuki.viewmodel.MainViewModel
 
 class MainActivity : BaseActivity<ActivityMainBinding,MainViewModel>() {
     override val mViewModel by viewModels<MainViewModel>()
+
+    private val fragmentList = mutableListOf<BaseFragment<*,*>>()
 
 
     override fun getLayout(): ActivityMainBinding {
@@ -33,14 +24,93 @@ class MainActivity : BaseActivity<ActivityMainBinding,MainViewModel>() {
     }
 
     override fun initView() {
-
-
-
-
+        initListener()
 
     }
 
     override fun initData() {
 
+    }
+
+    private fun initListener() {
+        mBinding.toolbar.setNavigationOnClickListener {
+            mBinding.drawLayout.open()
+        }
+        mBinding.navigationView.setNavigationItemSelectedListener { menuItem ->
+            mBinding.navigationView.menu.forEach {
+                it.subMenu?.forEach { item ->
+                    item.isChecked = false
+                }
+            }
+            menuItem.isChecked = true
+            mBinding.toolbar.title = menuItem.title
+            changeFragment(menuItem.title.toString())
+            mBinding.drawLayout.close()
+            true
+        }
+
+        mBinding.drawLayout.addDrawerListener(object : DrawerListener{
+            override fun onDrawerSlide(drawerView: View, slideOffset: Float) {
+            }
+
+            override fun onDrawerOpened(drawerView: View) {
+                window.statusBarColor = ContextCompat.getColor(this@MainActivity, R.color.md_theme_secondaryContainer)
+            }
+
+            override fun onDrawerClosed(drawerView: View) {
+                window.statusBarColor = ContextCompat.getColor(this@MainActivity, R.color.md_theme_primaryContainer)
+            }
+
+            override fun onDrawerStateChanged(newState: Int) {
+
+            }
+
+        })
+    }
+
+    private fun changeFragment(fragmentName:String) {
+        when(fragmentName) {
+            getString(R.string.navigation_draw_func_1) -> {
+                showCardFragment<CardFragment>()
+
+            }
+            getString(R.string.navigation_draw_func_2) -> {
+
+            }
+            getString(R.string.navigation_draw_func_3) -> {
+
+            }
+            getString(R.string.navigation_other_about) -> {
+
+            }
+
+            else -> {}
+        }
+
+    }
+
+
+
+    private inline fun<reified T :BaseFragment<*,*>> showCardFragment() {
+        val fragmentManager = supportFragmentManager
+        val transaction = fragmentManager.beginTransaction()
+
+        fragmentList.forEach { fragment ->
+            if (fragment.isAdded) {
+                transaction.hide(fragment)
+            }
+        }
+
+        val fragment = fragmentList.find { it is T } as? T
+
+        if (fragment != null) {
+            transaction.show(fragment)
+        } else {
+            val newFragment = T::class.java.getDeclaredConstructor().newInstance()
+            fragmentList.add(newFragment)
+            transaction.add(R.id.fragment_container, newFragment)
+        }
+
+        transaction.commit()
     }
 }

@@ -45,6 +45,7 @@ dependencies {
     implementation(libs.material)
     implementation(libs.androidx.activity)
     implementation(libs.androidx.constraintlayout)
+    implementation(libs.androidx.fragment)
 //    implementation(libs.androidx.databinding.compiler.common)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
