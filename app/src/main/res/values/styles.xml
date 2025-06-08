@@ -27,4 +27,14 @@
 <!--        <item name="checkedIconVisible">false</item>-->
 <!--        <item name="shapeAppearanceOverlay">@null</item>-->
     </style>
+
+
+    <style name="Widget.App.StarChip" parent="Widget.Material3.Chip.Assist">
+        <item name="textStartPadding">0dp</item>
+        <item name="textEndPadding">0dp</item>
+        <item name="closeIconStartPadding">0dp</item>
+        <item name="closeIconEndPadding">0dp</item>
+        <item name="chipMinTouchTargetSize">38dp</item>
+
+    </style>
 </resources>

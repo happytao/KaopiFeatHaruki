@@ -17,6 +17,23 @@
     <string name="card_tab_25_night_cord">25时</string>
     <string name="btn_filter">筛选</string>"
     <string name="search_hint">搜索</string>
+    <string name="skill_point_bonus_card">分卡</string>
+    <string name="skill_check_bonus_card">判卡</string>
+    <string name="skill_hp_bonus_card">奶卡</string>
+    <string name="skill_point_bonus_when_perfect_card">p分卡</string>
+    <string name="skill_point_bonus_when_high_hp_card">血分卡</string>
+    <string name="filter_subtitle_band">组合</string>
+    <string name="filter_subtitle_character">角色</string>
+    <string name="filter_subtitle_attribute">属性</string>
+    <string name="filter_subtitle_skill">技能</string>
+    <string name="filter_subtitle_rarity">稀有度</string>
+    <string name="filter_subtitle_sort">排序</string>
+    <string name="filter_subtitle_asc">升序</string>
+    <string name="filter_subtitle_desc">降序</string>
+    <string name="filter_subtitle_sort_by">排序属性</string>
+    <string name="filter_subtitle_release_time">开放时间</string>
+    <string name="filter_subtitle_id">编号</string>
+    <string name="filter_subtitle_power">综合力</string>
 
 
 </resources>

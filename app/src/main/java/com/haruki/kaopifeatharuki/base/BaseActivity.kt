@@ -1,7 +1,9 @@
 package com.haruki.kaopifeatharuki.base
 
+import android.content.res.Configuration
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import android.view.ViewGroup
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -16,8 +18,13 @@ abstract class BaseActivity<VB: ViewBinding, VM:BaseViewModel>:AppCompatActivity
     lateinit var mBinding :VB
     protected abstract val mViewModel:VM
 
+    companion object {
+        private const val TAG = "BaseActivity"
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        Log.i(TAG,"onCreate")
         mBinding = getLayout()
         setContentView(mBinding.root)
         enableEdgeToEdge()
@@ -36,6 +43,11 @@ abstract class BaseActivity<VB: ViewBinding, VM:BaseViewModel>:AppCompatActivity
         window.statusBarColor = ContextCompat.getColor(this, R.color.md_theme_primaryContainer)
         initView()
         initData()
+    }
+
+    override fun onConfigurationChanged(newConfig: Configuration) {
+        super.onConfigurationChanged(newConfig)
+        Log.i(TAG,"onConfigurationChanged")
     }
 
     abstract fun getLayout():VB

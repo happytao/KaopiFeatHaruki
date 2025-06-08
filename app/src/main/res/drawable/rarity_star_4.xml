@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/star_1"
+        android:width="18dp"
+        android:height="18dp"
+        android:drawable="@drawable/rarity_star_after_training"
+        android:gravity="center_vertical"/>
+
+
+    <item android:id="@+id/star_2"
+        android:width="18dp"
+        android:height="18dp"
+        android:drawable="@drawable/rarity_star_after_training"
+        android:gravity="center_vertical"
+        android:left="18dp"/>
+
+    <item android:id="@+id/star_3"
+        android:width="18dp"
+        android:height="18dp"
+        android:drawable="@drawable/rarity_star_after_training"
+        android:gravity="center_vertical"
+        android:left="36dp"/>
+
+    <item android:id="@+id/star_4"
+        android:width="18dp"
+        android:height="18dp"
+        android:drawable="@drawable/rarity_star_after_training"
+        android:gravity="center_vertical"
+        android:left="54dp"/>
+
+</layer-list>
