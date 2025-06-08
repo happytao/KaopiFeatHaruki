@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.kotlin.ksp)
 }
 
 android {
@@ -47,6 +48,15 @@ dependencies {
     implementation(libs.androidx.constraintlayout)
     implementation(libs.androidx.fragment)
     implementation(libs.expandableLayout)
+    implementation(libs.gson)
+    implementation(libs.glide)
+    implementation(libs.retrofit)
+    implementation(libs.brvah)
+    implementation(libs.androidx.room.runtime)
+    implementation(libs.androidx.room.ktx)
+    ksp(libs.androidx.room.compiler)
+
+
 //    implementation(libs.skydoves.expandablelayout)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
