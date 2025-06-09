@@ -1,6 +1,39 @@
 package com.haruki.kaopifeatharuki.viewmodel
 
+import android.util.Log
+import androidx.lifecycle.viewModelScope
 import com.haruki.kaopifeatharuki.base.BaseViewModel
+import com.haruki.kaopifeatharuki.repo.data.CardData
+import com.haruki.kaopifeatharuki.repo.database.CardDBDataRepoImp
+import com.haruki.kaopifeatharuki.repo.database.CardDataBase
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.launch
 
 class CardViewModel: BaseViewModel() {
+
+    companion object {
+        private const val TAG = "CardViewModel"
+    }
+
+    private val _cardList = MutableSharedFlow<List<CardData>>()
+    val cardList = _cardList.asSharedFlow()
+
+    private val cardRepo: CardDBDataRepoImp by lazy {
+        CardDBDataRepoImp(CardDataBase.getDatabase(mContext).cardDBDataDao())
+    }
+
+    fun loadCardList() {
+        viewModelScope.launch {
+            cardRepo.getCardDBDataByRarity("rarity_4").collect{ cardDBDataList ->
+                Log.i(TAG,"loadCardList: ${cardDBDataList.size}")
+                val cardDataList = mutableListOf<CardData>()
+                cardDBDataList.forEach { cardDBData ->
+                    cardDataList.add(CardData(cardDBData))
+                }
+                _cardList.emit(cardDataList)
+            }
+        }
+    }
 }

@@ -47,6 +47,7 @@ dependencies {
     implementation(libs.androidx.activity)
     implementation(libs.androidx.constraintlayout)
     implementation(libs.androidx.fragment)
+    implementation(libs.androidx.recyclerview)
     implementation(libs.expandableLayout)
     implementation(libs.gson)
     implementation(libs.glide)

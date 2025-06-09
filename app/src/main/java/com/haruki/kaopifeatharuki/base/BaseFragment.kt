@@ -24,6 +24,7 @@ abstract class BaseFragment<VB: ViewBinding, VM:BaseViewModel>:Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initData()
+
     }
 
     abstract fun getLayout(inflater: LayoutInflater, container: ViewGroup?):VB
@@ -31,4 +32,5 @@ abstract class BaseFragment<VB: ViewBinding, VM:BaseViewModel>:Fragment() {
     abstract fun initView()
 
     abstract fun initData()
+
 }

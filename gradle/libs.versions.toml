@@ -14,10 +14,11 @@ fragment = "1.5.0+"
 expandableLayout="2.9.2"
 gson="2.13.1"
 glide="4.16.0"
-retrofit="3.1.0-SNAPSHOT"
+retrofit="3.0.0"
 brvah="4.1.4"
 room_version="2.7.1"
 kotlin_ksp="2.0.21-1.0.27"
+recyclerview="1.4.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -34,10 +35,11 @@ expandableLayout = { group = "com.github.cachapa", name = "ExpandableLayout", ve
 gson = { group = "com.google.code.gson", name = "gson", version.ref = "gson" }
 glide = { group = "com.github.bumptech.glide", name = "glide", version.ref = "glide" }
 retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit" }
-brvah = { group = "com.github.cymchad", name = "BaseRecyclerViewAdapterHelper4", version.ref = "brvah" }
+brvah = { group = "io.github.cymchad", name = "BaseRecyclerViewAdapterHelper4", version.ref = "brvah" }
 androidx-room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "room_version" }
 androidx-room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room_version" }
 androidx-room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room_version" }
+androidx-recyclerview = { group = "androidx.recyclerview", name = "recyclerview", version.ref = "recyclerview" }
 
 
 [plugins]

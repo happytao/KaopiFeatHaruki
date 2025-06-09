@@ -2,8 +2,13 @@ package com.haruki.kaopifeatharuki.fragment
 
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.StaggeredGridLayoutManager
+import com.haruki.kaopifeatharuki.adapter.CardListAdapter
+import com.haruki.kaopifeatharuki.adapter.decoration.StaggeredGridSpacingDecoration
 import com.haruki.kaopifeatharuki.base.BaseFragment
 import com.haruki.kaopifeatharuki.databinding.FragmentCardListBinding
 import com.haruki.kaopifeatharuki.util.ConstUtil.BAND_25_NIGHT_CORD
@@ -13,13 +18,19 @@ import com.haruki.kaopifeatharuki.util.ConstUtil.BAND_MORE_MORE_JUMP
 import com.haruki.kaopifeatharuki.util.ConstUtil.BAND_VIRTUAL_SINGER
 import com.haruki.kaopifeatharuki.util.ConstUtil.BAND_VIVID_BAD_SQUAD
 import com.haruki.kaopifeatharuki.util.ConstUtil.BAND_WONDERLAND_SHOWTIME
+import com.haruki.kaopifeatharuki.util.dp
+import com.haruki.kaopifeatharuki.util.observe
 import com.haruki.kaopifeatharuki.viewmodel.CardViewModel
 
 
 class CardListFragment: BaseFragment<FragmentCardListBinding, CardViewModel>() {
-    override val mViewModel: CardViewModel by viewModels({requireParentFragment()})
+    override val mViewModel: CardViewModel by viewModels()
 
     private var band: String?= null
+
+    private val adapter: CardListAdapter by lazy {
+        CardListAdapter()
+    }
 
     companion object{
         private const val ARG_BAND = "band"
@@ -45,7 +56,11 @@ class CardListFragment: BaseFragment<FragmentCardListBinding, CardViewModel>() {
     }
 
     override fun initView() {
-
+//        val layoutManager = StaggeredGridLayoutManager(10,StaggeredGridLayoutManager.VERTICAL)
+        val layoutManager = GridLayoutManager(requireContext(), 2, GridLayoutManager.HORIZONTAL, false)
+        mBinding.recyclerView.layoutManager = layoutManager
+//        mBinding.recyclerView.addItemDecoration(StaggeredGridSpacingDecoration(10,16))
+        mBinding.recyclerView.adapter = adapter
     }
 
     override fun initData() {
@@ -54,7 +69,8 @@ class CardListFragment: BaseFragment<FragmentCardListBinding, CardViewModel>() {
         band?.let {
             when(it) {
                 BAND_ALL -> {
-                    mBinding.tvTest.text = "全部"
+                    mBinding.tvTest.text = ""
+                    mViewModel.loadCardList()
                 }
 
                 BAND_VIRTUAL_SINGER -> {
@@ -87,5 +103,12 @@ class CardListFragment: BaseFragment<FragmentCardListBinding, CardViewModel>() {
 
             }
         }
+
+        mViewModel.cardList.observe(this) { cardList ->
+            adapter.submitList(   cardList.take(8))
+        }
+
+
+
     }
 }
