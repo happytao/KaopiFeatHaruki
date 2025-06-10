@@ -1,9 +1,14 @@
 package com.haruki.kaopifeatharuki.adapter
 
 import android.content.Context
+import android.graphics.drawable.Drawable
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.DataSource
+import com.bumptech.glide.load.engine.GlideException
+import com.bumptech.glide.request.RequestListener
+import com.bumptech.glide.request.target.Target
 import com.chad.library.adapter4.BaseDifferAdapter
 import com.chad.library.adapter4.viewholder.QuickViewHolder
 import com.google.android.material.imageview.ShapeableImageView
@@ -16,7 +21,31 @@ class CardListAdapter: BaseDifferAdapter<CardData, QuickViewHolder>(DiffCallback
 
     override fun onBindViewHolder(holder: QuickViewHolder, position: Int, item: CardData?) {
         val cardImg = holder.getView<ShapeableImageView>(R.id.iv_item_card)
-        Glide.with(context).load(item?.afterTrainingThumbnailUrl).into(cardImg)
+        Glide.with(context).load(item?.afterTrainingThumbnailUrl)
+            .addListener(object: RequestListener<Drawable>{
+
+
+                override fun onLoadFailed(
+                    e: GlideException?,
+                    model: Any?,
+                    target: Target<Drawable>,
+                    isFirstResource: Boolean
+                ): Boolean {
+                    return false
+                }
+
+                override fun onResourceReady(
+                    resource: Drawable,
+                    model: Any,
+                    target: Target<Drawable>?,
+                    dataSource: DataSource,
+                    isFirstResource: Boolean
+                ): Boolean {
+                    return false
+                }
+
+            })
+            .into(cardImg)
 
     }
 

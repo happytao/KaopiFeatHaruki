@@ -3,6 +3,7 @@ package com.haruki.kaopifeatharuki.repo.data
 import android.util.Log
 import com.google.gson.annotations.SerializedName
 import com.haruki.kaopifeatharuki.repo.database.CardDBData
+import com.haruki.kaopifeatharuki.util.ConstUtil.AFTER_TRAINING_THUMBNAIL_TAIL
 import com.haruki.kaopifeatharuki.util.ConstUtil.HARUKI_ASSET_URL_PREFIX
 import com.haruki.kaopifeatharuki.util.ConstUtil.NORMAL_THUMBNAIL_TAIL
 import com.haruki.kaopifeatharuki.util.ConstUtil.SEKAI_VIEWER_ASSET_URL_PREFIX
@@ -58,13 +59,13 @@ data class CardData(@SerializedName("specialTrainingPower3BonusFixed")
     val normalThumbnailUrl: String
         get() {
             if(assetbundleName.isEmpty()) return ""
-            return SEKAI_VIEWER_ASSET_URL_PREFIX + THUMBNAIL_PREFIX + assetbundleName + NORMAL_THUMBNAIL_TAIL
+            return HARUKI_ASSET_URL_PREFIX + THUMBNAIL_PREFIX + assetbundleName + NORMAL_THUMBNAIL_TAIL
         }
 
     val afterTrainingThumbnailUrl: String
         get() {
             if(assetbundleName.isEmpty()) return ""
-            return SEKAI_VIEWER_ASSET_URL_PREFIX + THUMBNAIL_PREFIX + assetbundleName + NORMAL_THUMBNAIL_TAIL
+            return HARUKI_ASSET_URL_PREFIX + THUMBNAIL_PREFIX + assetbundleName + AFTER_TRAINING_THUMBNAIL_TAIL
         }
 
     var isShowAfterTraining: Boolean = true

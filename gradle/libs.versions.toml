@@ -19,6 +19,8 @@ brvah="4.1.4"
 room_version="2.7.1"
 kotlin_ksp="2.0.21-1.0.27"
 recyclerview="1.4.0"
+glide_okhttp3_integration="4.16.0"
+glide_ksp="4.16.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -40,6 +42,8 @@ androidx-room-runtime = { group = "androidx.room", name = "room-runtime", versio
 androidx-room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room_version" }
 androidx-room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room_version" }
 androidx-recyclerview = { group = "androidx.recyclerview", name = "recyclerview", version.ref = "recyclerview" }
+glide-okhttp3-integration = { group = "com.github.bumptech.glide", name = "okhttp3-integration", version.ref = "glide_okhttp3_integration" }
+glide-ksp = { group = "com.github.bumptech.glide", name = "ksp", version.ref = "glide_ksp" }
 
 
 [plugins]

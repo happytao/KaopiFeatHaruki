@@ -23,6 +23,11 @@ interface CardDBDataDao {
     @Query("SELECT * FROM CardDBData WHERE id = :id")
     fun getCardDBDataById(id: Int): Flow<CardDBData>
 
-    @Query("SELECT * FROM CardDBData WHERE cardRarityType = :rarity ORDER BY releaseAt DESC")
-    fun getCardDBDataByRarity(rarity: String): Flow<List<CardDBData>>
+    @Query("""
+        SELECT * FROM CardDBData 
+        WHERE cardRarityType = :rarity 
+        ORDER BY releaseAt DESC
+        LIMIT :pageSize OFFSET (:pageIndex * :pageSize)
+    """)
+    fun getCardDBDataByRarity(rarity: String, pageSize: Int, pageIndex: Int): Flow<List<CardDBData>>
 }

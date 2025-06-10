@@ -51,6 +51,8 @@ dependencies {
     implementation(libs.expandableLayout)
     implementation(libs.gson)
     implementation(libs.glide)
+    ksp(libs.glide.ksp)
+    implementation(libs.glide.okhttp3.integration)
     implementation(libs.retrofit)
     implementation(libs.brvah)
     implementation(libs.androidx.room.runtime)

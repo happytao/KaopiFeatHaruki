@@ -4,8 +4,8 @@ import kotlinx.coroutines.flow.Flow
 
 class CardDBDataRepoImp(private val cardDBDataDao: CardDBDataDao): CardDBDataRepo  {
 
-    override fun getCardDBDataByRarity(rarity: String): Flow<List<CardDBData>> =
-        cardDBDataDao.getCardDBDataByRarity(rarity)
+    override fun getCardDBDataByRarity(rarity: String, pageSize: Int, pageIndex: Int): Flow<List<CardDBData>> =
+        cardDBDataDao.getCardDBDataByRarity(rarity,pageSize, pageIndex)
 
     override fun getCardDBDataById(id: Int): Flow<CardDBData> =
         cardDBDataDao.getCardDBDataById(id)

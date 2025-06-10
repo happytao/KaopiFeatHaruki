@@ -2,6 +2,10 @@ package com.haruki.kaopifeatharuki.application
 
 import android.app.Application
 import android.content.Context
+import android.util.Log
+import com.bumptech.glide.Glide
+import com.bumptech.glide.GlideBuilder
+import com.bumptech.glide.load.engine.executor.GlideExecutor
 import kotlin.properties.Delegates
 
 class BaseApplication: Application() {

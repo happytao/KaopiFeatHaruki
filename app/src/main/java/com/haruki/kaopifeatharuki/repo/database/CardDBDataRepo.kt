@@ -4,7 +4,7 @@ import kotlinx.coroutines.flow.Flow
 
 interface CardDBDataRepo {
 
-    fun getCardDBDataByRarity(rarity: String): Flow<List<CardDBData>>
+    fun getCardDBDataByRarity(rarity: String,pageSize: Int, pageIndex: Int): Flow<List<CardDBData>>
 
     fun getCardDBDataById(id: Int): Flow<CardDBData>
 
