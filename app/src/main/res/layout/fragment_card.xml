@@ -91,52 +91,13 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:rippleColor="?attr/colorOnPrimaryContainer"/>
 
-    <androidx.core.widget.NestedScrollView
-        android:id="@+id/nested_scroll_view"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
+    <androidx.viewpager2.widget.ViewPager2
         app:layout_constraintTop_toBottomOf="@id/btn_filter"
         app:layout_constraintBottom_toBottomOf="parent"
-        >
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            >
-            <net.cachapa.expandablelayout.ExpandableLayout
-                android:id="@+id/expandable_layout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:layout_constraintTop_toBottomOf="@id/btn_filter"
-                app:layout_constraintStart_toStartOf="parent"
-                android:layout_marginStart="16dp"
-                android:layout_marginEnd="16dp"
-                >
-
-                <include
-                    android:id="@+id/expand_link"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    layout="@layout/card_filter_expandable" />
-
-            </net.cachapa.expandablelayout.ExpandableLayout>
-
-            <androidx.viewpager2.widget.ViewPager2
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/viewpager"
-                />
-
-
-        </LinearLayout>
-
-
-
-
-
-
-    </androidx.core.widget.NestedScrollView>
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:id="@+id/viewpager"
+        />
 
 
 

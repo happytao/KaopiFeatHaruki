@@ -1,25 +1,12 @@
 package com.haruki.kaopifeatharuki.fragment
-
-import android.annotation.SuppressLint
-import android.content.Context
-import android.graphics.ColorMatrix
-import android.graphics.ColorMatrixColorFilter
 import android.graphics.Rect
-import android.text.Editable
-import android.text.TextWatcher
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
-import androidx.core.content.ContextCompat.getSystemService
-import androidx.core.view.forEach
-import androidx.core.view.get
 import androidx.fragment.app.viewModels
-import com.google.android.material.chip.Chip
-import com.google.android.material.chip.ChipGroup
-import com.google.android.material.internal.ViewUtils.hideKeyboard
 import com.google.android.material.tabs.TabLayoutMediator
 import com.haruki.kaopifeatharuki.R
 import com.haruki.kaopifeatharuki.activity.MainActivity
@@ -34,7 +21,6 @@ class CardFragment: BaseFragment<FragmentCardBinding, CardViewModel>() {
     }
     override val mViewModel by viewModels<CardViewModel>()
 
-    private val iconFilterChipGroupList = mutableListOf<ChipGroup>()
 
     private val bandNameList by lazy {
         listOf(getString(R.string.card_tab_all),
@@ -51,7 +37,6 @@ class CardFragment: BaseFragment<FragmentCardBinding, CardViewModel>() {
     }
 
     override fun initView() {
-        mBinding.nestedScrollView.isNestedScrollingEnabled = false
         mBinding.viewpager.adapter = ViewpagerAdapter(requireActivity())
         TabLayoutMediator(mBinding.tabLayout, mBinding.viewpager, true, true) { tab, position ->
             tab.text = bandNameList[position]
@@ -65,36 +50,18 @@ class CardFragment: BaseFragment<FragmentCardBinding, CardViewModel>() {
 
     }
 
+    private fun getCurrentCardListFragment(): CardListFragment? {
+        val currentItem = mBinding.viewpager.currentItem
+        return (mBinding.viewpager.adapter as? ViewpagerAdapter)?.getCurrentFragment(currentItem)
+    }
+
     private fun initListener() {
         mBinding.btnFilter.setOnClickListener {
             Log.i(TAG, "initView: btn_filter click")
-            mBinding.expandableLayout.toggle()
+            getCurrentCardListFragment()?.headerExpandableToggle()
+                ?:Log.e(TAG,"currentCardListFragment null")
 
         }
-
-        iconFilterChipGroupList.add(mBinding.expandLink.chipIconBandGroup)
-        iconFilterChipGroupList.add(mBinding.expandLink.chipIconCharacterGroup)
-        iconFilterChipGroupList.add(mBinding.expandLink.chipIconAttributeGroup)
-
-
-        iconFilterChipGroupList.forEach { iconGroup ->
-            iconGroup.setOnCheckedStateChangeListener { group, checkedIds ->
-                group.forEach {
-                    if(it is Chip) {
-                        //将所有icon_chip_group设置取消点击后变灰
-                        if(!checkedIds.contains(it.id)) {
-                            it.chipIcon?.colorFilter = ColorMatrixColorFilter(ColorMatrix().apply {
-                                setSaturation(0f)
-                            })
-                        } else {
-                            it.chipIcon?.colorFilter = null
-                        }
-                    }
-                }
-            }
-
-        }
-
 
 
     }
