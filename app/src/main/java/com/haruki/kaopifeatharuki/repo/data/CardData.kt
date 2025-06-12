@@ -70,7 +70,7 @@ data class CardData(@SerializedName("specialTrainingPower3BonusFixed")
 
     var isShowAfterTraining: Boolean = true
 
-    constructor(cardDBData: CardDBData):this(
+    constructor(cardDBData: CardDBData, isShowAfterTraining: Boolean = true):this(
         id = cardDBData.id,
         prefix = cardDBData.prefix,
         gachaPhrase = cardDBData.gachaPhrase,
@@ -81,6 +81,8 @@ data class CardData(@SerializedName("specialTrainingPower3BonusFixed")
         cardRarityType = cardDBData.cardRarityType,
         attr = cardDBData.attr,
         characterId = cardDBData.characterId,
-        seq = cardDBData.seq)
+        seq = cardDBData.seq) {
+        this.isShowAfterTraining = isShowAfterTraining
+    }
 
 }

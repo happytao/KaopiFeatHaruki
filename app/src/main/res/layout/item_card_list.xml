@@ -5,8 +5,8 @@
     android:padding="10dp">
 
     <com.google.android.material.imageview.ShapeableImageView
-        android:layout_width="56dp"
-        android:layout_height="56dp"
+        android:layout_width="86dp"
+        android:layout_height="86dp"
         android:src="@mipmap/card_frame_start_4"
         android:scaleType="fitXY">
 
@@ -14,8 +14,8 @@
 
     <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/iv_item_card"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
         android:scaleType="fitXY"
         android:layout_gravity="center"
         />

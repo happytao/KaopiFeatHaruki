@@ -13,6 +13,7 @@ import com.haruki.kaopifeatharuki.activity.MainActivity
 import com.haruki.kaopifeatharuki.adapter.ViewpagerAdapter
 import com.haruki.kaopifeatharuki.base.BaseFragment
 import com.haruki.kaopifeatharuki.databinding.FragmentCardBinding
+import com.haruki.kaopifeatharuki.util.ConstUtil.BAND_ALL
 import com.haruki.kaopifeatharuki.viewmodel.CardViewModel
 
 class CardFragment: BaseFragment<FragmentCardBinding, CardViewModel>() {
@@ -20,6 +21,10 @@ class CardFragment: BaseFragment<FragmentCardBinding, CardViewModel>() {
         private const val TAG = "CardFragment"
     }
     override val mViewModel by viewModels<CardViewModel>()
+
+    private val cardListFragment by lazy {
+        CardListFragment.newInstance(BAND_ALL)
+    }
 
 
     private val bandNameList by lazy {
@@ -37,30 +42,22 @@ class CardFragment: BaseFragment<FragmentCardBinding, CardViewModel>() {
     }
 
     override fun initView() {
-        mBinding.viewpager.adapter = ViewpagerAdapter(requireActivity())
-        TabLayoutMediator(mBinding.tabLayout, mBinding.viewpager, true, true) { tab, position ->
-            tab.text = bandNameList[position]
-        }.attach()
+        requireActivity().supportFragmentManager.beginTransaction()
+            .add(R.id.card_list_container, cardListFragment)
+            .commit()
         editClearFocus()
         initListener()
-
     }
 
     override fun initData() {
 
     }
 
-    private fun getCurrentCardListFragment(): CardListFragment? {
-        val currentItem = mBinding.viewpager.currentItem
-        return (mBinding.viewpager.adapter as? ViewpagerAdapter)?.getCurrentFragment(currentItem)
-    }
+
 
     private fun initListener() {
         mBinding.btnFilter.setOnClickListener {
-            Log.i(TAG, "initView: btn_filter click")
-            getCurrentCardListFragment()?.headerExpandableToggle()
-                ?:Log.e(TAG,"currentCardListFragment null")
-
+            cardListFragment.headerExpandableToggle()
         }
 
 

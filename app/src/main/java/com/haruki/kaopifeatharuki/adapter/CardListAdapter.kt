@@ -21,31 +21,17 @@ class CardListAdapter: BaseDifferAdapter<CardData, QuickViewHolder>(DiffCallback
 
     override fun onBindViewHolder(holder: QuickViewHolder, position: Int, item: CardData?) {
         val cardImg = holder.getView<ShapeableImageView>(R.id.iv_item_card)
-        Glide.with(context).load(item?.afterTrainingThumbnailUrl)
-            .addListener(object: RequestListener<Drawable>{
+        item?.let {
+            if(it.isShowAfterTraining) {
+                Glide.with(context).load(it.afterTrainingThumbnailUrl)
+                    .into(cardImg)
+            } else {
+                Glide.with(context).load(it.normalThumbnailUrl)
+                    .into(cardImg)
+            }
+        }
 
 
-                override fun onLoadFailed(
-                    e: GlideException?,
-                    model: Any?,
-                    target: Target<Drawable>,
-                    isFirstResource: Boolean
-                ): Boolean {
-                    return false
-                }
-
-                override fun onResourceReady(
-                    resource: Drawable,
-                    model: Any,
-                    target: Target<Drawable>?,
-                    dataSource: DataSource,
-                    isFirstResource: Boolean
-                ): Boolean {
-                    return false
-                }
-
-            })
-            .into(cardImg)
 
     }
 

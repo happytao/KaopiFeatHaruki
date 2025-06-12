@@ -6,6 +6,8 @@ import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import com.haruki.kaopifeatharuki.base.BaseFragment
 import com.haruki.kaopifeatharuki.databinding.FragmentAboutBinding
+import com.haruki.kaopifeatharuki.util.ToastUtil
+import com.haruki.kaopifeatharuki.util.observe
 import com.haruki.kaopifeatharuki.viewmodel.AboutViewModel
 
 class AboutFragment:BaseFragment<FragmentAboutBinding,AboutViewModel>() {
@@ -19,14 +21,20 @@ class AboutFragment:BaseFragment<FragmentAboutBinding,AboutViewModel>() {
     }
 
     override fun initView() {
-//        mBinding.tvAboutTest.setOnClickListener {
-//            Log.i(TAG,"start parse json")
-//            mViewModel.parseJson(requireContext())
-//        }
+        mBinding.tvAboutTest.setOnClickListener {
+            Log.i(TAG,"start parse json")
+            mViewModel.parseJson(requireContext())
+        }
 
     }
 
     override fun initData() {
+        mViewModel.importJsonState.observe(this) {
+            if(it) {
+                ToastUtil.showToast(requireContext(), "数据库导入成功")
+            }
+        }
+
 
     }
 }
