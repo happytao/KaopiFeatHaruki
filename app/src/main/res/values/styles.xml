@@ -37,4 +37,11 @@
         <item name="chipMinTouchTargetSize">38dp</item>
 
     </style>
+
+
+    <style name="ModalBottomSheetDialog" parent="Widget.Material3.BottomSheet.Modal">
+
+    </style>
+
+
 </resources>

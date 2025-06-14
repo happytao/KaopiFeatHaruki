@@ -1,11 +1,14 @@
 package com.haruki.kaopifeatharuki.fragment
 import android.graphics.Rect
 import android.util.Log
+import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
+import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.viewModels
 import com.google.android.material.tabs.TabLayoutMediator
 import com.haruki.kaopifeatharuki.R
@@ -14,7 +17,9 @@ import com.haruki.kaopifeatharuki.adapter.ViewpagerAdapter
 import com.haruki.kaopifeatharuki.base.BaseFragment
 import com.haruki.kaopifeatharuki.databinding.FragmentCardBinding
 import com.haruki.kaopifeatharuki.util.ConstUtil.BAND_ALL
+import com.haruki.kaopifeatharuki.util.ToastUtil
 import com.haruki.kaopifeatharuki.viewmodel.CardViewModel
+import okhttp3.internal.cache.DiskLruCache
 
 class CardFragment: BaseFragment<FragmentCardBinding, CardViewModel>() {
     companion object{
@@ -42,7 +47,7 @@ class CardFragment: BaseFragment<FragmentCardBinding, CardViewModel>() {
     }
 
     override fun initView() {
-        requireActivity().supportFragmentManager.beginTransaction()
+        childFragmentManager.beginTransaction()
             .add(R.id.card_list_container, cardListFragment)
             .commit()
         editClearFocus()
@@ -57,8 +62,36 @@ class CardFragment: BaseFragment<FragmentCardBinding, CardViewModel>() {
 
     private fun initListener() {
         mBinding.btnFilter.setOnClickListener {
-            cardListFragment.headerExpandableToggle()
+//            cardListFragment.headerExpandableToggle()
+            val bottomSheetFragment = CardFilterBottomSheetFragment()
+            bottomSheetFragment.show(childFragmentManager, CardFilterBottomSheetFragment.TAG)
         }
+
+        mBinding.searchInput.setOnEditorActionListener { textView, actionId, keyEvent ->
+            if(actionId == EditorInfo.IME_ACTION_DONE) {
+                Log.i(TAG,"searchInput complete")
+                val idStr = textView.text
+                try {
+                    val id = idStr.toString().toInt()
+                    mViewModel.loadCardById(id)
+                } catch (e: Exception) {
+                    Log.e(TAG,"parse id error")
+                    Log.e(TAG, Log.getStackTraceString(e))
+                    ToastUtil.showToast(requireContext(), "目前只支持输入id搜索")
+                }
+
+
+            }
+            mBinding.searchContainer.clearFocus()
+            hideKeyboard(mBinding.searchContainer)
+            false
+        }
+
+        mBinding.searchContainer.setEndIconOnClickListener {
+            mBinding.searchInput.text?.clear()
+            mViewModel.restoreCardList()
+        }
+
 
 
     }

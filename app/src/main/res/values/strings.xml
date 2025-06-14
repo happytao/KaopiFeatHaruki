@@ -35,5 +35,9 @@
     <string name="filter_subtitle_id">编号</string>
     <string name="filter_subtitle_power">综合力</string>
 
+    <string name="filter_reset">重置</string>
+    <string name="filter_select_none">清空</string>
+    <string name="filter_confirm">确认</string>
+
 
 </resources>

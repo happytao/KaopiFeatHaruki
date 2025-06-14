@@ -22,7 +22,15 @@ class CardViewModel: BaseViewModel() {
     private val _changeTrainingStateCardList = MutableSharedFlow<List<CardData>>()
     val changeTrainingStateCardList = _changeTrainingStateCardList.asSharedFlow()
 
+    private val _cardDataById = MutableSharedFlow<CardData>()
+    val cardDataById = _cardDataById.asSharedFlow()
+
+    private val _restoreEvent = MutableSharedFlow<Unit>()
+    val restoreEvent = _restoreEvent.asSharedFlow()
+
     val currentCardList = mutableListOf<CardData>()
+
+    var currentPosition = 0
 
     private val cardRepo: CardDBDataRepoImp by lazy {
         CardDBDataRepoImp(CardDataBase.getDatabase(mContext).cardDBDataDao())
@@ -46,15 +54,32 @@ class CardViewModel: BaseViewModel() {
         }
     }
 
-    fun changeTrainingState() {
+    fun loadCardById(id: Int) {
+        viewModelScope.launch {
+            cardRepo.getCardDBDataById(id).collect{ cardDBData ->
+                val cardData = CardData(cardDBData, isShowAfterTraining)
+                _cardDataById.emit(cardData)
+            }
+        }
+    }
+
+    fun restoreCardList() {
+        viewModelScope.launch {
+            _restoreEvent.emit(Unit)
+        }
+    }
+
+    fun changeTrainingState(showList: List<CardData>) {
         this.isShowAfterTraining = !isShowAfterTraining
+        val newList = showList.map { cardData ->
+            cardData.copy().apply { isShowAfterTraining = this@CardViewModel.isShowAfterTraining }
+        }
+        viewModelScope.launch {
+            _changeTrainingStateCardList.emit(newList)
+        }
         currentCardList.forEach { cardData ->
             cardData.isShowAfterTraining = isShowAfterTraining
         }
-        viewModelScope.launch {
-            _changeTrainingStateCardList.emit(currentCardList)
-        }
-
 
     }
 }
