@@ -10,3 +10,5 @@ get() = TypedValue.applyDimension(
     this.toFloat(),
     BaseApplication.appContext.resources.displayMetrics
 )
+
+

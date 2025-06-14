@@ -710,7 +710,7 @@
                     android:layout_height="wrap_content"
                     android:checkable="true"
                     android:checked="true"
-                    app:chipIcon="@drawable/rarity_star_3"
+                    app:chipIcon="@drawable/rarity_star_3_after_training"
                     app:iconEndPadding="36dp"
                     style="@style/Widget.App.StarChip"/>
 
@@ -719,7 +719,7 @@
                     android:layout_height="wrap_content"
                     android:checkable="true"
                     android:checked="true"
-                    app:chipIcon="@drawable/rarity_star_4"
+                    app:chipIcon="@drawable/rarity_star_4_after_training"
                     app:iconEndPadding="54dp"
                     style="@style/Widget.App.StarChip"/>
 

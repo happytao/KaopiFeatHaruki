@@ -17,9 +17,9 @@ import java.io.InputStream
 class FlowControlGlide:AppGlideModule() {
 
 
+
     override fun applyOptions(context: Context, builder: GlideBuilder) {
         super.applyOptions(context, builder)
-        builder.setSourceExecutor(GlideExecutor.newSourceBuilder().setThreadCount(2).setName("flow_control_source").build())
         builder.setLogLevel(Log.DEBUG)
         builder.setLogRequestOrigins(true)
     }

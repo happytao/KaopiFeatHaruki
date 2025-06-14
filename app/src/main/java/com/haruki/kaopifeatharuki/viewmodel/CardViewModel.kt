@@ -28,12 +28,13 @@ class CardViewModel: BaseViewModel() {
         CardDBDataRepoImp(CardDataBase.getDatabase(mContext).cardDBDataDao())
     }
 
-    private var isShowAfterTraining = true
+    var isShowAfterTraining:Boolean = true
+        private set
 
     fun loadCardList(pageSize: Int,pageIndex: Int) {
         Log.i(TAG, "loadCardList pageSize:$pageSize pageIndex:$pageIndex")
         viewModelScope.launch {
-            cardRepo.getCardDBDataByRarity("rarity_4", pageSize,pageIndex).collect{ cardDBDataList ->
+            cardRepo.getAllCardDBData(pageSize,pageIndex).collect{ cardDBDataList ->
                 Log.i(TAG,"loadCardList: ${cardDBDataList.size}")
                 val cardDataList = mutableListOf<CardData>()
                 cardDBDataList.forEach { cardDBData ->

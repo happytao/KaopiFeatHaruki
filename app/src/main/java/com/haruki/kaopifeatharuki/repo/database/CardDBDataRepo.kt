@@ -6,6 +6,8 @@ interface CardDBDataRepo {
 
     fun getCardDBDataByRarity(rarity: String,pageSize: Int, pageIndex: Int): Flow<List<CardDBData>>
 
+    fun getAllCardDBData(pageSize: Int, pageIndex: Int): Flow<List<CardDBData>>
+
     fun getCardDBDataById(id: Int): Flow<CardDBData>
 
     suspend fun insert(cardDBData: CardDBData)

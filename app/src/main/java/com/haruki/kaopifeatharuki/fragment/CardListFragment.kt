@@ -31,6 +31,7 @@ import com.haruki.kaopifeatharuki.util.ToastUtil
 import com.haruki.kaopifeatharuki.util.observe
 import com.haruki.kaopifeatharuki.viewmodel.CardViewModel
 import net.cachapa.expandablelayout.ExpandableLayout
+import okhttp3.internal.notifyAll
 
 
 class CardListFragment: BaseFragment<FragmentCardListBinding, CardViewModel>() {
@@ -118,12 +119,20 @@ class CardListFragment: BaseFragment<FragmentCardListBinding, CardViewModel>() {
 
         mViewModel.changeTrainingStateCardList.observe(this) { cardList ->
             Log.i(TAG,"changeTrainingStateCardList ${cardList.size}")
-            adapter.submitList(cardList)
+//            adapter.submitList(cardList)
+            //直接清空列表重新加载性能反而更好
+            adapter.submitList(null)
+            adapter.addAll(cardList)
+            adapter.notifyDataSetChanged()
         }
 
         mBinding.btnFloating.setOnClickListener {
             mViewModel.changeTrainingState()
-
+            if(mViewModel.isShowAfterTraining) {
+                ToastUtil.showToast(requireContext(),"已切换为花后图")
+            } else {
+                ToastUtil.showToast(requireContext(),"已切换为花前图")
+            }
         }
 
 

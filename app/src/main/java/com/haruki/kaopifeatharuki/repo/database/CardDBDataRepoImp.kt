@@ -7,6 +7,9 @@ class CardDBDataRepoImp(private val cardDBDataDao: CardDBDataDao): CardDBDataRep
     override fun getCardDBDataByRarity(rarity: String, pageSize: Int, pageIndex: Int): Flow<List<CardDBData>> =
         cardDBDataDao.getCardDBDataByRarity(rarity,pageSize, pageIndex)
 
+    override fun getAllCardDBData(pageSize: Int, pageIndex: Int): Flow<List<CardDBData>> =
+        cardDBDataDao.getAllCardDBData(pageSize,pageIndex)
+
     override fun getCardDBDataById(id: Int): Flow<CardDBData> =
         cardDBDataDao.getCardDBDataById(id)
 

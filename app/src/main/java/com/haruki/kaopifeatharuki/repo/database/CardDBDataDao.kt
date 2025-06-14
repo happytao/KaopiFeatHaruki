@@ -30,4 +30,11 @@ interface CardDBDataDao {
         LIMIT :pageSize OFFSET (:pageIndex * :pageSize)
     """)
     fun getCardDBDataByRarity(rarity: String, pageSize: Int, pageIndex: Int): Flow<List<CardDBData>>
+
+    @Query("""
+        SELECT * FROM CardDBData
+        ORDER BY releaseAt DESC
+        LIMIT :pageSize OFFSET (:pageIndex * :pageSize)
+    """)
+    fun getAllCardDBData(pageSize: Int, pageIndex: Int): Flow<List<CardDBData>>
 }

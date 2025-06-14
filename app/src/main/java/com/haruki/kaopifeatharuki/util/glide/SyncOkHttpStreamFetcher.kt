@@ -9,7 +9,13 @@ import com.bumptech.glide.load.data.DataFetcher
 import com.bumptech.glide.load.model.GlideUrl
 import com.bumptech.glide.util.ContentLengthInputStream
 import com.bumptech.glide.util.Preconditions
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.sync.Semaphore
 import okhttp3.Call
+import okhttp3.Dispatcher
 import okhttp3.Request
 import java.io.IOException
 import java.io.InputStream
@@ -21,29 +27,40 @@ class SyncOkHttpStreamFetcher@JvmOverloads constructor(
 
     companion object {
         private const val TAG = "SyncOkHttpStreamFetcher"
+        private val semaphore = Semaphore(1)
     }
 
     private var callback: DataFetcher.DataCallback<in InputStream>? = null
 
     override fun loadData(priority: Priority, callback: DataFetcher.DataCallback<in InputStream>) {
-        Log.d(TAG,"start loadData url:$url")
-        val requestBuilder = Request.Builder().url(url.toStringUrl())
-        for ((key, value) in url.headers) {
-            requestBuilder.addHeader(key, value!!)
-        }
-        val request = requestBuilder.build()
-        this.callback = callback
+        try {
+            runBlocking {
+                semaphore.acquire()
+                Log.d(TAG,"start loadData url:$url")
+                val requestBuilder = Request.Builder().url(url.toStringUrl())
+                for ((key, value) in url.headers) {
+                    requestBuilder.addHeader(key, value!!)
+                }
+                val request = requestBuilder.build()
+                this@SyncOkHttpStreamFetcher.callback = callback
 
-        val call = client.newCall(request)
-        val response = call.execute()
-        Log.d(TAG,"loadedData url:$url")
-        val responseBody = response.body
-        if (response.isSuccessful) {
-            val contentLength = Preconditions.checkNotNull(responseBody).contentLength()
-            val stream = ContentLengthInputStream.obtain(responseBody!!.byteStream(), contentLength)
-            callback.onDataReady(stream)
-        } else {
-            callback.onLoadFailed(HttpException(response.message, response.code))
+                val call = client.newCall(request)
+                val response = call.execute()
+                Log.d(TAG,"loadedData url:$url")
+                val responseBody = response.body
+                if (response.isSuccessful) {
+                    val contentLength = Preconditions.checkNotNull(responseBody).contentLength()
+                    val stream = ContentLengthInputStream.obtain(responseBody!!.byteStream(), contentLength)
+                    callback.onDataReady(stream)
+                } else {
+                    callback.onLoadFailed(HttpException(response.message, response.code))
+                }
+            }
+
+        } catch (e: Exception) {
+            this.callback?.onLoadFailed(e)
+        }finally {
+            semaphore.release()
         }
     }
 
