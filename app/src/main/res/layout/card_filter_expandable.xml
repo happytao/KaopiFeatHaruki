@@ -452,6 +452,15 @@
                         android:text="@string/skill_point_bonus_when_high_hp_card"
                         app:chipMinTouchTargetSize="38dp"/>
 
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/chip_skill_point_bonus_when_band"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:checkable="true"
+                        android:checked="true"
+                        android:text="@string/skill_point_bonus_when_band"
+                        app:chipMinTouchTargetSize="38dp"/>
+
 
                 </com.google.android.material.chip.ChipGroup>
 

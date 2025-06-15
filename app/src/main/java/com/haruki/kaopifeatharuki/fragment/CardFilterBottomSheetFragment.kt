@@ -10,7 +10,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.forEach
 import androidx.fragment.app.viewModels
-import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
@@ -32,6 +31,7 @@ import com.haruki.kaopifeatharuki.util.ConstUtil.RARITY_4
 import com.haruki.kaopifeatharuki.util.ConstUtil.SKILL_TYPE_CHECK_BONUS
 import com.haruki.kaopifeatharuki.util.ConstUtil.SKILL_TYPE_HP_BONUS
 import com.haruki.kaopifeatharuki.util.ConstUtil.SKILL_TYPE_POINT_BONUS
+import com.haruki.kaopifeatharuki.util.ConstUtil.SKILL_TYPE_POINT_BONUS_WHEN_BAND
 import com.haruki.kaopifeatharuki.util.ConstUtil.SKILL_TYPE_POINT_BONUS_WHEN_HIGH_HP
 import com.haruki.kaopifeatharuki.util.ConstUtil.SKILL_TYPE_POINT_BONUS_WHEN_PERFECT
 import com.haruki.kaopifeatharuki.util.name2Id
@@ -207,6 +207,18 @@ class CardFilterBottomSheetFragment: BottomSheetDialogFragment() {
             adapter.submitList(newList)
         }
 
+        mBinding.btnConfirm.setOnClickListener {
+            mViewModel.filterParam = getCurrentFilterParam()
+            mViewModel.cardListCurrentPageIndex = 0
+            if(mViewModel.filterParam!!.isInitState()) {
+                Log.i(TAG,"isInitState")
+                mViewModel.loadCardList(10,mViewModel.cardListCurrentPageIndex)
+            } else {
+                mViewModel.loadCardByAllFilterParam(10,mViewModel.cardListCurrentPageIndex)
+            }
+            dismiss()
+        }
+
         adapter.setOnItemClickListener { _,view,pos ->
             val chip = view as Chip
             val newList = adapter.items.map { it.copy() }
@@ -268,8 +280,8 @@ class CardFilterBottomSheetFragment: BottomSheetDialogFragment() {
             R.id.chip_skill_hp_bonus to SKILL_TYPE_HP_BONUS,
             R.id.chip_skill_check_bonus to SKILL_TYPE_CHECK_BONUS,
             R.id.chip_skill_point_bonus_when_perfect to SKILL_TYPE_POINT_BONUS_WHEN_PERFECT,
-            R.id.chip_skill_point_bonus_when_high_hp to SKILL_TYPE_POINT_BONUS_WHEN_HIGH_HP
-
+            R.id.chip_skill_point_bonus_when_high_hp to SKILL_TYPE_POINT_BONUS_WHEN_HIGH_HP,
+            R.id.chip_skill_point_bonus_when_band to SKILL_TYPE_POINT_BONUS_WHEN_BAND
         )
         mBinding.chipIconSkillGroup.forEach {
             val chip = it as Chip
@@ -296,11 +308,11 @@ class CardFilterBottomSheetFragment: BottomSheetDialogFragment() {
         return CardFilterParam(
             isDescSort = isSortDec,
             sortedProperty = sortParam,
-            filterBand = bandList,
-            filterCharacterId = characterIdList,
-            filterAttr = attrList,
-            filterSkillType = skillTypeList,
-            filterRarity = rarityList)
+            filterBands = bandList,
+            filterCharacterIds = characterIdList,
+            filterAttrs = attrList,
+            filterSkillTypes = skillTypeList,
+            filterRarities = rarityList)
 
     }
 
@@ -323,7 +335,7 @@ class CardFilterBottomSheetFragment: BottomSheetDialogFragment() {
             "power" -> mBinding.rgSortParam.check(R.id.rb_sort_power)
             else -> {}
         }
-        restoreChips(mBinding.chipIconBandGroup, filterParam.filterBand, mapOf(
+        restoreChips(mBinding.chipIconBandGroup, filterParam.filterBands, mapOf(
                 R.id.chip_virtual_singer to ConstUtil.BAND_VIRTUAL_SINGER,
         R.id.chip_leoneed to ConstUtil.BAND_LEO_NEED,
         R.id.chip_mmj to ConstUtil.BAND_MORE_MORE_JUMP,
@@ -331,22 +343,23 @@ class CardFilterBottomSheetFragment: BottomSheetDialogFragment() {
         R.id.chip_ws to ConstUtil.BAND_WONDERLAND_SHOWTIME,
         R.id.chip_25_night to ConstUtil.BAND_25_NIGHT_CORD
         ))
-        restoreChips(mBinding.chipIconAttributeGroup, filterParam.filterAttr, mapOf(
+        restoreChips(mBinding.chipIconAttributeGroup, filterParam.filterAttrs, mapOf(
             R.id.chip_pure to ATTR_PURE,
             R.id.chip_mysterious to ATTR_MYSTERIOUS,
             R.id.chip_happy to ATTR_HAPPY,
             R.id.chip_cute to ATTR_CUTE,
             R.id.chip_cool to ATTR_COOL
         ))
-        restoreChips(mBinding.chipIconSkillGroup, filterParam.filterSkillType, mapOf(
+        restoreChips(mBinding.chipIconSkillGroup, filterParam.filterSkillTypes, mapOf(
             R.id.chip_skill_point_bonus to SKILL_TYPE_POINT_BONUS,
             R.id.chip_skill_hp_bonus to SKILL_TYPE_HP_BONUS,
             R.id.chip_skill_check_bonus to SKILL_TYPE_CHECK_BONUS,
             R.id.chip_skill_point_bonus_when_perfect to SKILL_TYPE_POINT_BONUS_WHEN_PERFECT,
-            R.id.chip_skill_point_bonus_when_high_hp to SKILL_TYPE_POINT_BONUS_WHEN_HIGH_HP
+            R.id.chip_skill_point_bonus_when_high_hp to SKILL_TYPE_POINT_BONUS_WHEN_HIGH_HP,
+            R.id.chip_skill_point_bonus_when_band to SKILL_TYPE_POINT_BONUS_WHEN_BAND
 
         ))
-        restoreChips(mBinding.chipIconRarityGroup, filterParam.filterRarity, mapOf(
+        restoreChips(mBinding.chipIconRarityGroup, filterParam.filterRarities, mapOf(
             R.id.chip_rarity_1 to RARITY_1,
             R.id.chip_rarity_2 to RARITY_2,
             R.id.chip_rarity_3 to RARITY_3,
@@ -355,7 +368,7 @@ class CardFilterBottomSheetFragment: BottomSheetDialogFragment() {
         ))
 
          characterChipList.forEach {
-            if(it.name.name2Id in filterParam.filterCharacterId) {
+            if(it.name.name2Id in filterParam.filterCharacterIds) {
                 it.isChecked = true
             } else {
                 it.isChecked = false
@@ -363,7 +376,7 @@ class CardFilterBottomSheetFragment: BottomSheetDialogFragment() {
         }
 
         val newList = characterChipList.map{
-            val isChecked = it.name.name2Id in filterParam.filterCharacterId
+            val isChecked = it.name.name2Id in filterParam.filterCharacterIds
             it.copy(isChecked = isChecked)
         }
         adapter.submitList(newList)

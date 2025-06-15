@@ -1,55 +1,19 @@
-package com.haruki.kaopifeatharuki.util
+package com.haruki.kaopifeatharuki.repo.parser
 
 import android.content.Context
-import android.util.Log
-import com.google.gson.Gson
 import com.google.gson.stream.JsonReader
-import com.haruki.kaopifeatharuki.repo.data.CardData
 import com.haruki.kaopifeatharuki.repo.database.CardDBData
 import com.haruki.kaopifeatharuki.repo.database.CardDBDataRepoImp
 import com.haruki.kaopifeatharuki.repo.database.CardDataBase
-import java.io.BufferedReader
-import java.io.InputStream
-import java.io.InputStreamReader
 
-class CardJsonParser(private val context: Context) {
-
-    companion object {
-        private const val TAG = "CardJsonParser"
-        private const val BATCH_SIZE = 200
+class CardJsonParser(private val context: Context): BaseJsonParser<CardDBData, CardDBDataRepoImp>(context) {
+    override val dataRepo: CardDBDataRepoImp by lazy {
+        CardDBDataRepoImp(CardDataBase.getDatabase(context).cardDBDataDao(),
+            CardDataBase.getDatabase(context).cardSkillDBDataDao())
     }
 
-    private val cardRepo:CardDBDataRepoImp by lazy {
-        CardDBDataRepoImp(CardDataBase.getDatabase(context).cardDBDataDao())
-    }
 
-    suspend fun importJson(inputStream: InputStream) {
-        BufferedReader(InputStreamReader(inputStream)).use { reader ->
-            JsonReader(reader).use { jsonReader ->
-                jsonReader.beginArray()
-
-                val batch = mutableListOf<CardData>()
-
-                while(jsonReader.hasNext()) {
-                    val cardData = parseCardData(jsonReader)
-                    batch.add(cardData)
-
-                    if(batch.size >= BATCH_SIZE) {
-                        insertBatch(batch)
-                        batch.clear()
-                    }
-                }
-
-                if(batch.isNotEmpty()) {
-                    insertBatch(batch)
-                }
-
-                jsonReader.endArray()
-            }
-        }
-    }
-
-    fun parseCardData(reader: JsonReader): CardData {
+    override fun parseData(reader: JsonReader): CardDBData {
         var id: Int = 0
         var specialTrainingPower3BonusFixed: Int = 0
         var prefix: String = ""
@@ -96,31 +60,25 @@ class CardJsonParser(private val context: Context) {
         }
         reader.endObject()
 
-        return CardData(id = id,
-            specialTrainingPower3BonusFixed = specialTrainingPower3BonusFixed,
+        return CardDBData(
+            id = id,
+            seq = seq,
+            characterId = characterId,
+            cardRarityType = cardRarityType,
+            attr = attr,
             prefix = prefix,
-            archivePublishedAt = archivePublishedAt,
             gachaPhrase = gachaPhrase,
             cardSkillName = cardSkillName,
             releaseAt = releaseAt,
             skillId = skillId,
-            assetbundleName = assetbundleName,
-            cardRarityType = cardRarityType,
-            archiveDisplayType = archiveDisplayType,
-            specialTrainingPower2BonusFixed = specialTrainingPower2BonusFixed,
-            supportUnit = supportUnit,
-            attr = attr,
-            characterId = characterId,
-            specialTrainingPower1BonusFixed = specialTrainingPower1BonusFixed,
-            seq = seq).also {
-                Log.i(TAG,"parseCardData: $it")
-        }
-
+            assetbundleName = assetbundleName
+        )
     }
 
-    private suspend fun insertBatch(batch: List<CardData>) {
-        batch.forEach {
-            cardRepo.insert(CardDBData(it))
+
+    override suspend fun insertBatch(parseData: List<CardDBData>) {
+        parseData.forEach {
+            dataRepo.insert(it)
         }
 
     }

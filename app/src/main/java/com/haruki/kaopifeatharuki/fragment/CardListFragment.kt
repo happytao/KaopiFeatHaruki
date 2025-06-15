@@ -34,7 +34,7 @@ class CardListFragment: BaseFragment<FragmentCardListBinding, CardViewModel>() {
     }
     private var adapterHelper:QuickAdapterHelper? = null
 
-    private var cardListCurrentPageIndex = 0
+//    private var cardListCurrentPageIndex = 0
 
 
     private var isAfterTraining = true
@@ -80,7 +80,7 @@ class CardListFragment: BaseFragment<FragmentCardListBinding, CardViewModel>() {
         band?.let {
             when(it) {
                 BAND_ALL -> {
-                    mViewModel.loadCardList(10,cardListCurrentPageIndex)
+                    mViewModel.loadCardList(10,mViewModel.cardListCurrentPageIndex)
 
                 }
 
@@ -95,7 +95,7 @@ class CardListFragment: BaseFragment<FragmentCardListBinding, CardViewModel>() {
             } else {
                 adapterHelper?.trailingLoadState = LoadState.NotLoading(false)
             }
-            if(cardListCurrentPageIndex == 0) {
+            if(mViewModel.cardListCurrentPageIndex == 0) {
                 adapter.submitList(cardList)
             } else {
                 adapter.addAll(cardList)
@@ -164,8 +164,13 @@ class CardListFragment: BaseFragment<FragmentCardListBinding, CardViewModel>() {
 
             override fun onLoad() {
                 Log.i(TAG, "load more onLoad")
-                cardListCurrentPageIndex += 1
-                mViewModel.loadCardList(10,cardListCurrentPageIndex)
+                mViewModel.cardListCurrentPageIndex += 1
+                if(mViewModel.isFilterMode) {
+                    mViewModel.loadCardByAllFilterParam(10,mViewModel.cardListCurrentPageIndex)
+                } else {
+                    mViewModel.loadCardList(10,mViewModel.cardListCurrentPageIndex)
+                }
+
             }
 
         })

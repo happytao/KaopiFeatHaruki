@@ -54,7 +54,9 @@ data class CardData(@SerializedName("specialTrainingPower3BonusFixed")
                     @SerializedName("seq")
                     val seq: Int = 0,
                     @SerializedName("cardParameters")
-                    val cardParameters: CardParameters? = null) {
+                    val cardParameters: CardParameters? = null,
+                    @SerializedName("skillType")
+                    val skillType:String = "") {
 
     val normalThumbnailUrl: String
         get() {
@@ -70,7 +72,7 @@ data class CardData(@SerializedName("specialTrainingPower3BonusFixed")
 
     var isShowAfterTraining: Boolean = true
 
-    constructor(cardDBData: CardDBData, isShowAfterTraining: Boolean = true):this(
+    constructor(cardDBData: CardDBData, isShowAfterTraining: Boolean = true, skillType: String = ""):this(
         id = cardDBData.id,
         prefix = cardDBData.prefix,
         gachaPhrase = cardDBData.gachaPhrase,
@@ -81,7 +83,8 @@ data class CardData(@SerializedName("specialTrainingPower3BonusFixed")
         cardRarityType = cardDBData.cardRarityType,
         attr = cardDBData.attr,
         characterId = cardDBData.characterId,
-        seq = cardDBData.seq) {
+        seq = cardDBData.seq,
+        skillType = skillType) {
         this.isShowAfterTraining = isShowAfterTraining
     }
 

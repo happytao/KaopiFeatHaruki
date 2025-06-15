@@ -20,12 +20,14 @@ object ConstUtil {
     const val SKILL_TYPE_CHECK_BONUS = "check_bonus"
     const val SKILL_TYPE_POINT_BONUS_WHEN_PERFECT = "point_bonus_when_perfect"
     const val SKILL_TYPE_POINT_BONUS_WHEN_HIGH_HP = "point_bonus_when_high_hp"
+    const val SKILL_TYPE_POINT_BONUS_WHEN_BAND = "point_bonus_when_band"
 
     const val RARITY_4 = "rarity_4"
     const val RARITY_3 = "rarity_3"
     const val RARITY_2 = "rarity_2"
     const val RARITY_1 = "rarity_1"
     const val RARITY_BIRTHDAY = "rarity_birthday"
+
 
 
 

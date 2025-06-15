@@ -22,6 +22,7 @@
     <string name="skill_hp_bonus_card">奶卡</string>
     <string name="skill_point_bonus_when_perfect_card">p分卡</string>
     <string name="skill_point_bonus_when_high_hp_card">血分卡</string>
+    <string name="skill_point_bonus_when_band">团分卡</string>"
     <string name="filter_subtitle_band">组合</string>
     <string name="filter_subtitle_character">角色</string>
     <string name="filter_subtitle_attribute">属性</string>

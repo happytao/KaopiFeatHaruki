@@ -33,11 +33,18 @@ class CardViewModel: BaseViewModel() {
 
     var filterParam:CardFilterParam? = null
 
+    val isFilterMode:Boolean
+        get() = filterParam != null && !filterParam!!.isInitState()
+
     var currentPosition = 0
+
+    var cardListCurrentPageIndex = 0
+
 
 
     private val cardRepo: CardDBDataRepoImp by lazy {
-        CardDBDataRepoImp(CardDataBase.getDatabase(mContext).cardDBDataDao())
+        CardDBDataRepoImp(CardDataBase.getDatabase(mContext).cardDBDataDao(),
+            CardDataBase.getDatabase(mContext).cardSkillDBDataDao())
     }
 
     var isShowAfterTraining:Boolean = true
@@ -45,25 +52,64 @@ class CardViewModel: BaseViewModel() {
 
     fun loadCardList(pageSize: Int,pageIndex: Int) {
         Log.i(TAG, "loadCardList pageSize:$pageSize pageIndex:$pageIndex")
+        if(pageIndex == 0) currentCardList.clear()
         viewModelScope.launch {
-            cardRepo.getAllCardDBData(pageSize,pageIndex).collect{ cardDBDataList ->
-                Log.i(TAG,"loadCardList: ${cardDBDataList.size}")
-                val cardDataList = mutableListOf<CardData>()
-                cardDBDataList.forEach { cardDBData ->
-                    cardDataList.add(CardData(cardDBData, isShowAfterTraining))
-                    currentCardList.add(CardData(cardDBData, isShowAfterTraining))
+            cardRepo.getAllCardDBData(pageSize,pageIndex).collect{ cardDataList ->
+                Log.i(TAG,"loadCardList: ${cardDataList.size}")
+                val newCardDataList = mutableListOf<CardData>()
+                cardDataList.forEach { cardData ->
+                    newCardDataList.add(cardData.copy().apply { this.isShowAfterTraining = this@CardViewModel.isShowAfterTraining })
+                    currentCardList.add(cardData.copy().apply { this.isShowAfterTraining = this@CardViewModel.isShowAfterTraining })
                 }
-                _cardList.emit(cardDataList)
+                _cardList.emit(newCardDataList)
             }
         }
     }
 
     fun loadCardById(id: Int) {
         viewModelScope.launch {
-            cardRepo.getCardDBDataById(id).collect{ cardDBData ->
-                val cardData = CardData(cardDBData, isShowAfterTraining)
-                _cardDataById.emit(cardData)
+            cardRepo.getCardDBDataById(id).collect{ cardData ->
+                _cardDataById.emit(cardData.copy().apply { this.isShowAfterTraining = this@CardViewModel.isShowAfterTraining })
             }
+        }
+    }
+
+    fun loadCardByAllFilterParam(pageSize: Int, pageIndex: Int) {
+        if(filterParam == null) {
+            return
+        }
+        if(pageIndex == 0) currentCardList.clear()
+        val filterParam = filterParam!!
+        val sortedProperties = when(filterParam.sortedProperty) {
+            "release_time" -> "releaseAt"
+            "rarity" -> "cardRarityType"
+            "id" -> "id"
+            "power" -> "releaseAt"
+            else -> "releaseAt"
+        }
+        Log.i(TAG,"""
+            loadCardByAllFilterParam:
+            filterCharacterIds -> ${filterParam.filterCharacterIds}
+            filterAttrs -> ${filterParam.filterAttrs}
+            filterRarities -> ${filterParam.filterRarities}
+            sortedProperties -> $sortedProperties
+            isDescSort -> ${filterParam.isDescSort}
+            pageSize -> $pageSize
+            pageIndex -> $pageIndex
+        """.trimIndent())
+        viewModelScope.launch {
+            cardRepo.getCardDBDataByAllParam(filterParam.filterCharacterIds, filterParam.filterAttrs,
+                filterParam.filterRarities,filterParam.filterSkillTypes,sortedProperties,filterParam.isDescSort,
+                pageSize,pageIndex).collect{ cardDataList ->
+                Log.i(TAG,"loadCardByAllFilterParam: ${cardDataList.map { it.id }}")
+                val newCardDataList = mutableListOf<CardData>()
+                cardDataList.forEach { cardData ->
+                    newCardDataList.add(cardData.copy().apply { this.isShowAfterTraining = this@CardViewModel.isShowAfterTraining })
+                    currentCardList.add(cardData.copy().apply { this.isShowAfterTraining = this@CardViewModel.isShowAfterTraining })
+                }
+                _cardList.emit(newCardDataList)
+            }
+
         }
     }
 

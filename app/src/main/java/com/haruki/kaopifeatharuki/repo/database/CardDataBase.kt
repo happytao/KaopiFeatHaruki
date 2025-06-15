@@ -4,11 +4,15 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import com.haruki.kaopifeatharuki.repo.database.skill.CardSkillDBData
+import com.haruki.kaopifeatharuki.repo.database.skill.CardSkillDBDataDao
 
-@Database(entities = [CardDBData::class], version = 1, exportSchema = false)
+@Database(entities = [CardDBData::class, CardSkillDBData::class], version = 1, exportSchema = false)
 abstract class CardDataBase: RoomDatabase() {
 
     abstract fun cardDBDataDao(): CardDBDataDao
+
+    abstract fun cardSkillDBDataDao(): CardSkillDBDataDao
 
 
     companion object {

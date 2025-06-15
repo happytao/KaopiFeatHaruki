@@ -21,9 +21,13 @@ class AboutFragment:BaseFragment<FragmentAboutBinding,AboutViewModel>() {
     }
 
     override fun initView() {
-        mBinding.tvAboutTest.setOnClickListener {
+        mBinding.btnImportDatabase.setOnClickListener {
             Log.i(TAG,"start parse json")
             mViewModel.parseJson(requireContext())
+        }
+
+        mBinding.btnClearDatabase.setOnClickListener {
+            mViewModel.clearDatabase()
         }
 
     }
@@ -32,6 +36,12 @@ class AboutFragment:BaseFragment<FragmentAboutBinding,AboutViewModel>() {
         mViewModel.importJsonState.observe(this) {
             if(it) {
                 ToastUtil.showToast(requireContext(), "数据库导入成功")
+            }
+        }
+
+        mViewModel.clearDataBaseState.observe(this) {
+            if(it) {
+                ToastUtil.showToast(requireContext(), "数据库删除成功")
             }
         }
 

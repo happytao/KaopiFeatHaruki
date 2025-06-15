@@ -5,7 +5,11 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import androidx.room.RawQuery
 import androidx.room.Update
+import androidx.sqlite.db.SupportSQLiteQuery
+import com.haruki.kaopifeatharuki.repo.database.skill.CardSkillDBData
+import com.haruki.kaopifeatharuki.repo.database.skill.CardWithSkillDBData
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -37,4 +41,9 @@ interface CardDBDataDao {
         LIMIT :pageSize OFFSET (:pageIndex * :pageSize)
     """)
     fun getAllCardDBData(pageSize: Int, pageIndex: Int): Flow<List<CardDBData>>
+
+
+    @RawQuery(observedEntities = [CardDBData::class,CardSkillDBData::class])
+    fun getCardDBDataByAllParam(query: SupportSQLiteQuery): Flow<List<CardWithSkillDBData>>
 }
+
