@@ -29,6 +29,13 @@ class CharacterChipAdapter: BaseDifferAdapter<CharacterChip, QuickViewHolder>(En
             Glide.with(context).load(item?.iconResId).into(object : CustomTarget<Drawable>(){
                 override fun onResourceReady(resource: Drawable, transition: Transition<in Drawable>?) {
                     chip.chipIcon = resource
+                    if(!item!!.isChecked) {
+                        chip.chipIcon?.colorFilter = ColorMatrixColorFilter(ColorMatrix().apply {
+                            setSaturation(0f)
+                        })
+                    } else {
+                        chip.chipIcon?.colorFilter = null
+                    }
                 }
 
                 override fun onLoadCleared(placeholder: Drawable?) {
@@ -38,6 +45,7 @@ class CharacterChipAdapter: BaseDifferAdapter<CharacterChip, QuickViewHolder>(En
             })
         }
         chip.isChecked = item!!.isChecked
+        Log.i(TAG,"changeFilterColor name:${item.name} isChecked:${item.isChecked}")
     }
 
     override fun onBindViewHolder(

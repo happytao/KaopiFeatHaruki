@@ -4,8 +4,11 @@ package com.haruki.kaopifeatharuki.fragment
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
+import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView.OnScrollListener
 import com.chad.library.adapter4.QuickAdapterHelper
 import com.chad.library.adapter4.layoutmanager.QuickGridLayoutManager
 import com.chad.library.adapter4.loadState.LoadState
@@ -35,6 +38,9 @@ class CardListFragment: BaseFragment<FragmentCardListBinding, CardViewModel>() {
 
 
     private var isAfterTraining = true
+    private val screenHeight by lazy {
+        resources.displayMetrics.heightPixels
+    }
 
 
     companion object{
@@ -129,7 +135,21 @@ class CardListFragment: BaseFragment<FragmentCardListBinding, CardViewModel>() {
             }
         }
 
+        mBinding.btnFloatingToTop.visibility = View.GONE
 
+        mBinding.btnFloatingToTop.setOnClickListener {
+            mBinding.recyclerView.scrollToPosition(0)
+            mBinding.btnFloatingToTop.visibility = View.GONE
+        }
+
+        mBinding.recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+                val offset = recyclerView.computeVerticalScrollOffset()
+                mBinding.btnFloatingToTop.visibility =
+                    if (offset > screenHeight) View.VISIBLE else View.GONE
+            }
+        })
 
     }
 

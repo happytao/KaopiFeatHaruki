@@ -9,6 +9,25 @@ object ConstUtil {
     const val BAND_WONDERLAND_SHOWTIME = "band_wonderland_showtime"
     const val BAND_25_NIGHT_CORD = "band_25_night_cord"
 
+    const val ATTR_PURE = "pure"
+    const val ATTR_MYSTERIOUS = "mysterious"
+    const val ATTR_COOL = "cool"
+    const val ATTR_HAPPY = "happy"
+    const val ATTR_CUTE = "cute"
+
+    const val SKILL_TYPE_POINT_BONUS = "point_bonus"
+    const val SKILL_TYPE_HP_BONUS = "hp_bonus"
+    const val SKILL_TYPE_CHECK_BONUS = "check_bonus"
+    const val SKILL_TYPE_POINT_BONUS_WHEN_PERFECT = "point_bonus_when_perfect"
+    const val SKILL_TYPE_POINT_BONUS_WHEN_HIGH_HP = "point_bonus_when_high_hp"
+
+    const val RARITY_4 = "rarity_4"
+    const val RARITY_3 = "rarity_3"
+    const val RARITY_2 = "rarity_2"
+    const val RARITY_1 = "rarity_1"
+    const val RARITY_BIRTHDAY = "rarity_birthday"
+
+
 
     const val HARUKI_ASSET_URL_PREFIX = "https://sekai-assets-bdf29c81.seiunx.net/cn-assets/startapp/"
 

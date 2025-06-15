@@ -10,6 +10,8 @@
         android:id="@+id/recycler_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:scrollbars="vertical"
+        android:orientation="vertical"
         />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -17,9 +19,21 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|right"
-        android:layout_marginEnd="32dp"
+        android:layout_marginEnd="8dp"
         android:layout_marginBottom="64dp"
         android:src="@drawable/refresh"
+        style="?attr/floatingActionButtonTertiaryStyle"
+        app:rippleColor="?attr/colorOnTertiaryContainer"
+        />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/btn_floating_to_top"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|right"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="128dp"
+        android:src="@drawable/totop"
         style="?attr/floatingActionButtonTertiaryStyle"
         app:rippleColor="?attr/colorOnTertiaryContainer"
         />

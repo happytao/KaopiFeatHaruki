@@ -316,6 +316,7 @@
                     >
 
                     <com.google.android.material.chip.Chip
+                        android:id="@+id/chip_cute"
                         style="@style/Widget.App.IconChip"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -324,6 +325,7 @@
                         app:chipIcon="@mipmap/cute_icon" />
 
                     <com.google.android.material.chip.Chip
+                        android:id="@+id/chip_mysterious"
                         style="@style/Widget.App.IconChip"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -332,6 +334,7 @@
                         app:chipIcon="@mipmap/mysterious_icon" />
 
                     <com.google.android.material.chip.Chip
+                        android:id="@+id/chip_cool"
                         style="@style/Widget.App.IconChip"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -340,6 +343,7 @@
                         app:chipIcon="@mipmap/cool_icon" />
 
                     <com.google.android.material.chip.Chip
+                        android:id="@+id/chip_happy"
                         style="@style/Widget.App.IconChip"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -348,6 +352,7 @@
                         app:chipIcon="@mipmap/happy_icon" />
 
                     <com.google.android.material.chip.Chip
+                        android:id="@+id/chip_pure"
                         style="@style/Widget.App.IconChip"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -403,6 +408,7 @@
                     >
 
                     <com.google.android.material.chip.Chip
+                        android:id="@+id/chip_skill_point_bonus"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:checkable="true"
@@ -411,6 +417,7 @@
                         app:chipMinTouchTargetSize="38dp"/>
 
                     <com.google.android.material.chip.Chip
+                        android:id="@+id/chip_skill_check_bonus"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:checkable="true"
@@ -419,6 +426,7 @@
                         app:chipMinTouchTargetSize="38dp"/>
 
                     <com.google.android.material.chip.Chip
+                        android:id="@+id/chip_skill_hp_bonus"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:checkable="true"
@@ -427,6 +435,7 @@
                         app:chipMinTouchTargetSize="38dp"/>
 
                     <com.google.android.material.chip.Chip
+                        android:id="@+id/chip_skill_point_bonus_when_perfect"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:checkable="true"
@@ -435,6 +444,7 @@
                         app:chipMinTouchTargetSize="38dp"/>
 
                     <com.google.android.material.chip.Chip
+                        android:id="@+id/chip_skill_point_bonus_when_high_hp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:checkable="true"
@@ -491,6 +501,7 @@
                     >
 
                     <com.google.android.material.chip.Chip
+                        android:id="@+id/chip_rarity_1"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:checkable="true"
@@ -501,6 +512,7 @@
                         app:iconEndPadding="9dp"/>
 
                     <com.google.android.material.chip.Chip
+                        android:id="@+id/chip_rarity_2"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:checkable="true"
@@ -510,6 +522,7 @@
                         style="@style/Widget.App.StarChip" />
 
                     <com.google.android.material.chip.Chip
+                        android:id="@+id/chip_rarity_3"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:checkable="true"
@@ -519,6 +532,7 @@
                         style="@style/Widget.App.StarChip"/>
 
                     <com.google.android.material.chip.Chip
+                        android:id="@+id/chip_rarity_4"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:checkable="true"
@@ -528,6 +542,7 @@
                         style="@style/Widget.App.StarChip"/>
 
                     <com.google.android.material.chip.Chip
+                        android:id="@+id/chip_rarity_birthday"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:checkable="true"
@@ -557,6 +572,7 @@
             android:dividerPadding="8dp">
 
             <Button
+                android:id="@+id/btn_reset"
                 style="@style/Widget.Material3.Button.OutlinedButton.Icon"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -568,6 +584,7 @@
                 app:rippleColor="?attr/colorPrimaryContainer"/>
 
             <Button
+                android:id="@+id/btn_clear"
                 style="@style/Widget.Material3.Button.OutlinedButton.Icon"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -579,6 +596,7 @@
                 app:rippleColor="?attr/colorPrimaryContainer"/>
 
             <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_confirm"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:text="@string/filter_confirm"

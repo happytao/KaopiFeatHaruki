@@ -48,7 +48,6 @@ dependencies {
     implementation(libs.androidx.constraintlayout)
     implementation(libs.androidx.fragment)
     implementation(libs.androidx.recyclerview)
-    implementation(libs.expandableLayout)
     implementation(libs.gson)
     implementation(libs.glide)
     ksp(libs.glide.ksp)
@@ -58,9 +57,6 @@ dependencies {
     implementation(libs.androidx.room.runtime)
     implementation(libs.androidx.room.ktx)
     ksp(libs.androidx.room.compiler)
-
-
-//    implementation(libs.skydoves.expandablelayout)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

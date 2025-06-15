@@ -62,7 +62,6 @@ class CardFragment: BaseFragment<FragmentCardBinding, CardViewModel>() {
 
     private fun initListener() {
         mBinding.btnFilter.setOnClickListener {
-//            cardListFragment.headerExpandableToggle()
             val bottomSheetFragment = CardFilterBottomSheetFragment()
             bottomSheetFragment.show(childFragmentManager, CardFilterBottomSheetFragment.TAG)
         }
@@ -71,6 +70,12 @@ class CardFragment: BaseFragment<FragmentCardBinding, CardViewModel>() {
             if(actionId == EditorInfo.IME_ACTION_DONE) {
                 Log.i(TAG,"searchInput complete")
                 val idStr = textView.text
+                if(idStr.isBlank()) {
+                    mViewModel.restoreCardList()
+                    mBinding.searchContainer.clearFocus()
+                    hideKeyboard(mBinding.searchContainer)
+                    return@setOnEditorActionListener false
+                }
                 try {
                     val id = idStr.toString().toInt()
                     mViewModel.loadCardById(id)

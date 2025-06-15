@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.haruki.kaopifeatharuki.base.BaseViewModel
 import com.haruki.kaopifeatharuki.repo.data.CardData
+import com.haruki.kaopifeatharuki.repo.data.CardFilterParam
 import com.haruki.kaopifeatharuki.repo.database.CardDBDataRepoImp
 import com.haruki.kaopifeatharuki.repo.database.CardDataBase
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -30,7 +31,10 @@ class CardViewModel: BaseViewModel() {
 
     val currentCardList = mutableListOf<CardData>()
 
+    var filterParam:CardFilterParam? = null
+
     var currentPosition = 0
+
 
     private val cardRepo: CardDBDataRepoImp by lazy {
         CardDBDataRepoImp(CardDataBase.getDatabase(mContext).cardDBDataDao())
