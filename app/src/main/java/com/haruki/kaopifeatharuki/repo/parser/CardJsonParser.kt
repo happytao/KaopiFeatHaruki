@@ -2,9 +2,11 @@ package com.haruki.kaopifeatharuki.repo.parser
 
 import android.content.Context
 import com.google.gson.stream.JsonReader
+import com.haruki.kaopifeatharuki.repo.data.CardData
 import com.haruki.kaopifeatharuki.repo.database.CardDBData
 import com.haruki.kaopifeatharuki.repo.database.CardDBDataRepoImp
 import com.haruki.kaopifeatharuki.repo.database.CardDataBase
+import com.haruki.kaopifeatharuki.util.GsonUtil
 
 class CardJsonParser(private val context: Context): BaseJsonParser<CardDBData, CardDBDataRepoImp>(context) {
     override val dataRepo: CardDBDataRepoImp by lazy {
@@ -14,64 +16,30 @@ class CardJsonParser(private val context: Context): BaseJsonParser<CardDBData, C
 
 
     override fun parseData(reader: JsonReader): CardDBData {
-        var id: Int = 0
-        var specialTrainingPower3BonusFixed: Int = 0
-        var prefix: String = ""
-        var archivePublishedAt: Long = 0
-        var gachaPhrase: String = ""
-        var cardSkillName: String = ""
-        var releaseAt: Long = 0
-        var skillId: Int = 0
-        var assetbundleName: String = ""
-        var cardRarityType: String = ""
-        var archiveDisplayType: String = ""
-        var specialTrainingPower2BonusFixed: Int = 0
-        var supportUnit: String = ""
-        var attr: String = ""
-        var characterId: Int = 0
-        var specialTrainingPower1BonusFixed: Int = 0
-        var seq: Int = 0
-
-
-
-        reader.beginObject()
-        while (reader.hasNext()) {
-            when (reader.nextName()) {
-                "id" -> id = reader.nextInt()
-                "specialTrainingPower3BonusFixed" -> specialTrainingPower3BonusFixed = reader.nextInt()
-                "prefix" -> prefix = reader.nextString()
-                "archivePublishedAt" -> archivePublishedAt = reader.nextLong()
-                "gachaPhrase" -> gachaPhrase = reader.nextString()
-                "cardSkillName" -> cardSkillName = reader.nextString()
-                "releaseAt" -> releaseAt = reader.nextLong()
-                "skillId" -> skillId = reader.nextInt()
-                "assetbundleName" -> assetbundleName = reader.nextString()
-                "cardRarityType" -> cardRarityType = reader.nextString()
-                "archiveDisplayType" -> archiveDisplayType = reader.nextString()
-                "specialTrainingPower2BonusFixed" -> specialTrainingPower2BonusFixed = reader.nextInt()
-                "supportUnit" -> supportUnit = reader.nextString()
-                "attr" -> attr = reader.nextString()
-                "characterId" -> characterId = reader.nextInt()
-                "specialTrainingPower1BonusFixed" -> specialTrainingPower1BonusFixed = reader.nextInt()
-                "seq" -> seq = reader.nextInt()
-                else -> reader.skipValue()
-            }
-
-        }
-        reader.endObject()
-
+        val cardData = GsonUtil.fromJson(reader, CardData::class.java)
+        val basePower = (cardData?.cardParameters?.param1?.lastOrNull() ?: 0) +
+                (cardData?.cardParameters?.param2?.lastOrNull() ?: 0) +
+                (cardData?.cardParameters?.param3?.lastOrNull() ?: 0)
+        val parametersJson = GsonUtil.toJson(cardData?.cardParameters)
+        val specialTrainingCostsJson = GsonUtil.toJson(cardData?.specialTrainingCosts)
         return CardDBData(
-            id = id,
-            seq = seq,
-            characterId = characterId,
-            cardRarityType = cardRarityType,
-            attr = attr,
-            prefix = prefix,
-            gachaPhrase = gachaPhrase,
-            cardSkillName = cardSkillName,
-            releaseAt = releaseAt,
-            skillId = skillId,
-            assetbundleName = assetbundleName
+            id = cardData!!.id,
+            seq = cardData.seq,
+            characterId = cardData.characterId,
+            cardRarityType = cardData.cardRarityType,
+            attr = cardData.attr,
+            prefix = cardData.prefix,
+            gachaPhrase = cardData.gachaPhrase,
+            cardSkillName = cardData.cardSkillName,
+            releaseAt = cardData.releaseAt,
+            skillId = cardData.skillId,
+            assetbundleName = cardData.assetbundleName,
+            specialTrainingPower1BonusFixed = cardData.specialTrainingPower1BonusFixed,
+            specialTrainingPower2BonusFixed = cardData.specialTrainingPower2BonusFixed,
+            specialTrainingPower3BonusFixed = cardData.specialTrainingPower3BonusFixed,
+            cardParameters = parametersJson,
+            specialTrainingCosts = specialTrainingCostsJson,
+            basePower = basePower
         )
     }
 

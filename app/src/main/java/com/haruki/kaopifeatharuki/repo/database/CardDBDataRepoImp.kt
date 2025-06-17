@@ -60,6 +60,7 @@ class CardDBDataRepoImp(private val cardDBDataDao: CardDBDataDao,
             cardWithSkillList.map { cardWithSkill ->
                 CardData(
                     cardDBData = cardWithSkill.card,
+                    basePower = cardWithSkill.card.basePower,
                     skillType = cardWithSkill.skill.skillType
                 )
             }
@@ -115,6 +116,12 @@ class CardDBDataRepoImp(private val cardDBDataDao: CardDBDataDao,
         CardDBData.releaseAt AS card_releaseAt,
         CardDBData.skillId AS card_skillId,
         CardDBData.assetbundleName AS card_assetbundleName,
+        CardDBData.specialTrainingPower1BonusFixed AS card_specialTrainingPower1BonusFixed,
+        CardDBData.specialTrainingPower2BonusFixed AS card_specialTrainingPower2BonusFixed,
+        CardDBData.specialTrainingPower3BonusFixed AS card_specialTrainingPower3BonusFixed,
+        CardDBData.cardParameters AS card_cardParameters,
+        CardDBData.specialTrainingCosts AS card_specialTrainingCosts,
+        CardDBData.basePower AS card_basePower,
 
         /* CardSkillDBData 字段（前缀 skill_） */
         CardSkillDBData.id AS skill_id,

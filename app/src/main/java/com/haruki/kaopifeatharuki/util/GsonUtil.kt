@@ -3,6 +3,7 @@ package com.haruki.kaopifeatharuki.util
 import android.util.Log
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import com.google.gson.stream.JsonReader
 import java.lang.reflect.Type
 
 object GsonUtil {
@@ -52,6 +53,25 @@ object GsonUtil {
         } catch (e: Exception) {
             Log.e(TAG,"fromJson: failed")
             Log.e(TAG,Log.getStackTraceString(e))
+            null
+        }
+    }
+
+    /**
+     * 将 JsonReader 转换为指定类型的对象
+     * @param reader JsonReader 对象
+     * @param clazz 目标对象的 Class 类型
+     * @return 转换后的对象（可能为 null）
+     */
+    fun <T> fromJson(reader: JsonReader?, clazz: Class<T>): T? {
+        if (reader == null) {
+            Log.e(TAG, "fromJson: JsonReader is null")
+            return null
+        }
+        return try {
+            gson.fromJson(reader, clazz) // 直接解析
+        } catch (e: Exception) {
+            Log.e(TAG, "fromJson: failed", e)
             null
         }
     }

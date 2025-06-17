@@ -84,7 +84,7 @@ class CardViewModel: BaseViewModel() {
             "release_time" -> "releaseAt"
             "rarity" -> "cardRarityType"
             "id" -> "id"
-            "power" -> "releaseAt"
+            "power" -> "basePower"
             else -> "releaseAt"
         }
         Log.i(TAG,"""
@@ -101,7 +101,7 @@ class CardViewModel: BaseViewModel() {
             cardRepo.getCardDBDataByAllParam(filterParam.filterCharacterIds, filterParam.filterAttrs,
                 filterParam.filterRarities,filterParam.filterSkillTypes,sortedProperties,filterParam.isDescSort,
                 pageSize,pageIndex).collect{ cardDataList ->
-                Log.i(TAG,"loadCardByAllFilterParam: ${cardDataList.map { it.id }}")
+                Log.i(TAG,"loadCardByAllFilterParam: ${cardDataList.map { "id:" + it.id + "power:" + it.basePower}}")
                 val newCardDataList = mutableListOf<CardData>()
                 cardDataList.forEach { cardData ->
                     newCardDataList.add(cardData.copy().apply { this.isShowAfterTraining = this@CardViewModel.isShowAfterTraining })

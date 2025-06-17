@@ -5,6 +5,7 @@ import com.google.gson.JsonArray
 import com.google.gson.JsonParser
 import com.google.gson.stream.JsonReader
 import com.haruki.kaopifeatharuki.R
+import com.haruki.kaopifeatharuki.repo.data.skill.CardSkillData
 import com.haruki.kaopifeatharuki.repo.data.skill.SkillEffectsItem
 import com.haruki.kaopifeatharuki.repo.database.CardDBData
 import com.haruki.kaopifeatharuki.repo.database.CardDBDataRepoImp
@@ -29,35 +30,12 @@ class CardSkillJsonParser(private val context: Context): BaseJsonParser<CardSkil
     }
 
     override fun parseData(reader: JsonReader): CardSkillDBData {
-        var id: Int = 0
-        var description: String = ""
-        var skillFilterId: Int = 0
-        var descriptionSpriteName: String = ""
-        var skillEffects: String = ""
-        var skillType: String = ""
-
-
-        reader.beginObject()
-        while (reader.hasNext()) {
-            when (reader.nextName()) {
-                "id" -> id = reader.nextInt()
-                "description" -> description = reader.nextString()
-                "skillFilterId" -> skillFilterId = reader.nextInt()
-                "descriptionSpriteName" -> descriptionSpriteName = reader.nextString()
-                "skillEffects" -> {
-                    val jsonArray = JsonParser.parseReader(reader) as JsonArray
-                    skillEffects = jsonArray.toString()
-                }
-                else -> reader.skipValue()
-            }
-
-        }
-        reader.endObject()
-
-        val skillEffectList = GsonUtil.fromJsonList(skillEffects, SkillEffectsItem::class.java)
-        skillType = if(descriptionSpriteName == "life_recovery") {
+        val cardSkillData = GsonUtil.fromJson(reader, CardSkillData::class.java)
+        val skillEffectList = cardSkillData!!.skillEffects
+        val skillEffectsJson = GsonUtil.toJson(skillEffectList)
+        val skillType = if(cardSkillData.descriptionSpriteName == "life_recovery") {
             SKILL_TYPE_HP_BONUS
-        } else if(descriptionSpriteName == "judgment_up") {
+        } else if(cardSkillData.descriptionSpriteName == "judgment_up") {
             SKILL_TYPE_CHECK_BONUS
         } else {
             if(skillEffectList?.first()?.skillEffectType == "score_up_condition_life") {
@@ -72,11 +50,11 @@ class CardSkillJsonParser(private val context: Context): BaseJsonParser<CardSkil
             }
         }
         return CardSkillDBData(
-            id = id,
-            description = description,
-            skillFilterId = skillFilterId,
-            descriptionSpriteName = descriptionSpriteName,
-            skillEffects = skillEffects,
+            id = cardSkillData.id,
+            description = cardSkillData.description,
+            skillFilterId = cardSkillData.skillFilterId,
+            descriptionSpriteName = cardSkillData.descriptionSpriteName,
+            skillEffects = skillEffectsJson,
             skillType = skillType
 
         )
