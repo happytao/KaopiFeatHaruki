@@ -8,6 +8,8 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.CheckBox
 import androidx.core.view.forEach
 import androidx.fragment.app.viewModels
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -226,6 +228,58 @@ class CardFilterBottomSheetFragment: BottomSheetDialogFragment() {
             adapter.submitList(newList)
 
         }
+
+        mBinding.btnBandSelectSwitch.setOnClickListener(::selectSwitchHandle)
+        mBinding.btnCharaSelectSwitch.setOnClickListener(::selectSwitchHandle)
+        mBinding.btnAttrSelectSwitch.setOnClickListener(::selectSwitchHandle)
+        mBinding.btnSkillSelectSwitch.setOnClickListener(::selectSwitchHandle)
+        mBinding.btnRaritySelectSwitch.setOnClickListener(::selectSwitchHandle)
+    }
+
+    /**
+     * 每个过滤选项的全选，全不选监听处理
+     */
+    private fun selectSwitchHandle(view: View) {
+        if(view !is CheckBox) {
+            return
+        }
+        val checkBox = view
+        when(checkBox.id) {
+            R.id.btn_band_select_switch,
+            R.id.btn_chara_select_switch-> {
+                //如果全选或者清空组合/角色 则同步另一个按钮的状态
+                if(checkBox.id == R.id.btn_band_select_switch) {
+                    mBinding.btnCharaSelectSwitch.isChecked = checkBox.isChecked
+                }else {
+                    mBinding.btnBandSelectSwitch.isChecked = checkBox.isChecked
+                }
+                //如果两个按钮状态不同步则直接return 避免多次回调事件
+                if(mBinding.btnBandSelectSwitch.isChecked != mBinding.btnCharaSelectSwitch.isChecked) return
+                mBinding.chipIconBandGroup.forEach { view ->
+                    (view as Chip).isChecked = !checkBox.isChecked
+                    val newList = adapter.items.map { it.copy() }
+                    newList.forEach { it.isChecked = !checkBox.isChecked }
+                    adapter.submitList(newList)
+                }
+            }
+            R.id.btn_attr_select_switch -> {
+                mBinding.chipIconAttributeGroup.forEach { view ->
+                    (view as Chip).isChecked = !checkBox.isChecked
+                }
+            }
+            R.id.btn_skill_select_switch -> {
+                mBinding.chipIconSkillGroup.forEach { view ->
+                    (view as Chip).isChecked = !checkBox.isChecked
+                }
+            }
+            R.id.btn_rarity_select_switch -> {
+                mBinding.chipIconRarityGroup.forEach { view ->
+                    (view as Chip).isChecked = !checkBox.isChecked
+                }
+            }
+            else -> {}
+        }
+
     }
 
     private fun getCurrentFilterParam():CardFilterParam {
@@ -385,7 +439,7 @@ class CardFilterBottomSheetFragment: BottomSheetDialogFragment() {
 
     }
 
-    fun restoreChips(chipGroup: ChipGroup, values: List<String>, mapping: Map<Int, String>) {
+    private fun restoreChips(chipGroup: ChipGroup, values: List<String>, mapping: Map<Int, String>) {
         chipGroup.forEach { view ->
             (view as Chip).isChecked = mapping[view.id] in values
         }
