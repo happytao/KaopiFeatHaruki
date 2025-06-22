@@ -18,7 +18,7 @@ import com.haruki.kaopifeatharuki.base.BaseActivity
 import com.haruki.kaopifeatharuki.base.BaseFragment
 import com.haruki.kaopifeatharuki.databinding.ActivityMainBinding
 import com.haruki.kaopifeatharuki.fragment.AboutFragment
-import com.haruki.kaopifeatharuki.fragment.CardFragment
+import com.haruki.kaopifeatharuki.fragment.CardListFragment
 import com.haruki.kaopifeatharuki.fragment.EventFragment
 import com.haruki.kaopifeatharuki.fragment.MusicFragment
 import com.haruki.kaopifeatharuki.viewmodel.MainViewModel
@@ -39,7 +39,7 @@ class MainActivity : BaseActivity<ActivityMainBinding,MainViewModel>() {
 
     override fun initView() {
         initListener()
-        showFragment<CardFragment>()
+        showFragment<CardListFragment>()
     }
 
 
@@ -126,7 +126,7 @@ class MainActivity : BaseActivity<ActivityMainBinding,MainViewModel>() {
     private fun changeFragment(fragmentName:String) {
         when(fragmentName) {
             getString(R.string.navigation_draw_func_1) -> {
-                showFragment<CardFragment>()
+                showFragment<CardListFragment>()
             }
             getString(R.string.navigation_draw_func_2) -> {
                 showFragment<MusicFragment>()

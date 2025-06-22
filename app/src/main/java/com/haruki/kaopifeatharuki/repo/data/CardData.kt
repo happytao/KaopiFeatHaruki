@@ -3,8 +3,11 @@ package com.haruki.kaopifeatharuki.repo.data
 import android.util.Log
 import com.google.gson.annotations.SerializedName
 import com.haruki.kaopifeatharuki.repo.database.CardDBData
+import com.haruki.kaopifeatharuki.util.ConstUtil.AFTER_TRAINING_CARD_IMG_TAIL
 import com.haruki.kaopifeatharuki.util.ConstUtil.AFTER_TRAINING_THUMBNAIL_TAIL
+import com.haruki.kaopifeatharuki.util.ConstUtil.CARD_IMG_PREFIX
 import com.haruki.kaopifeatharuki.util.ConstUtil.HARUKI_ASSET_URL_PREFIX
+import com.haruki.kaopifeatharuki.util.ConstUtil.NORMAL_CARD_IMG_TAIL
 import com.haruki.kaopifeatharuki.util.ConstUtil.NORMAL_THUMBNAIL_TAIL
 import com.haruki.kaopifeatharuki.util.ConstUtil.SEKAI_VIEWER_ASSET_URL_PREFIX
 import com.haruki.kaopifeatharuki.util.ConstUtil.THUMBNAIL_PREFIX
@@ -68,6 +71,19 @@ data class CardData(@SerializedName("specialTrainingPower3BonusFixed")
         get() {
             if(assetbundleName.isEmpty()) return ""
             return HARUKI_ASSET_URL_PREFIX + THUMBNAIL_PREFIX + assetbundleName + AFTER_TRAINING_THUMBNAIL_TAIL
+        }
+
+    val normalCardImgUrl:String
+        get() {
+            if(assetbundleName.isEmpty()) return ""
+            return HARUKI_ASSET_URL_PREFIX + CARD_IMG_PREFIX + assetbundleName + NORMAL_CARD_IMG_TAIL
+        }
+
+    val afterTrainingCardImgUrl:String
+        get() {
+            if(assetbundleName.isEmpty()) return ""
+            return HARUKI_ASSET_URL_PREFIX + CARD_IMG_PREFIX + assetbundleName + AFTER_TRAINING_CARD_IMG_TAIL
+
         }
 
     var isShowAfterTraining: Boolean = true
