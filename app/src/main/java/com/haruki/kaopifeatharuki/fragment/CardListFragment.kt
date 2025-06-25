@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.OnScrollListener
 import com.chad.library.adapter4.QuickAdapterHelper
@@ -23,6 +24,8 @@ import com.haruki.kaopifeatharuki.adapter.CardListAdapter
 import com.haruki.kaopifeatharuki.adapter.CardListLoadMoreAdapter
 import com.haruki.kaopifeatharuki.base.BaseFragment
 import com.haruki.kaopifeatharuki.databinding.FragmentCardListBinding
+import com.haruki.kaopifeatharuki.navigation.CardDetail
+import com.haruki.kaopifeatharuki.repo.data.CardData
 import com.haruki.kaopifeatharuki.util.ConstUtil.BAND_ALL
 import com.haruki.kaopifeatharuki.util.ToastUtil
 import com.haruki.kaopifeatharuki.util.observe
@@ -70,8 +73,16 @@ class CardListFragment: BaseFragment<FragmentCardListBinding, CardViewModel>() {
         editClearFocus()
     }
 
+    override fun onDestroyView() {
+        mViewModel.currentPosition = (mBinding.recyclerView.layoutManager as QuickGridLayoutManager)
+            .findFirstVisibleItemPosition()
+        Log.i(TAG, "currentPosition : ${mViewModel.currentPosition}")
+        mViewModel.isDataLoaded = true
+        super.onDestroyView()
+    }
+
+
     override fun initData() {
-        mViewModel.loadCardList(10,mViewModel.cardListCurrentPageIndex)
         mViewModel.cardList.observe(this) { cardList ->
             if(cardList.isEmpty()) {
                 adapterHelper?.trailingLoadState = LoadState.NotLoading(true)
@@ -96,17 +107,18 @@ class CardListFragment: BaseFragment<FragmentCardListBinding, CardViewModel>() {
         mViewModel.cardDataById.observe(this) { cardData ->
             Log.i(TAG,"cardDataById ${cardData.id}")
             mViewModel.currentPosition = (mBinding.recyclerView.layoutManager as QuickGridLayoutManager)
-                .findLastVisibleItemPosition()
+                .findFirstVisibleItemPosition()
             adapterHelper?.trailingLoadState = LoadState.NotLoading(true)
             adapter.submitList(listOf(cardData))
         }
 
-        mViewModel.restoreEvent.observe(this) {
-            adapter.submitList(null)
-            adapter.addAll(mViewModel.currentCardList)
-            adapter.notifyDataSetChanged()
+        mViewModel.restoreEvent.observe(this) { cardList ->
+            Log.i(TAG,"restoreEvent, list size: ${cardList.size} pos:${mViewModel.currentPosition}")
+            adapter.submitList(cardList) {
+                mBinding.recyclerView.scrollToPosition(mViewModel.currentPosition)
+            }
             adapterHelper?.trailingLoadState = LoadState.NotLoading(false)
-            mBinding.recyclerView.scrollToPosition(mViewModel.currentPosition)
+
 
         }
 
@@ -136,12 +148,9 @@ class CardListFragment: BaseFragment<FragmentCardListBinding, CardViewModel>() {
         })
 
         adapter.setOnItemClickListener{ _,_,pos ->
-            mViewModel.currentPosition = pos
+            mViewModel.selectPosition = pos
             Log.i(TAG,"setOnItemClickListener $pos")
-            requireActivity().supportFragmentManager.beginTransaction()
-                .replace(R.id.fragment_container, CardDetailFragment())
-                .addToBackStack(null)
-                .commit()
+            findNavController().navigate(CardDetail)
         }
 
         mBinding.btnFilter.setOnClickListener {
@@ -180,9 +189,18 @@ class CardListFragment: BaseFragment<FragmentCardListBinding, CardViewModel>() {
             mViewModel.restoreCardList()
         }
 
+        if(!mViewModel.isDataLoaded) {
+            mViewModel.loadCardList(10,mViewModel.cardListCurrentPageIndex)
+        }
     }
 
+    override fun restoreData() {
+        Log.i(TAG,"restore fragment")
+        mBinding.root.post {
+            mViewModel.restoreCardList()
+        }
 
+    }
 
     private fun setCardListHeaderAndTrailingLoad() {
         val loadMoreAdapter = CardListLoadMoreAdapter()

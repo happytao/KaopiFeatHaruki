@@ -53,7 +53,7 @@ class CardFilterBottomSheetFragment: BottomSheetDialogFragment() {
         CharacterChipAdapter()
     }
 
-    private val mViewModel by viewModels<CardViewModel>({requireParentFragment()})
+    private val mViewModel by viewModels<CardViewModel>({requireActivity()})
 
     private val iconFilterChipGroupList = mutableListOf<ChipGroup>()
 

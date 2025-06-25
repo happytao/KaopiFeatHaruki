@@ -1,5 +1,6 @@
 package com.haruki.kaopifeatharuki.fragment
 
+import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels

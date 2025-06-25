@@ -26,7 +26,7 @@ class CardViewModel: BaseViewModel() {
     private val _cardDataById = MutableSharedFlow<CardData>()
     val cardDataById = _cardDataById.asSharedFlow()
 
-    private val _restoreEvent = MutableSharedFlow<Unit>()
+    private val _restoreEvent = MutableSharedFlow<List<CardData>>()
     val restoreEvent = _restoreEvent.asSharedFlow()
 
     val currentCardList = mutableListOf<CardData>()
@@ -37,6 +37,8 @@ class CardViewModel: BaseViewModel() {
         get() = filterParam != null && !filterParam!!.isInitState()
 
     var currentPosition = 0
+
+    var selectPosition = 0
 
     var cardListCurrentPageIndex = 0
 
@@ -115,7 +117,14 @@ class CardViewModel: BaseViewModel() {
 
     fun restoreCardList() {
         viewModelScope.launch {
-            _restoreEvent.emit(Unit)
+//            val newList = mutableListOf<CardData>()
+//            currentCardList.forEach { cardData ->
+//                newList.add(cardData.copy())
+//            }
+            val newList2 = currentCardList.map{
+                it.copy()
+            }
+            _restoreEvent.emit(newList2)
         }
     }
 

@@ -24,6 +24,10 @@ abstract class BaseFragment<VB: ViewBinding, VM:BaseViewModel>:Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initData()
+        if(mViewModel.isDataLoaded) {
+            restoreData()
+        }
+
 
     }
 
@@ -32,5 +36,11 @@ abstract class BaseFragment<VB: ViewBinding, VM:BaseViewModel>:Fragment() {
     abstract fun initView()
 
     abstract fun initData()
+
+    open fun restoreData() {
+
+    }
+
+
 
 }

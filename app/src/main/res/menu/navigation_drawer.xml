@@ -5,19 +5,18 @@
     <item android:id="@+id/navi_menu_func_list"
         android:title="@string/navigation_draw_subtitle_1">
         <menu>
-            <item android:id="@+id/navi_menu_func_1"
+            <item android:id="@+id/card_list"
                 android:title="@string/navigation_draw_func_1"
                 android:checkable="true"
-                android:checked="true"
                 android:icon="@drawable/card"
                 />
 
-            <item android:id="@+id/navi_menu_func_2"
+            <item android:id="@+id/music"
                 android:title="@string/navigation_draw_func_2"
                 android:checkable="true"
                 android:icon="@drawable/music"/>
 
-            <item android:id="@+id/navi_menu_func_3"
+            <item android:id="@+id/event"
                 android:title="@string/navigation_draw_func_3"
                 android:checkable="true"
                 android:icon="@drawable/event"/>
@@ -27,7 +26,7 @@
     <item android:id="@+id/navi_menu_others"
         android:title="@string/navigation_other_subtitle">
         <menu>
-            <item android:id="@+id/navi_menu_about"
+            <item android:id="@+id/about"
                 android:title="@string/navigation_other_about"
                 android:checkable="true"
                 android:icon="@drawable/about"/>

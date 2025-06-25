@@ -1,11 +1,13 @@
 package com.haruki.kaopifeatharuki.fragment
 
 import android.content.Intent
+import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import com.haruki.kaopifeatharuki.R
 import com.haruki.kaopifeatharuki.adapter.CardDetailViewpagerAdapter
 import com.haruki.kaopifeatharuki.base.BaseFragment
@@ -34,7 +36,12 @@ class CardDetailFragment: BaseFragment<FragmentCardDetailBinding, CardViewModel>
         mBinding.detailViewPager.adapter = adapter
         adapter.submitList(mViewModel.currentCardList)
         mBinding.detailViewPager.post {
-            mBinding.detailViewPager.setCurrentItem(mViewModel.currentPosition, false)
+            mBinding.detailViewPager.setCurrentItem(mViewModel.selectPosition, false)
+        }
+
+        adapter.setOnItemClickListener{ adapter, view, pos ->
+            Log.i(TAG,"setOnItemClickListener $pos")
+//            findNavController().popBackStack()
         }
 
 
@@ -45,4 +52,6 @@ class CardDetailFragment: BaseFragment<FragmentCardDetailBinding, CardViewModel>
     override fun initData() {
 
     }
+
+
 }

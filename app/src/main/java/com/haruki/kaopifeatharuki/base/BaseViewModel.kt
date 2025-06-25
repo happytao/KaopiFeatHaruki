@@ -6,4 +6,6 @@ import com.haruki.kaopifeatharuki.application.BaseApplication
 
 abstract class BaseViewModel:ViewModel() {
     protected val mContext = BaseApplication.appContext
+
+    var isDataLoaded = false
 }
