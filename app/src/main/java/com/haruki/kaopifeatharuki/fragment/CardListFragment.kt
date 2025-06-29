@@ -229,6 +229,20 @@ class CardListFragment: BaseFragment<FragmentCardListBinding, CardViewModel>() {
 
     }
 
+    override fun onHiddenChanged(hidden: Boolean) {
+        super.onHiddenChanged(hidden)
+        if(!hidden) {
+            Log.i(TAG,"onHiddenChanged hidden:$hidden")
+            val newList = mViewModel.currentCardList.map {
+                it.copy()
+            }
+            adapter.submitList(newList){
+                mBinding.recyclerView.scrollToPosition(mViewModel.currentPosition)
+            }
+
+        }
+    }
+
     /**
      * 设置当点击搜索框外关闭输入法和取消焦点
      */

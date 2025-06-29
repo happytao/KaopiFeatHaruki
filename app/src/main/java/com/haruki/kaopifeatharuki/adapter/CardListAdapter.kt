@@ -6,7 +6,11 @@ import android.util.Log
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.DataSource
+import com.bumptech.glide.load.engine.GlideException
+import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.CustomTarget
+import com.bumptech.glide.request.target.Target
 import com.bumptech.glide.request.transition.Transition
 import com.chad.library.adapter4.BaseDifferAdapter
 import com.chad.library.adapter4.viewholder.QuickViewHolder
@@ -37,10 +41,11 @@ class CardListAdapter: BaseDifferAdapter<CardData, QuickViewHolder>(DiffCallback
                 "rarity_4" -> {
                     if(it.isShowAfterTraining) {
                         Glide.with(context).load(R.drawable.rarity_star_4_after_training).override(72.dp.toInt(),18.dp.toInt()).into(rarityImg)
-                        Glide.with(context).load(it.afterTrainingThumbnailUrl)
+                        Glide.with(context).load(it.displayThumbnailUrl)
                             .into(cardImg)
                     } else {
-                        Glide.with(context).load(R.drawable.rarity_star_4_normal).override(72.dp.toInt(),18.dp.toInt()).into(object : CustomTarget<Drawable>(){
+                        Glide.with(context).load(R.drawable.rarity_star_4_normal).override(72.dp.toInt(),18.dp.toInt())
+                            .into(object : CustomTarget<Drawable>(){
                             override fun onResourceReady(resource: Drawable, transition: Transition<in Drawable>?) {
                                 rarityImg.setImageDrawable(resource)
                             }
@@ -49,34 +54,57 @@ class CardListAdapter: BaseDifferAdapter<CardData, QuickViewHolder>(DiffCallback
 
                             }
                         })
-                        Glide.with(context).load(it.normalThumbnailUrl)
+                        Glide.with(context).load(it.displayThumbnailUrl)
+                            .addListener(object :RequestListener<Drawable>{
+                                override fun onLoadFailed(
+                                    e: GlideException?,
+                                    model: Any?,
+                                    target: Target<Drawable>,
+                                    isFirstResource: Boolean
+                                ): Boolean {
+                                    Log.e(TAG,"card list glide failed")
+                                    Log.e(TAG,Log.getStackTraceString(e))
+                                    return false
+                                }
+
+                                override fun onResourceReady(
+                                    resource: Drawable,
+                                    model: Any,
+                                    target: Target<Drawable>?,
+                                    dataSource: DataSource,
+                                    isFirstResource: Boolean
+                                ): Boolean {
+                                    return false
+                                }
+
+                            })
                             .into(cardImg)
                     }
                 }
                 "rarity_3" -> {
                     if(it.isShowAfterTraining) {
                         Glide.with(context).load(R.drawable.rarity_star_3_after_training).override(54.dp.toInt(),18.dp.toInt()).into(rarityImg)
-                        Glide.with(context).load(it.afterTrainingThumbnailUrl)
+                        Glide.with(context).load(it.displayThumbnailUrl)
                             .into(cardImg)
                     } else {
                         Glide.with(context).load(R.drawable.rarity_star_3_normal).override(54.dp.toInt(),18.dp.toInt()).into(rarityImg)
-                        Glide.with(context).load(it.normalThumbnailUrl)
+                        Glide.with(context).load(it.displayThumbnailUrl)
                             .into(cardImg)
                     }
                 }
                 "rarity_birthday" -> {
                     Glide.with(context).load(R.drawable.rarity_birthday).override(18.dp.toInt(),18.dp.toInt()).into(rarityImg)
-                    Glide.with(context).load(it.normalThumbnailUrl)
+                    Glide.with(context).load(it.displayThumbnailUrl)
                         .into(cardImg)
                 }
                 "rarity_2" -> {
                     Glide.with(context).load(R.drawable.rarity_star_2).override(36.dp.toInt(),18.dp.toInt()).into(rarityImg)
-                    Glide.with(context).load(it.normalThumbnailUrl)
+                    Glide.with(context).load(it.displayThumbnailUrl)
                         .into(cardImg)
                 }
                 "rarity_1" -> {
                     Glide.with(context).load(R.drawable.rarity_star_normal).override(18.dp.toInt(),18.dp.toInt()).into(rarityImg)
-                    Glide.with(context).load(it.normalThumbnailUrl)
+                    Glide.with(context).load(it.displayThumbnailUrl)
                         .into(cardImg)
                 }
 
@@ -122,7 +150,7 @@ class CardListAdapter: BaseDifferAdapter<CardData, QuickViewHolder>(DiffCallback
                     "rarity_4" -> {
                         if(it.isShowAfterTraining) {
                             Glide.with(context).load(R.drawable.rarity_star_4_after_training).override(72.dp.toInt(),18.dp.toInt()).into(rarityImg)
-                            Glide.with(context).load(it.afterTrainingThumbnailUrl)
+                            Glide.with(context).load(it.displayThumbnailUrl)
                                 .into(cardImg)
                         } else {
                             Glide.with(context).load(R.drawable.rarity_star_4_normal).override(72.dp.toInt(),18.dp.toInt()).into(
@@ -136,18 +164,18 @@ class CardListAdapter: BaseDifferAdapter<CardData, QuickViewHolder>(DiffCallback
                                     }
                                 }
                             )
-                            Glide.with(context).load(it.normalThumbnailUrl)
+                            Glide.with(context).load(it.displayThumbnailUrl)
                                 .into(cardImg)
                         }
                     }
                     "rarity_3" -> {
                         if(it.isShowAfterTraining) {
                             Glide.with(context).load(R.drawable.rarity_star_3_after_training).override(54.dp.toInt(),18.dp.toInt()).into(rarityImg)
-                            Glide.with(context).load(it.afterTrainingThumbnailUrl)
+                            Glide.with(context).load(it.displayThumbnailUrl)
                                 .into(cardImg)
                         } else {
                             Glide.with(context).load(R.drawable.rarity_star_3_normal).override(54.dp.toInt(),18.dp.toInt()).into(rarityImg)
-                            Glide.with(context).load(it.normalThumbnailUrl)
+                            Glide.with(context).load(it.displayThumbnailUrl)
                                 .into(cardImg)
                         }
                     }

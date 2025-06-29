@@ -8,11 +8,13 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import androidx.viewpager2.widget.ViewPager2
 import com.haruki.kaopifeatharuki.R
 import com.haruki.kaopifeatharuki.adapter.CardDetailViewpagerAdapter
 import com.haruki.kaopifeatharuki.base.BaseFragment
 import com.haruki.kaopifeatharuki.databinding.FragmentCardDetailBinding
 import com.haruki.kaopifeatharuki.util.imageviewer.showViewer
+import com.haruki.kaopifeatharuki.util.observe
 import com.haruki.kaopifeatharuki.viewmodel.CardViewModel
 
 class CardDetailFragment: BaseFragment<FragmentCardDetailBinding, CardViewModel>() {
@@ -34,23 +36,55 @@ class CardDetailFragment: BaseFragment<FragmentCardDetailBinding, CardViewModel>
 
     override fun initView() {
         mBinding.detailViewPager.adapter = adapter
-        adapter.submitList(mViewModel.currentCardList)
-        mBinding.detailViewPager.post {
-            mBinding.detailViewPager.setCurrentItem(mViewModel.selectPosition, false)
-        }
-
-        adapter.setOnItemClickListener{ adapter, view, pos ->
-            Log.i(TAG,"setOnItemClickListener $pos")
-//            findNavController().popBackStack()
-        }
-
-
-
 
     }
 
     override fun initData() {
 
+        val newList = mViewModel.currentCardList.map {
+            it.copy()
+        }
+        adapter.submitList(newList) {
+            mBinding.detailViewPager.setCurrentItem(mViewModel.selectPosition, false)
+        }
+        adapter.setOnItemClickListener{ adapter, view, pos ->
+            Log.i(TAG,"setOnItemClickListener $pos")
+        }
+
+        mBinding.detailViewPager.registerOnPageChangeCallback(viewpagerChangeCallback)
+
+        mViewModel.cardList.observe(this){ cardList ->
+            if(cardList.isEmpty()) return@observe
+            adapter.addAll(cardList)
+        }
+
+
+    }
+
+    override fun onHiddenChanged(hidden: Boolean) {
+        super.onHiddenChanged(hidden)
+        if(!hidden) {
+            val newList = mViewModel.currentCardList.map {
+                it.copy()
+            }
+            adapter.submitList(newList){
+                mBinding.detailViewPager.setCurrentItem(mViewModel.selectPosition, false)
+            }
+
+        }
+    }
+
+    private val viewpagerChangeCallback = object : ViewPager2.OnPageChangeCallback() {
+        override fun onPageSelected(position: Int) {
+            super.onPageSelected(position)
+            mViewModel.currentPosition = position
+            val lastPosition = adapter.items.size - 1
+            Log.i(TAG,"position:$position, lastPosition:$lastPosition")
+            if(position >= lastPosition - 3) {
+                mViewModel.loadMore()
+            }
+
+        }
     }
 
 

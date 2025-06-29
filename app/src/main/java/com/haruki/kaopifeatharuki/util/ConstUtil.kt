@@ -33,7 +33,7 @@ object ConstUtil {
 
     const val HARUKI_ASSET_URL_PREFIX = "https://sekai-assets-bdf29c81.seiunx.net/cn-assets/startapp/"
 
-    const val SEKAI_VIEWER_ASSET_URL_PREFIX = "https://storage.sekai.best/sekai-jp-assets/"
+    const val SEKAI_VIEWER_ASSET_URL_PREFIX = "https://storage.sekai.best/sekai-cn-assets/"
 
     const val THUMBNAIL_PREFIX = "thumbnail/chara/"
     const val NORMAL_THUMBNAIL_TAIL = "_normal.png"

@@ -11,6 +11,7 @@ import com.haruki.kaopifeatharuki.util.ConstUtil.NORMAL_CARD_IMG_TAIL
 import com.haruki.kaopifeatharuki.util.ConstUtil.NORMAL_THUMBNAIL_TAIL
 import com.haruki.kaopifeatharuki.util.ConstUtil.SEKAI_VIEWER_ASSET_URL_PREFIX
 import com.haruki.kaopifeatharuki.util.ConstUtil.THUMBNAIL_PREFIX
+import com.haruki.kaopifeatharuki.util.glide.ImagePathUtil
 
 data class CardData(@SerializedName("specialTrainingPower3BonusFixed")
                     val specialTrainingPower3BonusFixed: Int = 0,
@@ -59,7 +60,8 @@ data class CardData(@SerializedName("specialTrainingPower3BonusFixed")
                     @SerializedName("cardParameters")
                     val cardParameters: CardParameters? = null,
                     val skillType:String = "",
-                    val basePower:Int = 0) {
+                    val basePower:Int = 0,
+                    var isShowAfterTraining: Boolean = true) {
 
     val normalThumbnailUrl: String
         get() {
@@ -70,7 +72,10 @@ data class CardData(@SerializedName("specialTrainingPower3BonusFixed")
     val afterTrainingThumbnailUrl: String
         get() {
             if(assetbundleName.isEmpty()) return ""
-            return HARUKI_ASSET_URL_PREFIX + THUMBNAIL_PREFIX + assetbundleName + AFTER_TRAINING_THUMBNAIL_TAIL
+            return if(cardRarityType != "rarity_4" && cardRarityType != "rarity_3")
+                normalThumbnailUrl
+            else
+                HARUKI_ASSET_URL_PREFIX + THUMBNAIL_PREFIX + assetbundleName + AFTER_TRAINING_THUMBNAIL_TAIL
         }
 
     val normalCardImgUrl:String
@@ -82,11 +87,39 @@ data class CardData(@SerializedName("specialTrainingPower3BonusFixed")
     val afterTrainingCardImgUrl:String
         get() {
             if(assetbundleName.isEmpty()) return ""
-            return HARUKI_ASSET_URL_PREFIX + CARD_IMG_PREFIX + assetbundleName + AFTER_TRAINING_CARD_IMG_TAIL
+            return if(cardRarityType != "rarity_4" && cardRarityType != "rarity_3")
+                normalCardImgUrl
+            else
+                HARUKI_ASSET_URL_PREFIX + CARD_IMG_PREFIX + assetbundleName + AFTER_TRAINING_CARD_IMG_TAIL
 
         }
 
-    var isShowAfterTraining: Boolean = true
+    val displayThumbnailUrl:String
+        get() {
+            if(isShowAfterTraining) {
+                val file = ImagePathUtil.getLocalFile(afterTrainingThumbnailUrl)
+                if(file != null) return file.absolutePath
+                return afterTrainingThumbnailUrl
+            } else {
+                val file = ImagePathUtil.getLocalFile(normalThumbnailUrl)
+                if(file != null) return file.absolutePath
+                return normalThumbnailUrl
+            }
+        }
+
+    val displayImgUrl:String
+        get() {
+            if(isShowAfterTraining) {
+                val file = ImagePathUtil.getLocalFile(afterTrainingCardImgUrl)
+                if(file != null) return file.absolutePath
+                return afterTrainingCardImgUrl
+            } else {
+                val file = ImagePathUtil.getLocalFile(normalCardImgUrl)
+                if(file != null) return file.absolutePath
+                return normalCardImgUrl
+            }
+        }
+
 
     constructor(cardDBData: CardDBData, isShowAfterTraining: Boolean = true,
                 skillType: String = "", basePower: Int = 0):this(
@@ -102,8 +135,8 @@ data class CardData(@SerializedName("specialTrainingPower3BonusFixed")
         characterId = cardDBData.characterId,
         seq = cardDBData.seq,
         skillType = skillType,
-        basePower = cardDBData.basePower) {
-        this.isShowAfterTraining = isShowAfterTraining
+        basePower = cardDBData.basePower,
+        isShowAfterTraining = isShowAfterTraining) {
     }
 
 }

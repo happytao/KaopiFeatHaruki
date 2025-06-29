@@ -43,9 +43,9 @@ class CardDetailViewpagerAdapter:BaseDifferAdapter<CardData, CardDetailViewpager
 
     override fun onBindViewHolder(holder: VBViewHolder, position: Int, item: CardData?) {
         Log.i(TAG,"onBindViewHolder $position")
-        Glide.with(context).load(item!!.normalCardImgUrl).into(holder.binding.ivDetailCardImg)
+        Glide.with(context).load(item!!.displayImgUrl).into(holder.binding.ivDetailCardImg)
         holder.binding.ivDetailCardImg.setOnClickListener {
-            holder.binding.ivDetailCardImg.showViewer(item.normalCardImgUrl)
+            holder.binding.ivDetailCardImg.showViewer(item.displayImgUrl)
         }
 
     }

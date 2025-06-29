@@ -31,6 +31,8 @@ class CardViewModel: BaseViewModel() {
 
     val currentCardList = mutableListOf<CardData>()
 
+    val cardListBackUpForSearch = mutableListOf<CardData>()
+
     var filterParam:CardFilterParam? = null
 
     val isFilterMode:Boolean
@@ -41,6 +43,8 @@ class CardViewModel: BaseViewModel() {
     var selectPosition = 0
 
     var cardListCurrentPageIndex = 0
+
+    private var currentLoadType:LoadType = LoadType.LOAD_ALL
 
 
 
@@ -54,6 +58,7 @@ class CardViewModel: BaseViewModel() {
 
     fun loadCardList(pageSize: Int,pageIndex: Int) {
         Log.i(TAG, "loadCardList pageSize:$pageSize pageIndex:$pageIndex")
+        currentLoadType = LoadType.LOAD_ALL
         if(pageIndex == 0) currentCardList.clear()
         viewModelScope.launch {
             cardRepo.getAllCardDBData(pageSize,pageIndex).collect{ cardDataList ->
@@ -69,8 +74,13 @@ class CardViewModel: BaseViewModel() {
     }
 
     fun loadCardById(id: Int) {
+        currentLoadType = LoadType.LOAD_SEARCH
         viewModelScope.launch {
             cardRepo.getCardDBDataById(id).collect{ cardData ->
+                cardListBackUpForSearch.clear()
+                cardListBackUpForSearch.addAll(currentCardList.map { it.copy() })
+                currentCardList.clear()
+                currentCardList.add(cardData)
                 _cardDataById.emit(cardData.copy().apply { this.isShowAfterTraining = this@CardViewModel.isShowAfterTraining })
             }
         }
@@ -80,6 +90,7 @@ class CardViewModel: BaseViewModel() {
         if(filterParam == null) {
             return
         }
+        currentLoadType = LoadType.LOAD_FILTER
         if(pageIndex == 0) currentCardList.clear()
         val filterParam = filterParam!!
         val sortedProperties = when(filterParam.sortedProperty) {
@@ -116,11 +127,18 @@ class CardViewModel: BaseViewModel() {
     }
 
     fun restoreCardList() {
+        if(filterParam?.isInitState() == true) {
+            currentLoadType = LoadType.LOAD_FILTER
+        } else {
+            currentLoadType = LoadType.LOAD_ALL
+        }
         viewModelScope.launch {
 //            val newList = mutableListOf<CardData>()
 //            currentCardList.forEach { cardData ->
 //                newList.add(cardData.copy())
 //            }
+            currentCardList.clear()
+            currentCardList.addAll(cardListBackUpForSearch.map { it.copy() })
             val newList2 = currentCardList.map{
                 it.copy()
             }
@@ -139,6 +157,32 @@ class CardViewModel: BaseViewModel() {
         currentCardList.forEach { cardData ->
             cardData.isShowAfterTraining = isShowAfterTraining
         }
+        cardListBackUpForSearch.forEach { cardData ->
+            cardData.isShowAfterTraining = isShowAfterTraining
+        }
+        Log.i(TAG,"currentCardList isShowAfter: ${currentCardList[0].isShowAfterTraining}")
 
+    }
+
+    fun loadMore() {
+        cardListCurrentPageIndex += 1
+        when(currentLoadType) {
+            LoadType.LOAD_ALL -> {
+                loadCardList(10, cardListCurrentPageIndex)
+            }
+            LoadType.LOAD_FILTER -> {
+                loadCardByAllFilterParam(10, cardListCurrentPageIndex)
+            }
+            LoadType.LOAD_SEARCH -> {
+
+            }
+        }
+    }
+
+
+    private enum class LoadType{
+        LOAD_ALL, //加载全列表
+        LOAD_FILTER, //根据过滤参数加载列表
+        LOAD_SEARCH //根据搜索数据加载列表
     }
 }

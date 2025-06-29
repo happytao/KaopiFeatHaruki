@@ -12,6 +12,7 @@ import com.github.iielse.imageviewer.core.Photo
 import com.github.iielse.imageviewer.core.SimpleDataProvider
 import com.github.iielse.imageviewer.core.Transformer
 import com.haruki.kaopifeatharuki.util.imageviewer.SimpleTransformer.Companion.provide
+import com.bumptech.glide.request.target.Target
 
 
 fun ImageView.showViewer(url:String) {
@@ -31,7 +32,9 @@ class SimpleImageLoader : ImageLoader {
     override fun load(view: ImageView, data: Photo, viewHolder: RecyclerView.ViewHolder) {
         val it = (data as MyData).url
         Glide.with(view).load(it)
+            .override(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL)
             .placeholder(view.drawable)
+
             .into(view)
     }
 }
