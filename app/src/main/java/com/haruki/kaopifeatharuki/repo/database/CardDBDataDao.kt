@@ -25,7 +25,7 @@ interface CardDBDataDao {
     suspend fun delete(cardDBData: CardDBData)
 
     @Query("SELECT * FROM CardDBData WHERE id = :id")
-    fun getCardDBDataById(id: Int): Flow<CardDBData>
+    fun getCardDBDataById(id: Int): Flow<CardDBData?>
 
     @Query("""
         SELECT * FROM CardDBData 

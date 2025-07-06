@@ -22,7 +22,12 @@ data class CardDBData(
     var specialTrainingPower3BonusFixed: Int,
     var cardParameters: String,
     var specialTrainingCosts: String,
-    var basePower: Int
+    var basePower: Int,
+    var supportUnit: String,
+    var cardSupplyId: Int,
+    var specialTrainingSkillId: Int?,
+    var specialTrainingSkillName: String?,
+
 )
 
 

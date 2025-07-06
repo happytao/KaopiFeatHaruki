@@ -105,11 +105,12 @@ class CardListFragment: BaseFragment<FragmentCardListBinding, CardViewModel>() {
         }
 
         mViewModel.cardDataById.observe(this) { cardData ->
-            Log.i(TAG,"cardDataById ${cardData.id}")
+            Log.i(TAG,"cardDataById ${cardData?.id}")
             mViewModel.currentPosition = (mBinding.recyclerView.layoutManager as QuickGridLayoutManager)
                 .findFirstVisibleItemPosition()
             adapterHelper?.trailingLoadState = LoadState.NotLoading(true)
-            adapter.submitList(listOf(cardData))
+            val newList = cardData?.let { listOf(it) }?: listOf()
+            adapter.submitList(newList)
         }
 
         mViewModel.restoreEvent.observe(this) { cardList ->

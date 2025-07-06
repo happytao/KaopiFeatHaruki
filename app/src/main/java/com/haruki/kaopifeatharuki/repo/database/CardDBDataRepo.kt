@@ -9,7 +9,7 @@ interface CardDBDataRepo {
 
     fun getAllCardDBData(pageSize: Int, pageIndex: Int): Flow<List<CardData>>
 
-    fun getCardDBDataById(id: Int): Flow<CardData>
+    fun getCardDBDataById(id: Int): Flow<CardData?>
 
     suspend fun getCardDBDataByAllParam(
         characterIds: List<Int>,

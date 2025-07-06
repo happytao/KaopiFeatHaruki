@@ -40,5 +40,13 @@
     <string name="filter_select_none">清空</string>
     <string name="filter_confirm">确认</string>
 
+    <string name="start_loading_original_Image">开始加载原图</string>
+    <string name="load_success">加载完成</string>
+    <string name="load_failed">加载失败</string>
 
+    <string name="attr_pure">属性： 纯真</string>
+    <string name="attr_cute">属性： 可爱</string>
+    <string name="attr_mysterious">属性： 神秘</string>
+    <string name="attr_cool">属性： 帅气</string>
+    <string name="attr_happy">属性： 快乐</string>
 </resources>

@@ -31,9 +31,12 @@ class CardDBDataRepoImp(private val cardDBDataDao: CardDBDataDao,
             }
         }
 
-    override fun getCardDBDataById(id: Int): Flow<CardData> =
+    override fun getCardDBDataById(id: Int): Flow<CardData?> =
         cardDBDataDao.getCardDBDataById(id).map {
-            CardData(it)
+            it?.let {
+                CardData(it)
+            }
+
         }
 
     override suspend fun getCardDBDataByAllParam(

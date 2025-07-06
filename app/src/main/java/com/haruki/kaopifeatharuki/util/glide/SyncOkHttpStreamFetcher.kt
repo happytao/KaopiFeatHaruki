@@ -56,7 +56,7 @@ class SyncOkHttpStreamFetcher@JvmOverloads constructor(
     }
 
     private var glideStream:InputStream? = null
-    private var localSaveStream:InputStream? = null
+    private var localSaveStream:ChannelInputStream? = null
 
     override fun loadData(priority: Priority, callback: DataFetcher.DataCallback<in InputStream>) {
         try {
@@ -80,6 +80,7 @@ class SyncOkHttpStreamFetcher@JvmOverloads constructor(
                         Log.e(TAG,Log.getStackTraceString(e))
                         this@SyncOkHttpStreamFetcher.callback?.onLoadFailed(e)
                         response?.close()
+                        return@launch
                     }
                 }
 
@@ -101,7 +102,7 @@ class SyncOkHttpStreamFetcher@JvmOverloads constructor(
                     }
 
                 } else {
-                    callback.onLoadFailed(HttpException(response?.message, response!!.code))
+                    response?.code?.let { callback.onLoadFailed(HttpException(response?.message, it)) }
                 }
             }
 
@@ -117,7 +118,8 @@ class SyncOkHttpStreamFetcher@JvmOverloads constructor(
 
         val glideChannel = Channel<ByteArray>(50 * 1024)
         val localChannel = Channel<ByteArray>(50 * 1024)
-
+        glideStream = ChannelInputStream(glideChannel)
+        localSaveStream = ChannelInputStream(localChannel)
         // 启动协程读取原始流并写入两个输出流
         val scope = CoroutineScope(scopeContext)
         scope.launch {
@@ -134,6 +136,7 @@ class SyncOkHttpStreamFetcher@JvmOverloads constructor(
             } catch (e: Exception) {
                 Log.e(TAG,"sharedInputStream failed")
                 Log.e(TAG,Log.getStackTraceString(e))
+                localSaveStream!!.dispatchThrowable(e)
             } finally {
                 glideChannel.close()
                 localChannel.close()
@@ -141,8 +144,6 @@ class SyncOkHttpStreamFetcher@JvmOverloads constructor(
             }
 
         }
-        glideStream = ChannelInputStream(glideChannel, scope)
-        localSaveStream = ChannelInputStream(localChannel, scope)
 
     }
 
@@ -174,6 +175,7 @@ class SyncOkHttpStreamFetcher@JvmOverloads constructor(
     }
 
     override fun cleanup() {
+        Log.i(TAG,"cleanup:$url")
         super.cleanup()
         this.callback = null
         response?.close()

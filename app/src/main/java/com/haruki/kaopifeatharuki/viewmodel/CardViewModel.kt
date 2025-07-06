@@ -23,7 +23,7 @@ class CardViewModel: BaseViewModel() {
     private val _changeTrainingStateCardList = MutableSharedFlow<List<CardData>>()
     val changeTrainingStateCardList = _changeTrainingStateCardList.asSharedFlow()
 
-    private val _cardDataById = MutableSharedFlow<CardData>()
+    private val _cardDataById = MutableSharedFlow<CardData?>()
     val cardDataById = _cardDataById.asSharedFlow()
 
     private val _restoreEvent = MutableSharedFlow<List<CardData>>()
@@ -77,11 +77,12 @@ class CardViewModel: BaseViewModel() {
         currentLoadType = LoadType.LOAD_SEARCH
         viewModelScope.launch {
             cardRepo.getCardDBDataById(id).collect{ cardData ->
-                cardListBackUpForSearch.clear()
-                cardListBackUpForSearch.addAll(currentCardList.map { it.copy() })
+                if(cardListBackUpForSearch.isEmpty()) {
+                    cardListBackUpForSearch.addAll(currentCardList.map { it.copy() })
+                }
                 currentCardList.clear()
-                currentCardList.add(cardData)
-                _cardDataById.emit(cardData.copy().apply { this.isShowAfterTraining = this@CardViewModel.isShowAfterTraining })
+                cardData?.let { currentCardList.add(cardData) }
+                _cardDataById.emit(cardData?.copy().apply { this?.isShowAfterTraining = this@CardViewModel.isShowAfterTraining })
             }
         }
     }
@@ -142,6 +143,7 @@ class CardViewModel: BaseViewModel() {
             val newList2 = currentCardList.map{
                 it.copy()
             }
+            cardListBackUpForSearch.clear()
             _restoreEvent.emit(newList2)
         }
     }

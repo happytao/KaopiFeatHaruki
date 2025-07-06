@@ -9,8 +9,7 @@ import java.io.InputStream
 import kotlin.math.min
 
 class ChannelInputStream(
-    private val channel: Channel<ByteArray>,
-    private val scope: CoroutineScope
+    private val channel: Channel<ByteArray>
 ) : InputStream() {
     private var currentChunk: ByteArray? = null
     private var pos = 0
@@ -53,6 +52,10 @@ class ChannelInputStream(
             super.close()
         }
 
+    }
+
+    fun dispatchThrowable(e:Throwable) {
+        throw e
     }
 
     // ============ 内部方法 ============

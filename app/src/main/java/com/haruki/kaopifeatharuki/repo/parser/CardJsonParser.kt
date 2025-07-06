@@ -39,7 +39,11 @@ class CardJsonParser(private val context: Context): BaseJsonParser<CardDBData, C
             specialTrainingPower3BonusFixed = cardData.specialTrainingPower3BonusFixed,
             cardParameters = parametersJson,
             specialTrainingCosts = specialTrainingCostsJson,
-            basePower = basePower
+            basePower = basePower,
+            supportUnit = cardData.supportUnit,
+            cardSupplyId = cardData.cardSupplyId,
+            specialTrainingSkillId = cardData.specialTrainingSkillId,
+            specialTrainingSkillName = cardData.specialTrainingSkillName
         )
     }
 

@@ -39,7 +39,8 @@ object ConstUtil {
     const val NORMAL_THUMBNAIL_TAIL = "_normal.png"
     const val AFTER_TRAINING_THUMBNAIL_TAIL = "_after_training.png"
 
-    const val CARD_IMG_PREFIX = "character/member/"
+    const val CARD_SMALL_IMG_PREFIX = "character/member_small/"
+    const val CARD_LARGE_IMG_PREFIX = "character/member/"
     const val NORMAL_CARD_IMG_TAIL = "/card_normal.png"
     const val AFTER_TRAINING_CARD_IMG_TAIL = "/card_after_training.png"
 
