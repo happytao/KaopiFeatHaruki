@@ -1,6 +1,6 @@
 package com.haruki.kaopifeatharuki.repo.database
 
-import com.haruki.kaopifeatharuki.repo.data.CardData
+import com.haruki.kaopifeatharuki.repo.data.card.CardData
 import kotlinx.coroutines.flow.Flow
 
 interface CardDBDataRepo {

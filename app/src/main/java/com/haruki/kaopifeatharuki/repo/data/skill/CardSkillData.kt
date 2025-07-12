@@ -2,6 +2,8 @@ package com.haruki.kaopifeatharuki.repo.data.skill
 
 
 import com.google.gson.annotations.SerializedName
+import com.haruki.kaopifeatharuki.repo.database.skill.CardSkillDBData
+import com.haruki.kaopifeatharuki.util.GsonUtil
 
 data class CardSkillData(@SerializedName("descriptionSpriteName")
                          val descriptionSpriteName: String = "",
@@ -12,7 +14,21 @@ data class CardSkillData(@SerializedName("descriptionSpriteName")
                          @SerializedName("id")
                          val id: Int = 0,
                          @SerializedName("skillEffects")
-                         val skillEffects: List<SkillEffectsItem>?)
+                         val skillEffects: List<SkillEffectsItem>?) {
+    constructor(cardSkillDBData: CardSkillDBData) :
+            this(
+                cardSkillDBData.descriptionSpriteName,
+                cardSkillDBData.skillFilterId,
+                cardSkillDBData.description,
+                cardSkillDBData.id,
+                mutableListOf<SkillEffectsItem>().apply {
+                    val skillEffectList = GsonUtil.fromJsonList(cardSkillDBData.skillEffects, SkillEffectsItem::class.java)
+                    if (skillEffectList != null) {
+                        this.addAll(skillEffectList)
+                    }
+                }
+            )
+}
 
 
 data class SkillEffectsItem(@SerializedName("skillEnhance")
@@ -23,6 +39,8 @@ data class SkillEffectsItem(@SerializedName("skillEnhance")
                             val skillEffectDetails: List<SkillEffectDetailsItem>?,
                             @SerializedName("activateLife")
                             val activateLife: Int = 0,
+                            @SerializedName("activateUnitCount")
+                            val activateUnitCount: Int = 0,
                             @SerializedName("skillEffectType")
                             val skillEffectType: String = "",
                             @SerializedName("conditionType")
@@ -33,6 +51,8 @@ data class SkillEffectsItem(@SerializedName("skillEnhance")
 
 data class SkillEffectDetailsItem(@SerializedName("activateEffectValue")
                                   val activateEffectValue: Int = 0,
+                                  @SerializedName("activateEffectValue2")
+                                  val activateEffectValue2: Int = 0,
                                   @SerializedName("level")
                                   val level: Int = 0,
                                   @SerializedName("id")

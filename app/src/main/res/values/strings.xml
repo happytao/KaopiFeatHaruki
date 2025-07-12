@@ -49,4 +49,12 @@
     <string name="attr_mysterious">属性： 神秘</string>
     <string name="attr_cool">属性： 帅气</string>
     <string name="attr_happy">属性： 快乐</string>
+
+    <string name="card_supply_type_normal">普通</string>
+    <string name="card_supply_type_birthday">生日限定</string>
+    <string name="card_supply_type_term_limited">期间限定</string>
+    <string name="card_supply_type_c_fes">cfes限定</string>
+    <string name="card_supply_type_b_fes">bfes限定</string>
+    <string name="card_supply_type_unit_limited">WL限定</string>
+    <string name="card_supply_type_collaboration_limited">联动限定</string>
 </resources>

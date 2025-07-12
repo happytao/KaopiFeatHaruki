@@ -2,7 +2,7 @@ package com.haruki.kaopifeatharuki.repo.parser
 
 import android.content.Context
 import com.google.gson.stream.JsonReader
-import com.haruki.kaopifeatharuki.repo.data.CardData
+import com.haruki.kaopifeatharuki.repo.data.card.CardData
 import com.haruki.kaopifeatharuki.repo.database.CardDBData
 import com.haruki.kaopifeatharuki.repo.database.CardDBDataRepoImp
 import com.haruki.kaopifeatharuki.repo.database.CardDataBase

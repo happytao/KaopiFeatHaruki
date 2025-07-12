@@ -17,7 +17,7 @@ import com.chad.library.adapter4.viewholder.QuickViewHolder
 import com.google.android.material.imageview.ShapeableImageView
 import com.google.android.material.textview.MaterialTextView
 import com.haruki.kaopifeatharuki.R
-import com.haruki.kaopifeatharuki.repo.data.CardData
+import com.haruki.kaopifeatharuki.repo.data.card.CardData
 import com.haruki.kaopifeatharuki.util.dp
 
 class CardListAdapter: BaseDifferAdapter<CardData, QuickViewHolder>(DiffCallback()) {

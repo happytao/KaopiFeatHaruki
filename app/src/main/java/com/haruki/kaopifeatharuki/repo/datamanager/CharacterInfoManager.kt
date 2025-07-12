@@ -14,7 +14,7 @@ object CharacterInfoManager {
 
     private fun loadCharacterData():Map<Int, CharacterData> {
         try {
-            val characterJson = BaseApplication.appContext.resources.assets.open("gameCharacters.json")
+            val characterJson = BaseApplication.appContext.resources.assets.open("immutable/gameCharacters.json")
                 .bufferedReader().use { it.readText() }
             val list = GsonUtil.fromJson(characterJson, Array<CharacterData>::class.java) ?: return mapOf()
             return list.associateBy { it.id }

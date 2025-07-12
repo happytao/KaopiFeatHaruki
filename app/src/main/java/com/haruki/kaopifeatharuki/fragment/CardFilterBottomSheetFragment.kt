@@ -8,7 +8,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.CheckBox
 import androidx.core.view.forEach
 import androidx.fragment.app.viewModels
@@ -18,8 +17,8 @@ import com.google.android.material.chip.ChipGroup
 import com.haruki.kaopifeatharuki.R
 import com.haruki.kaopifeatharuki.adapter.CharacterChipAdapter
 import com.haruki.kaopifeatharuki.databinding.CardFilterExpandableBinding
-import com.haruki.kaopifeatharuki.repo.data.CardFilterParam
-import com.haruki.kaopifeatharuki.repo.data.CharacterChip
+import com.haruki.kaopifeatharuki.repo.data.card.CardFilterParam
+import com.haruki.kaopifeatharuki.repo.data.card.CharacterChip
 import com.haruki.kaopifeatharuki.util.ConstUtil
 import com.haruki.kaopifeatharuki.util.ConstUtil.ATTR_COOL
 import com.haruki.kaopifeatharuki.util.ConstUtil.ATTR_CUTE
@@ -282,7 +281,7 @@ class CardFilterBottomSheetFragment: BottomSheetDialogFragment() {
 
     }
 
-    private fun getCurrentFilterParam():CardFilterParam {
+    private fun getCurrentFilterParam(): CardFilterParam {
         val isSortDec = mBinding.rbSortDesc.isChecked
         val sortParam = when(mBinding.rgSortParam.checkedRadioButtonId) {
             R.id.rb_sort_release_time -> "release_time"

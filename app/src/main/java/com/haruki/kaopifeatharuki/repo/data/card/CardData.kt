@@ -1,4 +1,4 @@
-package com.haruki.kaopifeatharuki.repo.data
+package com.haruki.kaopifeatharuki.repo.data.card
 
 import com.google.gson.annotations.SerializedName
 import com.haruki.kaopifeatharuki.repo.database.CardDBData
@@ -172,6 +172,9 @@ data class CardData(@SerializedName("specialTrainingPower3BonusFixed")
         cardSupplyId = cardDBData.cardSupplyId,
         specialTrainingSkillId = cardDBData.specialTrainingSkillId,
         specialTrainingSkillName = cardDBData.specialTrainingSkillName,
+        specialTrainingPower1BonusFixed = cardDBData.specialTrainingPower1BonusFixed,
+        specialTrainingPower2BonusFixed = cardDBData.specialTrainingPower2BonusFixed,
+        specialTrainingPower3BonusFixed = cardDBData.specialTrainingPower3BonusFixed,
         skillType = skillType,
         basePower = cardDBData.basePower,
         isShowAfterTraining = isShowAfterTraining) {

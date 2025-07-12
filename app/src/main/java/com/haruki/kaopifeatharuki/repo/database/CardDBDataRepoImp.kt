@@ -3,15 +3,16 @@ package com.haruki.kaopifeatharuki.repo.database
 import android.util.Log
 import androidx.sqlite.db.SimpleSQLiteQuery
 import androidx.sqlite.db.SupportSQLiteQuery
-import com.haruki.kaopifeatharuki.repo.data.CardData
+import com.haruki.kaopifeatharuki.repo.data.card.CardData
+import com.haruki.kaopifeatharuki.repo.data.skill.CardSkillData
 import com.haruki.kaopifeatharuki.repo.database.skill.CardSkillDBData
 import com.haruki.kaopifeatharuki.repo.database.skill.CardSkillDBDataDao
+import com.haruki.kaopifeatharuki.repo.database.skill.CardSkillDBDataRepo
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.map
 
 class CardDBDataRepoImp(private val cardDBDataDao: CardDBDataDao,
-    private val cardSkillDBDataDao: CardSkillDBDataDao): CardDBDataRepo, CardSkillDBDataDao  {
+    private val cardSkillDBDataDao: CardSkillDBDataDao): CardDBDataRepo, CardSkillDBDataRepo {
 
     companion object {
         private const val TAG = "CardDBDataRepoImp"
@@ -125,6 +126,11 @@ class CardDBDataRepoImp(private val cardDBDataDao: CardDBDataDao,
         CardDBData.cardParameters AS card_cardParameters,
         CardDBData.specialTrainingCosts AS card_specialTrainingCosts,
         CardDBData.basePower AS card_basePower,
+        CardDBData.supportUnit AS card_supportUnit,
+        CardDBData.cardSupplyId AS card_cardSupplyId,
+        CardDBData.specialTrainingSkillId AS card_specialTrainingSkillId,
+        CardDBData.specialTrainingSkillName AS card_specialTrainingSkillName,
+        
 
         /* CardSkillDBData 字段（前缀 skill_） */
         CardSkillDBData.id AS skill_id,
@@ -156,5 +162,15 @@ class CardDBDataRepoImp(private val cardDBDataDao: CardDBDataDao,
 
     override suspend fun delete(cardSkillDBData: CardSkillDBData) =
         cardSkillDBDataDao.delete(cardSkillDBData)
+
+    override fun getCardSkillDBDataById(skillId: Int): Flow<CardSkillData?> =
+        cardSkillDBDataDao.getCardSkillDBDataById(skillId)
+            .map {
+                it?.let {
+                    CardSkillData(it)
+                }
+            }
+
+
 
 }

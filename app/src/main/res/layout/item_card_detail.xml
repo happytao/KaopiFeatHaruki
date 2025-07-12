@@ -156,8 +156,7 @@
                     android:layout_height="wrap_content"
                     app:layout_constraintTop_toTopOf="@id/tv_limit_type_value"
                     app:layout_constraintEnd_toStartOf="@id/tv_limit_type_value"
-                    android:layout_marginEnd="8dp"
-                    android:text="类型： "
+                    android:text="类型："
                     />
 
                 <com.google.android.material.textview.MaterialTextView
@@ -194,7 +193,7 @@
                     android:layout_height="wrap_content"
                     app:layout_constraintBaseline_toBaselineOf="@id/tv_card_id_key"
                     app:layout_constraintEnd_toStartOf="@id/tv_card_release_time"
-                    android:text="发布时间： "
+                    android:text="发布时间："
                     />
 
 
@@ -215,7 +214,7 @@
                     app:layout_constraintEnd_toStartOf="@id/tv_power_value"
                     android:layout_marginTop="16dp"
                     android:layout_marginEnd="8dp"
-                    android:text="综合力key占位"
+                    android:text="综合力"
                     app:layout_constraintHorizontal_chainStyle="packed"
                     />
 
@@ -227,21 +226,21 @@
                     app:layout_constraintStart_toEndOf="@id/tv_power_key"
                     app:layout_constraintEnd_toEndOf="parent"
                     android:layout_marginStart="8dp"
-                    android:text="综合value占位"
+                    android:text="加载中"
                     />
 
                 <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/tv_professor_level"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    app:layout_constraintTop_toTopOf="@id/sl_professor_level"
-                    app:layout_constraintBottom_toBottomOf="@id/sl_professor_level"
+                    app:layout_constraintTop_toTopOf="@id/sl_master_rank"
+                    app:layout_constraintBottom_toBottomOf="@id/sl_master_rank"
                     app:layout_constraintStart_toStartOf="parent"
                     android:text="专家等级"
                     />
 
                 <com.google.android.material.slider.Slider
-                    android:id="@+id/sl_professor_level"
+                    android:id="@+id/sl_master_rank"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     app:layout_constraintTop_toBottomOf="@id/tv_power_key"
@@ -258,9 +257,11 @@
                     android:id="@+id/chip_chara_story_before"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    app:layout_constraintTop_toBottomOf="@id/sl_professor_level"
+                    app:layout_constraintTop_toBottomOf="@id/sl_master_rank"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toStartOf="@id/chip_chara_story_after"
+                    android:checkable="true"
+                    android:checked="true"
                     android:text="角色剧情前篇"
                     />
 
@@ -269,9 +270,11 @@
                     android:id="@+id/chip_chara_story_after"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    app:layout_constraintTop_toBottomOf="@id/sl_professor_level"
+                    app:layout_constraintTop_toBottomOf="@id/sl_master_rank"
                     app:layout_constraintStart_toEndOf="@id/chip_chara_story_before"
                     app:layout_constraintEnd_toEndOf="parent"
+                    android:checkable="true"
+                    android:checked="true"
                     android:text="角色剧情前篇"
                     />
 
@@ -314,13 +317,103 @@
                     />
 
                 <com.google.android.material.textview.MaterialTextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:id="@+id/tv_skill_description"
-                    app:layout_constraintBaseline_toBaselineOf="@id/tv_skill_description_key"
+                    app:layout_constraintTop_toTopOf="@id/tv_skill_description_key"
                     app:layout_constraintStart_toEndOf="@id/tv_skill_description_key"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:maxLines="10"
                     android:text="技能描述占位"
                     />
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/after_training_skill_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintTop_toBottomOf="@id/tv_skill_description"
+                    android:visibility="visible"
+                    >
+
+                    <com.google.android.material.textview.MaterialTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/tv_after_training"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        android:text="特训后"
+                        android:layout_marginTop="8dp"
+                        />
+
+                    <com.google.android.material.textview.MaterialTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/tv_after_training_skill_name_key"
+                        app:layout_constraintTop_toBottomOf="@id/tv_after_training"
+                        app:layout_constraintStart_toStartOf="parent"
+                        android:text="技能名称： "
+                        android:layout_marginTop="8dp"
+                        />
+
+                    <com.google.android.material.textview.MaterialTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/tv_after_training_skill_name"
+                        app:layout_constraintBaseline_toBaselineOf="@id/tv_after_training_skill_name_key"
+                        app:layout_constraintStart_toEndOf="@id/tv_after_training_skill_name_key"
+                        android:text="特训后技能名占位"
+                        />
+
+                    <com.google.android.material.textview.MaterialTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/tv_after_training_skill_description_key"
+                        app:layout_constraintTop_toBottomOf="@id/tv_after_training_skill_name_key"
+                        app:layout_constraintStart_toStartOf="parent"
+                        android:layout_marginTop="8dp"
+                        android:text="技能描述： "
+                        />
+
+                    <com.google.android.material.textview.MaterialTextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/tv_after_training_skill_description"
+                        app:layout_constraintTop_toTopOf="@id/tv_after_training_skill_description_key"
+                        app:layout_constraintStart_toEndOf="@id/tv_after_training_skill_description_key"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        android:maxLines="10"
+                        android:text="特训后技能描述占位"
+                        android:fontFamily="monospace"
+                        />
+
+                    <com.google.android.material.slider.Slider
+                        android:id="@+id/sl_character_rank"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintTop_toBottomOf="@id/tv_after_training_skill_description"
+                        android:layout_marginTop="8dp"
+                        app:layout_constraintStart_toEndOf="@id/tv_character_rank"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:thumbHeight="25dp"
+                        android:valueFrom="1"
+                        android:valueTo="100"
+                        android:stepSize="1"
+                        app:tickVisible="false"
+                        />
+
+                    <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/tv_character_rank"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintTop_toTopOf="@id/sl_character_rank"
+                        app:layout_constraintBottom_toBottomOf="@id/sl_character_rank"
+                        app:layout_constraintStart_toStartOf="parent"
+                        android:text="角色等级"
+                        />
+
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
 
                 <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/tv_skill_level"
@@ -336,7 +429,7 @@
                     android:id="@+id/sl_skill_level"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    app:layout_constraintTop_toBottomOf="@id/tv_skill_description"
+                    app:layout_constraintTop_toBottomOf="@id/after_training_skill_layout"
                     app:layout_constraintStart_toEndOf="@id/tv_professor_level"
                     app:layout_constraintEnd_toEndOf="parent"
                     android:layout_marginTop="8dp"

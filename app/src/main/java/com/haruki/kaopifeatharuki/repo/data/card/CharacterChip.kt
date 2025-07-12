@@ -1,4 +1,4 @@
-package com.haruki.kaopifeatharuki.repo.data
+package com.haruki.kaopifeatharuki.repo.data.card
 
 data class CharacterChip(
     var name:String,

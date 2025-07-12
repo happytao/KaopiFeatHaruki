@@ -2,7 +2,6 @@ package com.haruki.kaopifeatharuki.fragment
 
 
 import android.graphics.Rect
-import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.MotionEvent
@@ -13,20 +12,16 @@ import android.view.inputmethod.InputMethodManager
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
-import androidx.recyclerview.widget.RecyclerView.OnScrollListener
 import com.chad.library.adapter4.QuickAdapterHelper
 import com.chad.library.adapter4.layoutmanager.QuickGridLayoutManager
 import com.chad.library.adapter4.loadState.LoadState
 import com.chad.library.adapter4.loadState.trailing.TrailingLoadStateAdapter.OnTrailingListener
-import com.haruki.kaopifeatharuki.R
 import com.haruki.kaopifeatharuki.activity.MainActivity
 import com.haruki.kaopifeatharuki.adapter.CardListAdapter
 import com.haruki.kaopifeatharuki.adapter.CardListLoadMoreAdapter
 import com.haruki.kaopifeatharuki.base.BaseFragment
 import com.haruki.kaopifeatharuki.databinding.FragmentCardListBinding
 import com.haruki.kaopifeatharuki.navigation.CardDetail
-import com.haruki.kaopifeatharuki.repo.data.CardData
-import com.haruki.kaopifeatharuki.util.ConstUtil.BAND_ALL
 import com.haruki.kaopifeatharuki.util.ToastUtil
 import com.haruki.kaopifeatharuki.util.observe
 import com.haruki.kaopifeatharuki.viewmodel.CardViewModel

@@ -3,10 +3,15 @@ package com.haruki.kaopifeatharuki.viewmodel
 import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.haruki.kaopifeatharuki.base.BaseViewModel
-import com.haruki.kaopifeatharuki.repo.data.CardData
-import com.haruki.kaopifeatharuki.repo.data.CardFilterParam
+import com.haruki.kaopifeatharuki.repo.data.card.CardData
+import com.haruki.kaopifeatharuki.repo.data.card.CardFilterParam
 import com.haruki.kaopifeatharuki.repo.database.CardDBDataRepoImp
 import com.haruki.kaopifeatharuki.repo.database.CardDataBase
+import com.haruki.kaopifeatharuki.repo.datamanager.CardEpisodesManager
+import com.haruki.kaopifeatharuki.repo.datamanager.CardMasterRankBonusManager
+import com.haruki.kaopifeatharuki.repo.datamanager.CharacterInfoManager
+import com.haruki.kaopifeatharuki.repo.datamanager.SkillDescriptionManager
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
@@ -29,11 +34,20 @@ class CardViewModel: BaseViewModel() {
     private val _restoreEvent = MutableSharedFlow<List<CardData>>()
     val restoreEvent = _restoreEvent.asSharedFlow()
 
+    private val _cardPower = MutableSharedFlow<Int>()
+    val cardPower = _cardPower.asSharedFlow()
+
+    private val _cardSkillDescription = MutableSharedFlow<String>()
+    val cardSkillDescription = _cardSkillDescription.asSharedFlow()
+
+    private val _cardSpecialSkillDescription = MutableSharedFlow<String>()
+    val cardSpecialSkillDescription = _cardSpecialSkillDescription.asSharedFlow()
+
     val currentCardList = mutableListOf<CardData>()
 
     val cardListBackUpForSearch = mutableListOf<CardData>()
 
-    var filterParam:CardFilterParam? = null
+    var filterParam: CardFilterParam? = null
 
     val isFilterMode:Boolean
         get() = filterParam != null && !filterParam!!.isInitState()
@@ -60,7 +74,7 @@ class CardViewModel: BaseViewModel() {
         Log.i(TAG, "loadCardList pageSize:$pageSize pageIndex:$pageIndex")
         currentLoadType = LoadType.LOAD_ALL
         if(pageIndex == 0) currentCardList.clear()
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.Default) {
             cardRepo.getAllCardDBData(pageSize,pageIndex).collect{ cardDataList ->
                 Log.i(TAG,"loadCardList: ${cardDataList.size}")
                 val newCardDataList = mutableListOf<CardData>()
@@ -75,7 +89,7 @@ class CardViewModel: BaseViewModel() {
 
     fun loadCardById(id: Int) {
         currentLoadType = LoadType.LOAD_SEARCH
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.Default) {
             cardRepo.getCardDBDataById(id).collect{ cardData ->
                 if(cardListBackUpForSearch.isEmpty()) {
                     cardListBackUpForSearch.addAll(currentCardList.map { it.copy() })
@@ -111,7 +125,7 @@ class CardViewModel: BaseViewModel() {
             pageSize -> $pageSize
             pageIndex -> $pageIndex
         """.trimIndent())
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.Default) {
             cardRepo.getCardDBDataByAllParam(filterParam.filterCharacterIds, filterParam.filterAttrs,
                 filterParam.filterRarities,filterParam.filterSkillTypes,sortedProperties,filterParam.isDescSort,
                 pageSize,pageIndex).collect{ cardDataList ->
@@ -133,7 +147,7 @@ class CardViewModel: BaseViewModel() {
         } else {
             currentLoadType = LoadType.LOAD_ALL
         }
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.Default) {
 //            val newList = mutableListOf<CardData>()
 //            currentCardList.forEach { cardData ->
 //                newList.add(cardData.copy())
@@ -179,6 +193,60 @@ class CardViewModel: BaseViewModel() {
 
             }
         }
+    }
+
+    /**
+     * 获取当前卡牌综合力
+     * @param isFirstPartEpisodeOpen 是否开启角色剧情前篇
+     * @param isSecondPartEpisodeOpen 是否开启角色剧情后篇
+     * @param masterRank 专家等级
+     */
+    fun getCardPower(isFirstPartEpisodeOpen: Boolean = true,
+                     isSecondPartEpisodeOpen: Boolean = true, masterRank: Int = 0) {
+        val cardData = currentCardList[currentPosition]
+        viewModelScope.launch(Dispatchers.Default) {
+            var cardPower = 0
+            cardPower = cardData.basePower + cardData.specialTrainingPower1BonusFixed +
+            cardData.specialTrainingPower2BonusFixed + cardData.specialTrainingPower3BonusFixed
+
+            if(isFirstPartEpisodeOpen) {
+                cardPower += CardEpisodesManager.getFirstPartEpisodesBonus(cardData.id)
+            }
+
+            if(isSecondPartEpisodeOpen) {
+                cardPower += CardEpisodesManager.getSecondPartEpisodesBonus(cardData.id)
+            }
+
+            cardPower += CardMasterRankBonusManager.getCardMasterRankBonus(cardData.cardRarityType, masterRank)
+            _cardPower.emit(cardPower)
+        }
+
+    }
+
+
+    fun getSkillDescription(skillRank: Int = 1, characterRank: Int = 1) {
+        val cardData = currentCardList[currentPosition]
+        viewModelScope.launch(Dispatchers.Default) {
+            cardRepo.getCardSkillDBDataById(cardData.skillId).collect { cardSkillData ->
+                if (cardSkillData == null) return@collect
+                val skillDescription =
+                    SkillDescriptionManager.getSkillDescription(cardSkillData, skillRank)
+                _cardSkillDescription.emit(skillDescription)
+            }
+        }
+        if(cardData.specialTrainingSkillId != null) {
+            viewModelScope.launch(Dispatchers.Default) {
+                cardRepo.getCardSkillDBDataById(cardData.specialTrainingSkillId!!).collect{ cardSkillData ->
+                    if (cardSkillData == null) return@collect
+                    val characterName = CharacterInfoManager.getCharacterName(cardData.characterId)
+                    val skillDescription =
+                        SkillDescriptionManager.getSkillDescription(cardSkillData, skillRank,
+                            characterName, characterRank)
+                    _cardSpecialSkillDescription.emit(skillDescription)
+                }
+            }
+        }
+
     }
 
 

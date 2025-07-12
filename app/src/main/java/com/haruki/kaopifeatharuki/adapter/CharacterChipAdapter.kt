@@ -11,11 +11,10 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
 import com.chad.library.adapter4.BaseDifferAdapter
-import com.chad.library.adapter4.BaseQuickAdapter
 import com.chad.library.adapter4.viewholder.QuickViewHolder
 import com.google.android.material.chip.Chip
 import com.haruki.kaopifeatharuki.R
-import com.haruki.kaopifeatharuki.repo.data.CharacterChip
+import com.haruki.kaopifeatharuki.repo.data.card.CharacterChip
 
 class CharacterChipAdapter: BaseDifferAdapter<CharacterChip, QuickViewHolder>(EntityDiffCallback()) {
 

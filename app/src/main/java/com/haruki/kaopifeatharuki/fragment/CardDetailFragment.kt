@@ -24,7 +24,7 @@ class CardDetailFragment: BaseFragment<FragmentCardDetailBinding, CardViewModel>
     override val mViewModel: CardViewModel by viewModels({requireActivity()})
 
     private val adapter by lazy {
-        CardDetailViewpagerAdapter()
+        CardDetailViewpagerAdapter(mViewModel,this)
     }
 
     override fun getLayout(
@@ -51,7 +51,7 @@ class CardDetailFragment: BaseFragment<FragmentCardDetailBinding, CardViewModel>
             Log.i(TAG,"setOnItemClickListener $pos")
         }
 
-        mBinding.detailViewPager.registerOnPageChangeCallback(viewpagerChangeCallback)
+        mBinding.detailViewPager.registerOnPageChangeCallback(adapter.viewpagerChangeCallback)
 
         mViewModel.cardList.observe(this){ cardList ->
             if(cardList.isEmpty()) return@observe
@@ -74,18 +74,7 @@ class CardDetailFragment: BaseFragment<FragmentCardDetailBinding, CardViewModel>
         }
     }
 
-    private val viewpagerChangeCallback = object : ViewPager2.OnPageChangeCallback() {
-        override fun onPageSelected(position: Int) {
-            super.onPageSelected(position)
-            mViewModel.currentPosition = position
-            val lastPosition = adapter.items.size - 1
-            Log.i(TAG,"position:$position, lastPosition:$lastPosition")
-            if(position >= lastPosition - 3) {
-                mViewModel.loadMore()
-            }
 
-        }
-    }
 
 
 }
