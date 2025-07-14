@@ -75,6 +75,7 @@ class CardDetailViewpagerAdapter(private val mViewModel: CardViewModel,
 
     override fun onBindViewHolder(holder: VBViewHolder, position: Int, item: CardData?) {
         Log.i(TAG,"onBindViewHolder $position")
+        val bindStartTime = System.currentTimeMillis()
         if(item == null) return
         holder.lifecycleRegistry.currentState = Lifecycle.State.CREATED
         holder.lifecycleRegistry.currentState = Lifecycle.State.STARTED
@@ -109,6 +110,8 @@ class CardDetailViewpagerAdapter(private val mViewModel: CardViewModel,
             holder.binding.slCharacterRank.visibility = View.GONE
         }
 
+        Log.d(TAG,"view holder bind time: ${System.currentTimeMillis() - bindStartTime}")
+
 
     }
 
@@ -119,7 +122,9 @@ class CardDetailViewpagerAdapter(private val mViewModel: CardViewModel,
         parent: ViewGroup,
         viewType: Int
     ): VBViewHolder {
+        val startTime = System.currentTimeMillis()
         val view = ItemCardDetailBinding.inflate(LayoutInflater.from(parent.context),parent,false)
+        Log.d(TAG,"view holder inflate time: ${System.currentTimeMillis() - startTime}")
         return VBViewHolder(view)
     }
 

@@ -35,6 +35,7 @@ class CardDetailFragment: BaseFragment<FragmentCardDetailBinding, CardViewModel>
     }
 
     override fun initView() {
+        mBinding.detailViewPager.offscreenPageLimit = 3
         mBinding.detailViewPager.adapter = adapter
 
     }

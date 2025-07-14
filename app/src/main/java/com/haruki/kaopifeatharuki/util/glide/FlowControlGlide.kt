@@ -10,6 +10,7 @@ import com.bumptech.glide.integration.okhttp3.OkHttpUrlLoader
 import com.bumptech.glide.load.engine.executor.GlideExecutor
 import com.bumptech.glide.load.model.GlideUrl
 import com.bumptech.glide.module.AppGlideModule
+import com.haruki.kaopifeatharuki.util.AppConfigUtil
 import okhttp3.OkHttpClient
 import java.io.InputStream
 
@@ -20,8 +21,10 @@ class FlowControlGlide:AppGlideModule() {
 
     override fun applyOptions(context: Context, builder: GlideBuilder) {
         super.applyOptions(context, builder)
-        builder.setLogLevel(Log.DEBUG)
-        builder.setLogRequestOrigins(true)
+        if(AppConfigUtil.isDebug()) {
+            builder.setLogLevel(Log.DEBUG)
+            builder.setLogRequestOrigins(true)
+        }
     }
 
     override fun registerComponents(context: Context, glide: Glide, registry: Registry) {
