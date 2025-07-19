@@ -53,9 +53,25 @@ class CardDetailViewpagerAdapter(private val mViewModel: CardViewModel,
         }
     }
 
+    private val viewpagerChangeCallback = object : ViewPager2.OnPageChangeCallback() {
+        override fun onPageSelected(position: Int) {
+            super.onPageSelected(position)
+            mViewModel.currentPosition = position
+            mViewModel.getCardPower()
+            mViewModel.getSkillDescription()
+            val lastPosition = items.size - 1
+            if(position >= lastPosition - 3) {
+                mViewModel.loadMore()
+            }
+            viewpager.offscreenPageLimit = OFFSCREEN_PAGE_LIMIT_DEFAULT
+
+        }
+    }
+
 
     init {
         lifecycleOwner.lifecycle.addObserver(lifecycleObserve)
+        viewpager.registerOnPageChangeCallback(viewpagerChangeCallback)
     }
 
     class DiffCallback: DiffUtil.ItemCallback<CardData>() {
@@ -86,7 +102,6 @@ class CardDetailViewpagerAdapter(private val mViewModel: CardViewModel,
 
     override fun onBindViewHolder(holder: VBViewHolder, position: Int, item: CardData?) {
         Log.i(TAG,"onBindViewHolder $position")
-        viewHolderStartTime = System.currentTimeMillis()
         if(item == null) return
         holder.binding.root.post {
             holder.lifecycleRegistry.currentState = Lifecycle.State.STARTED
@@ -118,8 +133,6 @@ class CardDetailViewpagerAdapter(private val mViewModel: CardViewModel,
 
 
     }
-
-    private var viewHolderStartTime:Long? = null
 
     override fun onCreateViewHolder(
         context: Context,
@@ -209,20 +222,7 @@ class CardDetailViewpagerAdapter(private val mViewModel: CardViewModel,
 
     }
 
-    val viewpagerChangeCallback = object : ViewPager2.OnPageChangeCallback() {
-        override fun onPageSelected(position: Int) {
-            super.onPageSelected(position)
-            mViewModel.currentPosition = position
-            mViewModel.getCardPower()
-            mViewModel.getSkillDescription()
-            val lastPosition = items.size - 1
-            if(position >= lastPosition - 3) {
-                mViewModel.loadMore()
-            }
-            viewpager.offscreenPageLimit = OFFSCREEN_PAGE_LIMIT_DEFAULT
 
-        }
-    }
 
 
     private fun showCardRarity(holder: VBViewHolder, item: CardData?) {

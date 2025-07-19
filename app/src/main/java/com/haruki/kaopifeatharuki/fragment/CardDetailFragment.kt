@@ -1,19 +1,14 @@
 package com.haruki.kaopifeatharuki.fragment
 
-import android.content.Intent
-import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import androidx.fragment.app.viewModels
-import androidx.navigation.fragment.findNavController
 import androidx.viewpager2.widget.ViewPager2
-import com.haruki.kaopifeatharuki.R
 import com.haruki.kaopifeatharuki.adapter.CardDetailViewpagerAdapter
 import com.haruki.kaopifeatharuki.base.BaseFragment
 import com.haruki.kaopifeatharuki.databinding.FragmentCardDetailBinding
-import com.haruki.kaopifeatharuki.util.imageviewer.showViewer
 import com.haruki.kaopifeatharuki.util.observe
 import com.haruki.kaopifeatharuki.viewmodel.CardViewModel
 
@@ -52,7 +47,7 @@ class CardDetailFragment: BaseFragment<FragmentCardDetailBinding, CardViewModel>
             Log.i(TAG,"setOnItemClickListener $pos")
         }
 
-        mBinding.detailViewPager.registerOnPageChangeCallback(adapter.viewpagerChangeCallback)
+        mBinding.detailViewPager.registerOnPageChangeCallback(viewpagerChangeCallback)
 
         mViewModel.cardList.observe(this){ cardList ->
             if(cardList.isEmpty()) return@observe
@@ -72,6 +67,18 @@ class CardDetailFragment: BaseFragment<FragmentCardDetailBinding, CardViewModel>
                 mBinding.detailViewPager.setCurrentItem(mViewModel.selectPosition, false)
             }
 
+        }
+    }
+
+    override fun onDestroy() {
+        mBinding.detailViewPager.unregisterOnPageChangeCallback(viewpagerChangeCallback)
+        super.onDestroy()
+    }
+
+    private val viewpagerChangeCallback = object : ViewPager2.OnPageChangeCallback() {
+        override fun onPageSelected(position: Int) {
+            super.onPageSelected(position)
+            mBinding.tvLoading.visibility = View.GONE
         }
     }
 
