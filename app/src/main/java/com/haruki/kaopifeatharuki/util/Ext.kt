@@ -2,6 +2,7 @@ package com.haruki.kaopifeatharuki.util
 
 import com.haruki.kaopifeatharuki.application.BaseApplication
 import android.util.TypedValue
+import android.widget.TextView
 
 
 val Int.dp: Float
@@ -10,6 +11,14 @@ get() = TypedValue.applyDimension(
     this.toFloat(),
     BaseApplication.appContext.resources.displayMetrics
 )
+
+var TextView.postText: CharSequence
+    get() = this.text
+    set(value) {
+        this.post {
+            this.text = value
+        }
+    }
 
 val String.name2Id:Int
     get() = when(this) {

@@ -5,35 +5,35 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.viewModels
+import android.view.ViewTreeObserver
+import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LifecycleRegistry
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
-import com.bumptech.glide.Glide
+import androidx.viewpager2.widget.ViewPager2.OFFSCREEN_PAGE_LIMIT_DEFAULT
 import com.chad.library.adapter4.BaseDifferAdapter
 import com.chad.library.adapter4.viewholder.QuickViewHolder
 import com.haruki.kaopifeatharuki.R
 import com.haruki.kaopifeatharuki.databinding.ItemCardDetailBinding
-import com.haruki.kaopifeatharuki.fragment.CardDetailFragment
-import com.haruki.kaopifeatharuki.fragment.CardDetailFragment.Companion
 import com.haruki.kaopifeatharuki.repo.data.card.CardData
 import com.haruki.kaopifeatharuki.repo.datamanager.CardSuppliesManager
 import com.haruki.kaopifeatharuki.repo.datamanager.CharacterInfoManager
 import com.haruki.kaopifeatharuki.util.TimeUtils
 import com.haruki.kaopifeatharuki.util.dp
 import com.haruki.kaopifeatharuki.util.imageviewer.showViewer
-import com.haruki.kaopifeatharuki.util.loadImage
-import com.haruki.kaopifeatharuki.util.loadResImage
 import com.haruki.kaopifeatharuki.util.observe
+import com.haruki.kaopifeatharuki.util.postLoadImage
+import com.haruki.kaopifeatharuki.util.postLoadResImage
+import com.haruki.kaopifeatharuki.util.postText
 import com.haruki.kaopifeatharuki.viewmodel.CardViewModel
 
 class CardDetailViewpagerAdapter(private val mViewModel: CardViewModel,
-    private val lifecycleOwner: LifecycleOwner)
+    private val lifecycleOwner: LifecycleOwner,
+    private val viewpager:ViewPager2)
     :BaseDifferAdapter<CardData, CardDetailViewpagerAdapter.VBViewHolder>(DiffCallback()) {
     companion object {
         private const val TAG = "CardDetailViewpagerAdapter"
@@ -45,11 +45,22 @@ class CardDetailViewpagerAdapter(private val mViewModel: CardViewModel,
     private var currentSkillRank = 1
     private var currentCharacterRank = 1
     private var adapterLifecycleScope = lifecycleOwner.lifecycleScope
+    private var isShowAfterTrainingSkill = false
+    private val lifecycleObserve = object: DefaultLifecycleObserver {
+        override fun onDestroy(owner: LifecycleOwner) {
+            super.onDestroy(owner)
+            viewpager.unregisterOnPageChangeCallback(viewpagerChangeCallback)
+        }
+    }
+
+
+    init {
+        lifecycleOwner.lifecycle.addObserver(lifecycleObserve)
+    }
 
     class DiffCallback: DiffUtil.ItemCallback<CardData>() {
         override fun areItemsTheSame(oldItem: CardData, newItem: CardData): Boolean {
             return oldItem.id == newItem.id
-//            return oldItem == newItem
         }
 
         override fun areContentsTheSame(oldItem: CardData, newItem: CardData): Boolean {
@@ -67,21 +78,22 @@ class CardDetailViewpagerAdapter(private val mViewModel: CardViewModel,
     }
 
     class VBViewHolder(var binding: ItemCardDetailBinding): QuickViewHolder(binding.root), LifecycleOwner {
-        val lifecycleRegistry = LifecycleRegistry(this)
+        val lifecycleRegistry = LifecycleRegistry(this).apply {
+            currentState = Lifecycle.State.CREATED
+        }
         override val lifecycle: Lifecycle = lifecycleRegistry
-
-
     }
 
     override fun onBindViewHolder(holder: VBViewHolder, position: Int, item: CardData?) {
         Log.i(TAG,"onBindViewHolder $position")
-        val bindStartTime = System.currentTimeMillis()
+        viewHolderStartTime = System.currentTimeMillis()
         if(item == null) return
-        holder.lifecycleRegistry.currentState = Lifecycle.State.CREATED
-        holder.lifecycleRegistry.currentState = Lifecycle.State.STARTED
+        holder.binding.root.post {
+            holder.lifecycleRegistry.currentState = Lifecycle.State.STARTED
+        }
         initListener(holder, position, item)
         holder.binding.ivCardAttr.visibility = View.GONE
-        holder.binding.ivDetailCardImg.loadImage(item.displaySmallImgUrl,
+        holder.binding.ivDetailCardImg.postLoadImage(item.displaySmallImgUrl,
             loadCallback = { isLoadSuccess ->
                 if(isLoadSuccess) {
                     showCardRarity(holder, item)
@@ -89,33 +101,25 @@ class CardDetailViewpagerAdapter(private val mViewModel: CardViewModel,
                 }
             })
         showUnitIcon(holder, item)
-        holder.binding.tvCardName.text = item.prefix
-        holder.binding.tvCardCharacterName.text = CharacterInfoManager.getCharacterName(item.characterId)
-        holder.binding.tvCardId.text = item.id.toString()
+        holder.binding.tvCardName.postText = item.prefix
+        holder.binding.tvCardCharacterName.postText = CharacterInfoManager.getCharacterName(item.characterId)
+        holder.binding.tvCardId.postText = item.id.toString()
         showCardSupplyType(holder, item)
-        holder.binding.tvCardReleaseTime.text = TimeUtils.timestampToTimeStr(item.releaseAt)
-        holder.binding.tvSkillName.text = item.cardSkillName
+        holder.binding.tvCardReleaseTime.postText = TimeUtils.timestampToTimeStr(item.releaseAt)
+        holder.binding.tvSkillName.postText = item.cardSkillName
         if(item.specialTrainingSkillName != null) {
-            holder.binding.afterTrainingSkillLayout.visibility = View.VISIBLE
-            holder.binding.tvAfterTrainingSkillName.text = item.specialTrainingSkillName
+            if(!isShowAfterTrainingSkill) isShowAfterTrainingSkill = true
+            setAfterTrainingLayoutVisibility(holder, true, item)
+            holder.binding.tvAfterTrainingSkillName.postText = item.specialTrainingSkillName!!
         } else {
-            holder.binding.afterTrainingSkillLayout.visibility = View.GONE
+            if(isShowAfterTrainingSkill) isShowAfterTrainingSkill = false
+            setAfterTrainingLayoutVisibility(holder, false, item)
         }
-
-        if(item.specialTrainingSkillId == 22) {
-            holder.binding.tvCharacterRank.visibility = View.VISIBLE
-            holder.binding.slCharacterRank.visibility = View.VISIBLE
-        } else {
-            holder.binding.tvCharacterRank.visibility = View.GONE
-            holder.binding.slCharacterRank.visibility = View.GONE
-        }
-
-        Log.d(TAG,"view holder bind time: ${System.currentTimeMillis() - bindStartTime}")
 
 
     }
 
-
+    private var viewHolderStartTime:Long? = null
 
     override fun onCreateViewHolder(
         context: Context,
@@ -124,7 +128,7 @@ class CardDetailViewpagerAdapter(private val mViewModel: CardViewModel,
     ): VBViewHolder {
         val startTime = System.currentTimeMillis()
         val view = ItemCardDetailBinding.inflate(LayoutInflater.from(parent.context),parent,false)
-        Log.d(TAG,"view holder inflate time: ${System.currentTimeMillis() - startTime}")
+        Log.d(TAG,"view holder no cache inflate time: ${System.currentTimeMillis() - startTime}")
         return VBViewHolder(view)
     }
 
@@ -146,6 +150,7 @@ class CardDetailViewpagerAdapter(private val mViewModel: CardViewModel,
         mViewModel.cardSpecialSkillDescription.observe(adapterLifecycleScope, holder.lifecycle) {
             holder.binding.tvAfterTrainingSkillDescription.text = it
         }
+
         holder.binding.ivDetailCardImg.setOnClickListener {
             holder.binding.ivDetailCardImg.showViewer(item.displayLargeImgUrl, item.displaySmallImgUrl)
         }
@@ -214,6 +219,7 @@ class CardDetailViewpagerAdapter(private val mViewModel: CardViewModel,
             if(position >= lastPosition - 3) {
                 mViewModel.loadMore()
             }
+            viewpager.offscreenPageLimit = OFFSCREEN_PAGE_LIMIT_DEFAULT
 
         }
     }
@@ -223,38 +229,27 @@ class CardDetailViewpagerAdapter(private val mViewModel: CardViewModel,
         when(item!!.cardRarityType) {
             "rarity_4" -> {
                 if(item.isShowAfterTraining) {
-                    Glide.with(context).load(R.drawable.rarity_star_4_after_training_vertical).override(18.dp.toInt(),72.dp.toInt()).into(holder.binding.ivCardRarity)
+                    holder.binding.ivCardRarity.postLoadResImage(R.drawable.rarity_star_4_after_training_vertical,18.dp.toInt(), 72.dp.toInt())
                 } else{
-                    Glide.with(context).load(R.drawable.rarity_star_4_normal_vertical).override(18.dp.toInt(),72.dp.toInt()).into(holder.binding.ivCardRarity)
+                    holder.binding.ivCardRarity.postLoadResImage(R.drawable.rarity_star_4_normal_vertical,18.dp.toInt(), 72.dp.toInt())
                 }
             }
 
             "rarity_3" -> {
                 if(item.isShowAfterTraining) {
-                    Glide.with(context).load(R.drawable.rarity_star_3_after_training_vertical)
-                        .override(18.dp.toInt(),54.dp.toInt())
-                        .into(holder.binding.ivCardRarity)
+                    holder.binding.ivCardRarity.postLoadResImage(R.drawable.rarity_star_3_after_training_vertical,18.dp.toInt(), 54.dp.toInt())
                 } else {
-                    Glide.with(context).load(R.drawable.rarity_star_3_normal_vertical)
-                        .override(18.dp.toInt(),54.dp.toInt())
-                        .into(holder.binding.ivCardRarity)
-
+                    holder.binding.ivCardRarity.postLoadResImage(R.drawable.rarity_star_3_normal_vertical,18.dp.toInt(), 54.dp.toInt())
                 }
             }
             "rarity_birthday" -> {
-                Glide.with(context).load(R.drawable.rarity_birthday)
-                    .override(18.dp.toInt(),18.dp.toInt())
-                    .into(holder.binding.ivCardRarity)
+                holder.binding.ivCardRarity.postLoadResImage(R.drawable.rarity_birthday,18.dp.toInt(), 18.dp.toInt())
             }
             "rarity_2" -> {
-                Glide.with(context).load(R.drawable.rarity_star_2_vertical)
-                    .override(18.dp.toInt(),36.dp.toInt())
-                    .into(holder.binding.ivCardRarity)
+                holder.binding.ivCardRarity.postLoadResImage(R.drawable.rarity_star_2_vertical,18.dp.toInt(), 36.dp.toInt())
             }
             "rarity_1" -> {
-                Glide.with(context).load(R.drawable.rarity_star_normal)
-                    .override(18.dp.toInt(),18.dp.toInt())
-                    .into(holder.binding.ivCardRarity)
+                holder.binding.ivCardRarity.postLoadResImage(R.drawable.rarity_star_normal,18.dp.toInt(), 18.dp.toInt())
             }
             else -> {}
 
@@ -265,29 +260,29 @@ class CardDetailViewpagerAdapter(private val mViewModel: CardViewModel,
         holder.binding.ivCardAttr.visibility = View.VISIBLE
         when(item!!.attr) {
             "pure" -> {
-                holder.binding.ivCardAttr.loadResImage(R.mipmap.pure_icon)
-                holder.binding.ivAttr.loadResImage(R.mipmap.pure_icon)
-                holder.binding.tvAttrKey.text = context.resources.getString(R.string.attr_pure)
+                holder.binding.ivCardAttr.postLoadResImage(R.mipmap.pure_icon)
+                holder.binding.ivAttr.postLoadResImage(R.mipmap.pure_icon)
+                holder.binding.tvAttrKey.postText = context.resources.getString(R.string.attr_pure)
             }
             "cute" -> {
-                holder.binding.ivCardAttr.loadResImage(R.mipmap.cute_icon)
-                holder.binding.ivAttr.loadResImage(R.mipmap.cute_icon)
-                holder.binding.tvAttrKey.text = context.resources.getString(R.string.attr_cute)
+                holder.binding.ivCardAttr.postLoadResImage(R.mipmap.cute_icon)
+                holder.binding.ivAttr.postLoadResImage(R.mipmap.cute_icon)
+                holder.binding.tvAttrKey.postText = context.resources.getString(R.string.attr_cute)
             }
             "mysterious"-> {
-                holder.binding.ivCardAttr.loadResImage(R.mipmap.mysterious_icon)
-                holder.binding.ivAttr.loadResImage(R.mipmap.mysterious_icon)
-                holder.binding.tvAttrKey.text = context.resources.getString(R.string.attr_mysterious)
+                holder.binding.ivCardAttr.postLoadResImage(R.mipmap.mysterious_icon)
+                holder.binding.ivAttr.postLoadResImage(R.mipmap.mysterious_icon)
+                holder.binding.tvAttrKey.postText = context.resources.getString(R.string.attr_mysterious)
             }
             "cool" -> {
-                holder.binding.ivCardAttr.loadResImage(R.mipmap.cool_icon)
-                holder.binding.ivAttr.loadResImage(R.mipmap.cool_icon)
-                holder.binding.tvAttrKey.text = context.resources.getString(R.string.attr_cool)
+                holder.binding.ivCardAttr.postLoadResImage(R.mipmap.cool_icon)
+                holder.binding.ivAttr.postLoadResImage(R.mipmap.cool_icon)
+                holder.binding.tvAttrKey.postText = context.resources.getString(R.string.attr_cool)
             }
             "happy" -> {
-                holder.binding.ivCardAttr.loadResImage(R.mipmap.happy_icon)
-                holder.binding.ivAttr.loadResImage(R.mipmap.happy_icon)
-                holder.binding.tvAttrKey.text = context.resources.getString(R.string.attr_happy)
+                holder.binding.ivCardAttr.postLoadResImage(R.mipmap.happy_icon)
+                holder.binding.ivAttr.postLoadResImage(R.mipmap.happy_icon)
+                holder.binding.tvAttrKey.postText = context.resources.getString(R.string.attr_happy)
             }
             else -> {}
         }
@@ -303,23 +298,23 @@ class CardDetailViewpagerAdapter(private val mViewModel: CardViewModel,
 
         when(unit) {
             "light_sound" -> {
-                holder.binding.ivBandIcon.loadResImage(R.mipmap.logo_light_sound)
+                holder.binding.ivBandIcon.postLoadResImage(R.mipmap.logo_light_sound)
             }
             "idol" -> {
-                holder.binding.ivBandIcon.loadResImage(R.mipmap.logo_idol)
+                holder.binding.ivBandIcon.postLoadResImage(R.mipmap.logo_idol)
 
             }
             "street" -> {
-                holder.binding.ivBandIcon.loadResImage(R.mipmap.logo_street)
+                holder.binding.ivBandIcon.postLoadResImage(R.mipmap.logo_street)
             }
             "theme_park" -> {
-                holder.binding.ivBandIcon.loadResImage(R.mipmap.logo_theme_park)
+                holder.binding.ivBandIcon.postLoadResImage(R.mipmap.logo_theme_park)
             }
             "school_refusal" -> {
-                holder.binding.ivBandIcon.loadResImage(R.mipmap.logo_school_refusal)
+                holder.binding.ivBandIcon.postLoadResImage(R.mipmap.logo_school_refusal)
             }
             "piapro" -> {
-                holder.binding.ivBandIcon.loadResImage(R.mipmap.logo_piapro)
+                holder.binding.ivBandIcon.postLoadResImage(R.mipmap.logo_piapro)
             }
             else -> {}
         }
@@ -333,29 +328,48 @@ class CardDetailViewpagerAdapter(private val mViewModel: CardViewModel,
         var cardSupplyType = CardSuppliesManager.getCardSupplyType(supplyId)
         when(cardSupplyType) {
             "normal" -> {
-                holder.binding.tvLimitTypeValue.text = context.resources.getString(R.string.card_supply_type_normal)
+                holder.binding.tvLimitTypeValue.postText = context.resources.getString(R.string.card_supply_type_normal)
             }
             "birthday" -> {
-                holder.binding.tvLimitTypeValue.text = context.resources.getString(R.string.card_supply_type_birthday)
+                holder.binding.tvLimitTypeValue.postText = context.resources.getString(R.string.card_supply_type_birthday)
             }
             "term_limited" -> {
-                holder.binding.tvLimitTypeValue.text = context.resources.getString(R.string.card_supply_type_term_limited)
+                holder.binding.tvLimitTypeValue.postText = context.resources.getString(R.string.card_supply_type_term_limited)
             }
             "colorful_festival_limited" -> {
-                holder.binding.tvLimitTypeValue.text = context.resources.getString(R.string.card_supply_type_c_fes)
+                holder.binding.tvLimitTypeValue.postText = context.resources.getString(R.string.card_supply_type_c_fes)
             }
             "bloom_festival_limited" -> {
-                holder.binding.tvLimitTypeValue.text = context.resources.getString(R.string.card_supply_type_b_fes)
+                holder.binding.tvLimitTypeValue.postText = context.resources.getString(R.string.card_supply_type_b_fes)
             }
             "unit_event_limited" -> {
-                holder.binding.tvLimitTypeValue.text = context.resources.getString(R.string.card_supply_type_unit_limited)
+                holder.binding.tvLimitTypeValue.postText = context.resources.getString(R.string.card_supply_type_unit_limited)
             }
             "collaboration_limited" -> {
-                holder.binding.tvLimitTypeValue.text = context.resources.getString(R.string.card_supply_type_collaboration_limited)
+                holder.binding.tvLimitTypeValue.postText = context.resources.getString(R.string.card_supply_type_collaboration_limited)
             }
             else -> {}
         }
     }
+
+    private fun setAfterTrainingLayoutVisibility(holder: VBViewHolder, isVisible: Boolean, item: CardData) {
+        val visibility = if(isVisible) View.VISIBLE else View.GONE
+        holder.binding.tvAfterTraining.visibility = visibility
+        holder.binding.tvAfterTrainingSkillNameKey.visibility = visibility
+        holder.binding.tvAfterTrainingSkillName.visibility = visibility
+        holder.binding.tvAfterTrainingSkillDescriptionKey.visibility = visibility
+        holder.binding.tvAfterTrainingSkillDescription.visibility = visibility
+        if(item.specialTrainingSkillId == 22) {
+            holder.binding.slCharacterRank.visibility = View.VISIBLE
+            holder.binding.tvCharacterRank.visibility = View.VISIBLE
+        } else {
+            holder.binding.slCharacterRank.visibility = View.GONE
+            holder.binding.tvCharacterRank.visibility = View.GONE
+        }
+
+    }
+
+
 
 
 

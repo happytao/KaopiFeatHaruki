@@ -17,7 +17,7 @@ fun ImageView.loadImage(
     error: Int? = null,
     loadCallback: ((Boolean) -> Unit)? = null
 ) {
-    val glideRequest = Glide.with(this)
+    Glide.with(this)
         .load(url)
         .apply {
             // 设置缩略图（仅当thumbnailUrl非空时）
@@ -59,14 +59,28 @@ fun ImageView.loadImage(
                 return false
             }
         })
-    glideRequest.into(this)
+        .into(this)
+}
+
+fun ImageView.postLoadImage(
+    url: String,
+    width: Int? = null,
+    height: Int? = null,
+    thumbnailUrl: String? = null,
+    placeHolder: Int? = null,
+    error: Int? = null,
+    loadCallback: ((Boolean) -> Unit)? = null
+) {
+    this.post {
+        loadImage(url, width, height, thumbnailUrl, placeHolder, error, loadCallback)
+    }
 }
 
 
 fun ImageView.loadResImage(res:Int,
                            width: Int? = null,
                            height: Int? = null) {
-    val glideRequest = Glide.with(this)
+    Glide.with(this)
         .load(res)
         .apply {
             if (width != null && height != null) {
@@ -74,4 +88,12 @@ fun ImageView.loadResImage(res:Int,
             }
         }
         .into(this)
+}
+
+fun ImageView.postLoadResImage(res:Int,
+                               width: Int? = null,
+                               height: Int? = null) {
+    this.post {
+        loadResImage(res,width, height)
+    }
 }

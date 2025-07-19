@@ -24,7 +24,7 @@ class CardDetailFragment: BaseFragment<FragmentCardDetailBinding, CardViewModel>
     override val mViewModel: CardViewModel by viewModels({requireActivity()})
 
     private val adapter by lazy {
-        CardDetailViewpagerAdapter(mViewModel,this)
+        CardDetailViewpagerAdapter(mViewModel,this,mBinding.detailViewPager)
     }
 
     override fun getLayout(
@@ -35,7 +35,7 @@ class CardDetailFragment: BaseFragment<FragmentCardDetailBinding, CardViewModel>
     }
 
     override fun initView() {
-        mBinding.detailViewPager.offscreenPageLimit = 3
+        mBinding.detailViewPager.offscreenPageLimit = 2
         mBinding.detailViewPager.adapter = adapter
 
     }

@@ -1,5 +1,6 @@
 package com.haruki.kaopifeatharuki.util.glide
 
+import android.net.TrafficStats
 import android.util.Log
 import com.bumptech.glide.Priority
 import com.bumptech.glide.integration.okhttp3.OkHttpStreamFetcher
@@ -65,13 +66,14 @@ class SyncOkHttpStreamFetcher@JvmOverloads constructor(
             coroutineScope.launch {
                 mutex.withLock {
                     try {
+                        //流量标记
+                        TrafficStats.setThreadStatsTag(0x1001)
                         Log.i(TAG,"start loadData url:$url")
                         val requestBuilder = Request.Builder().url(url.toStringUrl())
                         for ((key, value) in url.headers) {
                             requestBuilder.addHeader(key, value!!)
                         }
                         val request = requestBuilder.build()
-
                         val call = client.newCall(request)
                         response = call.execute()
                         Log.i(TAG,"loadedData url:$url")
@@ -81,6 +83,8 @@ class SyncOkHttpStreamFetcher@JvmOverloads constructor(
                         this@SyncOkHttpStreamFetcher.callback?.onLoadFailed(e)
                         response?.close()
                         return@launch
+                    } finally {
+                        TrafficStats.clearThreadStatsTag()
                     }
                 }
 
