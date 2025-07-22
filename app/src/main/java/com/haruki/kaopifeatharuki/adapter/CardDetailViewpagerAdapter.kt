@@ -12,10 +12,12 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LifecycleRegistry
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import androidx.viewpager2.widget.ViewPager2.OFFSCREEN_PAGE_LIMIT_DEFAULT
 import com.chad.library.adapter4.BaseDifferAdapter
+import com.chad.library.adapter4.layoutmanager.QuickGridLayoutManager
 import com.chad.library.adapter4.viewholder.QuickViewHolder
 import com.haruki.kaopifeatharuki.R
 import com.haruki.kaopifeatharuki.databinding.ItemCardDetailBinding
@@ -46,6 +48,9 @@ class CardDetailViewpagerAdapter(private val mViewModel: CardViewModel,
     private var currentCharacterRank = 1
     private var adapterLifecycleScope = lifecycleOwner.lifecycleScope
     private var isShowAfterTrainingSkill = false
+    private val clothesAdapter:CardClothesAdapter by lazy {
+        CardClothesAdapter()
+    }
     private val lifecycleObserve = object: DefaultLifecycleObserver {
         override fun onDestroy(owner: LifecycleOwner) {
             super.onDestroy(owner)
@@ -57,8 +62,11 @@ class CardDetailViewpagerAdapter(private val mViewModel: CardViewModel,
         override fun onPageSelected(position: Int) {
             super.onPageSelected(position)
             mViewModel.currentPosition = position
-            mViewModel.getCardPower()
-            mViewModel.getSkillDescription()
+            viewpager.post {
+                mViewModel.getCardPower()
+                mViewModel.getSkillDescription()
+                mViewModel.getCardClothes(mViewModel.currentCardList[position].id)
+            }
             val lastPosition = items.size - 1
             if(position >= lastPosition - 3) {
                 mViewModel.loadMore()
@@ -105,8 +113,8 @@ class CardDetailViewpagerAdapter(private val mViewModel: CardViewModel,
         if(item == null) return
         holder.binding.root.post {
             holder.lifecycleRegistry.currentState = Lifecycle.State.STARTED
+            initListener(holder, position, item)
         }
-        initListener(holder, position, item)
         holder.binding.ivCardAttr.visibility = View.GONE
         holder.binding.ivDetailCardImg.postLoadImage(item.displaySmallImgUrl,
             loadCallback = { isLoadSuccess ->
@@ -130,6 +138,7 @@ class CardDetailViewpagerAdapter(private val mViewModel: CardViewModel,
             if(isShowAfterTrainingSkill) isShowAfterTrainingSkill = false
             setAfterTrainingLayoutVisibility(holder, false, item)
         }
+        showCardClothes(holder, item)
 
 
     }
@@ -153,15 +162,22 @@ class CardDetailViewpagerAdapter(private val mViewModel: CardViewModel,
 
     private fun initListener(holder: VBViewHolder, position: Int, item: CardData) {
         mViewModel.cardPower.observe(adapterLifecycleScope, holder.lifecycle) {
+            Log.i(TAG,"cardPower: $it")
             holder.binding.tvPowerValue.text = it.toString()
         }
 
+        Log.i(TAG,"start observe cardSkillDescription")
         mViewModel.cardSkillDescription.observe(adapterLifecycleScope, holder.lifecycle) {
+            Log.i(TAG,"cardSkillDescription: $it")
             holder.binding.tvSkillDescription.text = it
         }
 
         mViewModel.cardSpecialSkillDescription.observe(adapterLifecycleScope, holder.lifecycle) {
             holder.binding.tvAfterTrainingSkillDescription.text = it
+        }
+
+        mViewModel.cardClothes.observe(adapterLifecycleScope, holder.lifecycle)  { clothesList ->
+            clothesAdapter.submitList(clothesList)
         }
 
         holder.binding.ivDetailCardImg.setOnClickListener {
@@ -367,6 +383,12 @@ class CardDetailViewpagerAdapter(private val mViewModel: CardViewModel,
             holder.binding.tvCharacterRank.visibility = View.GONE
         }
 
+    }
+
+
+    private fun showCardClothes(holder: VBViewHolder, item: CardData?) {
+        holder.binding.rlClothes.layoutManager = QuickGridLayoutManager(context,4)
+        holder.binding.rlClothes.adapter = clothesAdapter
     }
 
 

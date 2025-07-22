@@ -3,15 +3,15 @@ package com.haruki.kaopifeatharuki.repo.parser
 import android.content.Context
 import com.google.gson.stream.JsonReader
 import com.haruki.kaopifeatharuki.repo.data.card.CardData
-import com.haruki.kaopifeatharuki.repo.database.CardDBData
-import com.haruki.kaopifeatharuki.repo.database.CardDBDataRepoImp
-import com.haruki.kaopifeatharuki.repo.database.CardDataBase
+import com.haruki.kaopifeatharuki.repo.database.card.CardDBData
+import com.haruki.kaopifeatharuki.repo.database.card.CardDBDataRepoImp
+import com.haruki.kaopifeatharuki.repo.database.GameDataBase
 import com.haruki.kaopifeatharuki.util.GsonUtil
 
 class CardJsonParser(private val context: Context): BaseJsonParser<CardDBData, CardDBDataRepoImp>(context) {
     override val dataRepo: CardDBDataRepoImp by lazy {
-        CardDBDataRepoImp(CardDataBase.getDatabase(context).cardDBDataDao(),
-            CardDataBase.getDatabase(context).cardSkillDBDataDao())
+        CardDBDataRepoImp(GameDataBase.getDatabase(context).cardDBDataDao(),
+            GameDataBase.getDatabase(context).cardSkillDBDataDao())
     }
 
 

@@ -1,7 +1,7 @@
 package com.haruki.kaopifeatharuki.repo.data.card
 
 import com.google.gson.annotations.SerializedName
-import com.haruki.kaopifeatharuki.repo.database.CardDBData
+import com.haruki.kaopifeatharuki.repo.database.card.CardDBData
 import com.haruki.kaopifeatharuki.util.ConstUtil.AFTER_TRAINING_CARD_IMG_TAIL
 import com.haruki.kaopifeatharuki.util.ConstUtil.AFTER_TRAINING_THUMBNAIL_TAIL
 import com.haruki.kaopifeatharuki.util.ConstUtil.CARD_LARGE_IMG_PREFIX

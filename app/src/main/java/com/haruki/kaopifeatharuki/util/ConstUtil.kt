@@ -44,6 +44,9 @@ object ConstUtil {
     const val NORMAL_CARD_IMG_TAIL = "/card_normal.png"
     const val AFTER_TRAINING_CARD_IMG_TAIL = "/card_after_training.png"
 
+    const val CARD_CLOTHES_THUMBNAIL_PREFIX = "thumbnail/costume/"
+    const val CARD_CLOTHES_THUMBNAIL_TAIL = ".png"
+
 
 
 }

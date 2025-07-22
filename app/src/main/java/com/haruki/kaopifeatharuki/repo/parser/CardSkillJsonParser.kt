@@ -1,15 +1,10 @@
 package com.haruki.kaopifeatharuki.repo.parser
 
 import android.content.Context
-import com.google.gson.JsonArray
-import com.google.gson.JsonParser
 import com.google.gson.stream.JsonReader
-import com.haruki.kaopifeatharuki.R
 import com.haruki.kaopifeatharuki.repo.data.skill.CardSkillData
-import com.haruki.kaopifeatharuki.repo.data.skill.SkillEffectsItem
-import com.haruki.kaopifeatharuki.repo.database.CardDBData
-import com.haruki.kaopifeatharuki.repo.database.CardDBDataRepoImp
-import com.haruki.kaopifeatharuki.repo.database.CardDataBase
+import com.haruki.kaopifeatharuki.repo.database.card.CardDBDataRepoImp
+import com.haruki.kaopifeatharuki.repo.database.GameDataBase
 import com.haruki.kaopifeatharuki.repo.database.skill.CardSkillDBData
 import com.haruki.kaopifeatharuki.util.ConstUtil.SKILL_TYPE_CHECK_BONUS
 import com.haruki.kaopifeatharuki.util.ConstUtil.SKILL_TYPE_HP_BONUS
@@ -25,8 +20,8 @@ class CardSkillJsonParser(private val context: Context): BaseJsonParser<CardSkil
     }
 
     override val dataRepo: CardDBDataRepoImp by lazy {
-        CardDBDataRepoImp(CardDataBase.getDatabase(context).cardDBDataDao(),
-            CardDataBase.getDatabase(context).cardSkillDBDataDao())
+        CardDBDataRepoImp(GameDataBase.getDatabase(context).cardDBDataDao(),
+            GameDataBase.getDatabase(context).cardSkillDBDataDao())
     }
 
     override fun parseData(reader: JsonReader): CardSkillDBData {

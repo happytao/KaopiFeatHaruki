@@ -63,9 +63,12 @@ class CardDetailFragment: BaseFragment<FragmentCardDetailBinding, CardViewModel>
             val newList = mViewModel.currentCardList.map {
                 it.copy()
             }
-            adapter.submitList(newList){
-                mBinding.detailViewPager.setCurrentItem(mViewModel.selectPosition, false)
+            adapter.submitList(newList) {
+                mBinding.detailViewPager.post{
+                    mBinding.detailViewPager.setCurrentItem(mViewModel.selectPosition, false)
+                }
             }
+
 
         }
     }

@@ -233,6 +233,7 @@ class CardListFragment: BaseFragment<FragmentCardListBinding, CardViewModel>() {
                 it.copy()
             }
             adapter.submitList(newList){
+                Log.i(TAG,"onHiddenChanged currentPosition:${mViewModel.currentPosition}")
                 mBinding.recyclerView.scrollToPosition(mViewModel.currentPosition)
             }
 

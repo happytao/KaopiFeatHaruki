@@ -5,8 +5,10 @@ import androidx.lifecycle.viewModelScope
 import com.haruki.kaopifeatharuki.base.BaseViewModel
 import com.haruki.kaopifeatharuki.repo.data.card.CardData
 import com.haruki.kaopifeatharuki.repo.data.card.CardFilterParam
-import com.haruki.kaopifeatharuki.repo.database.CardDBDataRepoImp
-import com.haruki.kaopifeatharuki.repo.database.CardDataBase
+import com.haruki.kaopifeatharuki.repo.data.clothes.ClothesData
+import com.haruki.kaopifeatharuki.repo.database.card.CardDBDataRepoImp
+import com.haruki.kaopifeatharuki.repo.database.GameDataBase
+import com.haruki.kaopifeatharuki.repo.database.clothes.ClothesDBDataRepoImp
 import com.haruki.kaopifeatharuki.repo.datamanager.CardEpisodesManager
 import com.haruki.kaopifeatharuki.repo.datamanager.CardMasterRankBonusManager
 import com.haruki.kaopifeatharuki.repo.datamanager.CharacterInfoManager
@@ -43,6 +45,9 @@ class CardViewModel: BaseViewModel() {
     private val _cardSpecialSkillDescription = MutableSharedFlow<String>()
     val cardSpecialSkillDescription = _cardSpecialSkillDescription.asSharedFlow()
 
+    private val _cardClothes = MutableSharedFlow<List<ClothesData>>()
+    val cardClothes = _cardClothes.asSharedFlow()
+
     val currentCardList = mutableListOf<CardData>()
 
     val cardListBackUpForSearch = mutableListOf<CardData>()
@@ -63,8 +68,12 @@ class CardViewModel: BaseViewModel() {
 
 
     private val cardRepo: CardDBDataRepoImp by lazy {
-        CardDBDataRepoImp(CardDataBase.getDatabase(mContext).cardDBDataDao(),
-            CardDataBase.getDatabase(mContext).cardSkillDBDataDao())
+        CardDBDataRepoImp(GameDataBase.getDatabase(mContext).cardDBDataDao(),
+            GameDataBase.getDatabase(mContext).cardSkillDBDataDao())
+    }
+
+    private val clothesRepo: ClothesDBDataRepoImp by lazy {
+        ClothesDBDataRepoImp(GameDataBase.getDatabase(mContext).clothesDBDataDao())
     }
 
     var isShowAfterTraining:Boolean = true
@@ -231,6 +240,7 @@ class CardViewModel: BaseViewModel() {
                 if (cardSkillData == null) return@collect
                 val skillDescription =
                     SkillDescriptionManager.getSkillDescription(cardSkillData, skillRank)
+                Log.i(TAG,"getSkillDescription cardSkillData emit: $skillDescription")
                 _cardSkillDescription.emit(skillDescription)
             }
         }
@@ -247,6 +257,15 @@ class CardViewModel: BaseViewModel() {
             }
         }
 
+    }
+
+    fun getCardClothes(cardId: Int) {
+        viewModelScope.launch(Dispatchers.Default) {
+            clothesRepo.getClothesDBDataByCardId(cardId).collect {clothesDataList ->
+                val newClothesDataList = clothesDataList.map { it.copy() }
+                _cardClothes.emit(newClothesDataList)
+            }
+        }
     }
 
 
