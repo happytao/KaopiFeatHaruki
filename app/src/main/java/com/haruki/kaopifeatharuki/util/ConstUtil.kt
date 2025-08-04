@@ -47,6 +47,10 @@ object ConstUtil {
     const val CARD_CLOTHES_THUMBNAIL_PREFIX = "thumbnail/costume/"
     const val CARD_CLOTHES_THUMBNAIL_TAIL = ".png"
 
+    const val GACHA_BANNER_PREFIX = "home/banner/"
+
+    const val GACHA_BANNER_TAIL = ".png"
+
 
 
 }

@@ -27,6 +27,7 @@ import com.haruki.kaopifeatharuki.repo.datamanager.CharacterInfoManager
 import com.haruki.kaopifeatharuki.util.TimeUtils
 import com.haruki.kaopifeatharuki.util.dp
 import com.haruki.kaopifeatharuki.util.imageviewer.showViewer
+import com.haruki.kaopifeatharuki.util.loadImage
 import com.haruki.kaopifeatharuki.util.observe
 import com.haruki.kaopifeatharuki.util.postLoadImage
 import com.haruki.kaopifeatharuki.util.postLoadResImage
@@ -63,9 +64,11 @@ class CardDetailViewpagerAdapter(private val mViewModel: CardViewModel,
             super.onPageSelected(position)
             mViewModel.currentPosition = position
             viewpager.post {
+                val cardId = mViewModel.currentCardList[position].id
                 mViewModel.getCardPower()
                 mViewModel.getSkillDescription()
-                mViewModel.getCardClothes(mViewModel.currentCardList[position].id)
+                mViewModel.getCardClothes(cardId)
+                mViewModel.getCardGacha(cardId)
             }
             val lastPosition = items.size - 1
             if(position >= lastPosition - 3) {
@@ -111,10 +114,8 @@ class CardDetailViewpagerAdapter(private val mViewModel: CardViewModel,
     override fun onBindViewHolder(holder: VBViewHolder, position: Int, item: CardData?) {
         Log.i(TAG,"onBindViewHolder $position")
         if(item == null) return
-        holder.binding.root.post {
-            holder.lifecycleRegistry.currentState = Lifecycle.State.STARTED
-            initListener(holder, position, item)
-        }
+        holder.lifecycleRegistry.currentState = Lifecycle.State.STARTED
+        initListener(holder, position, item)
         holder.binding.ivCardAttr.visibility = View.GONE
         holder.binding.ivDetailCardImg.postLoadImage(item.displaySmallImgUrl,
             loadCallback = { isLoadSuccess ->
@@ -168,7 +169,7 @@ class CardDetailViewpagerAdapter(private val mViewModel: CardViewModel,
 
         Log.i(TAG,"start observe cardSkillDescription")
         mViewModel.cardSkillDescription.observe(adapterLifecycleScope, holder.lifecycle) {
-            Log.i(TAG,"cardSkillDescription: $it")
+            Log.i(TAG,"cardSkillDescription: $it  this:${holder.hashCode()}")
             holder.binding.tvSkillDescription.text = it
         }
 
@@ -178,6 +179,28 @@ class CardDetailViewpagerAdapter(private val mViewModel: CardViewModel,
 
         mViewModel.cardClothes.observe(adapterLifecycleScope, holder.lifecycle)  { clothesList ->
             clothesAdapter.submitList(clothesList)
+        }
+
+        mViewModel.cardGacha.observe(adapterLifecycleScope, holder.lifecycle) { gachaData ->
+            if(gachaData == null) {
+                setGachaInfoLayoutVisibility(holder, false)
+                return@observe
+            }
+            setGachaInfoLayoutVisibility(holder, true)
+            holder.binding.ivGachaImg.loadImage(gachaData.displayBannerUrl)
+            holder.binding.tvGachaName.text = gachaData.name
+            val type = when(gachaData.gachaType) {
+                "ceil" -> "类型: 期间限定"
+                "normal" -> "类型: 普通"
+                "beginner" -> "类型: 新手"
+                "gift" -> "类型: 礼包"
+                else -> ""
+            }
+            holder.binding.tvGachaType.text = type
+            holder.binding.tvGachaId.text = "id: " + gachaData.id
+            holder.binding.tvGachaStartTime.text = TimeUtils.timestampToTimeStr(gachaData.startAt)
+            holder.binding.tvGachaEndTime.text = TimeUtils.timestampToTimeStr(gachaData.endAt)
+
         }
 
         holder.binding.ivDetailCardImg.setOnClickListener {
@@ -383,6 +406,19 @@ class CardDetailViewpagerAdapter(private val mViewModel: CardViewModel,
             holder.binding.tvCharacterRank.visibility = View.GONE
         }
 
+    }
+
+    private fun setGachaInfoLayoutVisibility(holder: VBViewHolder, isVisible: Boolean) {
+        val visibility = if(isVisible) View.VISIBLE else View.GONE
+        holder.binding.cvGachaLayout.visibility = visibility
+        holder.binding.tvGachaTitle.visibility = visibility
+        holder.binding.tvGachaName.visibility = visibility
+        holder.binding.tvGachaType.visibility = visibility
+        holder.binding.tvGachaId.visibility = visibility
+        holder.binding.divider4.visibility = visibility
+        holder.binding.ivGachaImg.visibility = visibility
+        holder.binding.tvGachaStartTime.visibility = visibility
+        holder.binding.tvGachaEndTime.visibility = visibility
     }
 
 

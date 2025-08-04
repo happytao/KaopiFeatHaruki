@@ -6,9 +6,11 @@ import com.haruki.kaopifeatharuki.base.BaseViewModel
 import com.haruki.kaopifeatharuki.repo.data.card.CardData
 import com.haruki.kaopifeatharuki.repo.data.card.CardFilterParam
 import com.haruki.kaopifeatharuki.repo.data.clothes.ClothesData
+import com.haruki.kaopifeatharuki.repo.data.gacha.GachaData
 import com.haruki.kaopifeatharuki.repo.database.card.CardDBDataRepoImp
 import com.haruki.kaopifeatharuki.repo.database.GameDataBase
 import com.haruki.kaopifeatharuki.repo.database.clothes.ClothesDBDataRepoImp
+import com.haruki.kaopifeatharuki.repo.database.gacha.GachaDBDataRepoImp
 import com.haruki.kaopifeatharuki.repo.datamanager.CardEpisodesManager
 import com.haruki.kaopifeatharuki.repo.datamanager.CardMasterRankBonusManager
 import com.haruki.kaopifeatharuki.repo.datamanager.CharacterInfoManager
@@ -48,6 +50,9 @@ class CardViewModel: BaseViewModel() {
     private val _cardClothes = MutableSharedFlow<List<ClothesData>>()
     val cardClothes = _cardClothes.asSharedFlow()
 
+    private val _cardGacha = MutableSharedFlow<GachaData?>()
+    val cardGacha = _cardGacha.asSharedFlow()
+
     val currentCardList = mutableListOf<CardData>()
 
     val cardListBackUpForSearch = mutableListOf<CardData>()
@@ -74,6 +79,11 @@ class CardViewModel: BaseViewModel() {
 
     private val clothesRepo: ClothesDBDataRepoImp by lazy {
         ClothesDBDataRepoImp(GameDataBase.getDatabase(mContext).clothesDBDataDao())
+    }
+
+    private val gachaRepo: GachaDBDataRepoImp by lazy {
+        GachaDBDataRepoImp(GameDataBase.getDatabase(mContext).gachaDBDataDao(),
+            GameDataBase.getDatabase(mContext).gachaDetailDBDataDao())
     }
 
     var isShowAfterTraining:Boolean = true
@@ -264,6 +274,14 @@ class CardViewModel: BaseViewModel() {
             clothesRepo.getClothesDBDataByCardId(cardId).collect {clothesDataList ->
                 val newClothesDataList = clothesDataList.map { it.copy() }
                 _cardClothes.emit(newClothesDataList)
+            }
+        }
+    }
+
+    fun getCardGacha(cardId: Int) {
+        viewModelScope.launch(Dispatchers.Default) {
+            gachaRepo.getGachaDataByCardId(cardId).collect { gachaData ->
+                _cardGacha.emit(gachaData)
             }
         }
     }

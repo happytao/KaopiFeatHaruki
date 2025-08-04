@@ -8,13 +8,19 @@ import com.haruki.kaopifeatharuki.repo.database.card.CardDBData
 import com.haruki.kaopifeatharuki.repo.database.card.CardDBDataDao
 import com.haruki.kaopifeatharuki.repo.database.clothes.ClothesDBData
 import com.haruki.kaopifeatharuki.repo.database.clothes.ClothesDBDataDao
+import com.haruki.kaopifeatharuki.repo.database.gacha.GachaDBData
+import com.haruki.kaopifeatharuki.repo.database.gacha.GachaDBDataDao
+import com.haruki.kaopifeatharuki.repo.database.gacha.GachaDetailDBData
+import com.haruki.kaopifeatharuki.repo.database.gacha.GachaDetailDBDataDao
 import com.haruki.kaopifeatharuki.repo.database.skill.CardSkillDBData
 import com.haruki.kaopifeatharuki.repo.database.skill.CardSkillDBDataDao
 
 @Database(entities = [
     CardDBData::class,
     CardSkillDBData::class,
-    ClothesDBData::class ], version = 1, exportSchema = false)
+    ClothesDBData::class,
+    GachaDBData::class,
+    GachaDetailDBData::class], version = 1, exportSchema = false)
 abstract class GameDataBase: RoomDatabase() {
 
     abstract fun cardDBDataDao(): CardDBDataDao
@@ -22,6 +28,10 @@ abstract class GameDataBase: RoomDatabase() {
     abstract fun cardSkillDBDataDao(): CardSkillDBDataDao
 
     abstract fun clothesDBDataDao(): ClothesDBDataDao
+
+    abstract fun gachaDBDataDao(): GachaDBDataDao
+
+    abstract fun gachaDetailDBDataDao(): GachaDetailDBDataDao
 
 
     companion object {

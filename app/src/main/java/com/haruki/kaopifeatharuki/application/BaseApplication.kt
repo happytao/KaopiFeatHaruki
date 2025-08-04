@@ -35,7 +35,6 @@ class BaseApplication: Application() {
                 StrictMode.ThreadPolicy.Builder()
                     .detectAll()
                     .penaltyLog()
-                    .penaltyFlashScreen()
                     .build()
             )
         }
